@@ -10,4 +10,9 @@
 
 <style lang="less">
 @import "./assets/style/base.less";
+
+#app {
+  padding-bottom: 120px;
+}
 </style>
+

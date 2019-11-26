@@ -40,7 +40,7 @@ export default {
 .home-tabbar {
   width: 750px;
   height: 120px;
-  position: absolute;
+  position: fixed;
   bottom: 0;
   display: flex;
   justify-content: space-around;
