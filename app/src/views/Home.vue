@@ -37,7 +37,14 @@ export default {
 </script>
 
 <style lang="less" scoped>
-ul li {
-  list-style: none;
+.home-tabbar {
+  width: 100%;
+  height: 60px;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  display: flex;
+  justify-content: space-between;
+  background: #eee;
 }
 </style>
