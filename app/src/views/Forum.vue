@@ -8,7 +8,7 @@
 
 
 export default {
-  name: 'Circle',
+  name: 'Forum'
  
 }
 </script>

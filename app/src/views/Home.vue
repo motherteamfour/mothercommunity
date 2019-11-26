@@ -7,7 +7,7 @@
           <router-link to="/">社区</router-link>
         </li>
         <li>
-          <router-link to="/circle">圈子</router-link>
+          <router-link to="/Forum">圈子</router-link>
         </li>
         <li>
           <router-link to="/qanda">问答</router-link>
@@ -38,13 +38,16 @@ export default {
 
 <style lang="less" scoped>
 .home-tabbar {
-  width: 100%;
-  height: 60px;
+  width: 750px;
+  height: 120px;
   position: absolute;
   bottom: 0;
-  left: 0;
   display: flex;
-  justify-content: space-between;
+  justify-content: space-around;
+  align-items: center;
   background: #eee;
+}
+.home-tabbar li {
+    display: inline-block;
 }
 </style>
