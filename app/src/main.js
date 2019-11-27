@@ -5,6 +5,7 @@ import router from './router'
 import store from './store'
 import 'amfe-flexible'
 import './assets/style/resize.css'
+import './assets/font-awesome/css/font-awesome.min.css'
 
 
 Vue.config.productionTip = false
