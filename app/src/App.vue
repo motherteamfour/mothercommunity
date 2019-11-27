@@ -12,7 +12,7 @@
 @import "./assets/style/base.less";
 
 #app {
-  padding-bottom: 120px;
+  padding-bottom: 100px;
 }
 </style>
 
