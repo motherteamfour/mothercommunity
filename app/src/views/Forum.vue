@@ -1,6 +1,7 @@
 <template>
   <div class="circle">
     <header>
+      <div class="header-bg"></div>
       <h3 class="title">圈子</h3>
       <ul>
         <li class="recommend" @click="select">
@@ -43,13 +44,21 @@ export default {
 .circle {
   width: 750px;
   height: 100vh;
+  position: absolute;
+  z-index: -9999;
   background: rgb(248, 248, 248);
   header {
     width: 750px;
-    height: 250px;
+    .header-bg {
+    width: 100%;
+    height: 250px;;
+    position: absolute;
+    top: 0;
     border-bottom-left-radius: 350px 220px;
     border-bottom-right-radius: 350px 220px;
     background: @themeColor;
+    z-index: -1;
+    }
     h3 {
       font-weight: 500;
       color: #fff;
@@ -87,6 +96,7 @@ export default {
     background: #ccc;
     box-sizing: border-box;
     margin: 20px;
+    border-radius: 10px;
   }
 }
 </style>
