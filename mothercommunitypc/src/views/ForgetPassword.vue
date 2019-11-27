@@ -1,35 +1,43 @@
 <template>
   <div class="login">
-    <form class="login-box">
+    <form class="login-box" v-show="show">
       <h2>motherAdmin</h2>
       <p>妈妈怀孕管理系统</p>
       <div class="login-input">
         <el-input placeholder="用户名" prefix-icon="el-icon-user" v-model="input1"></el-input>
       </div>
-      <div class="login-input">
-        <el-input placeholder="密码" prefix-icon="el-icon-lock" v-model="input2"></el-input>
-      </div>
+      
       <div class="login-input login-input-three">
         <div class="login-input-verification">
-          <el-input placeholder="图形验证码" prefix-icon="el-icon-umbrella" v-model="input3"></el-input>
+          <el-input placeholder="手机号" prefix-icon="el-icon-phone-outline" v-model="input3"></el-input>
         </div>
         
-        <div class="verification-code" @click="refreshCode">
-          <s-identify :identifyCode="identifyCode"></s-identify>
+        <div class="verification-code">
+          <button type="button" class="getCode">获取验证码</button>
         </div>
       </div>
-      <div class="login-about-password">
-        <el-checkbox label="记住密码" name="type"></el-checkbox>
-        <a class="login-forgetPassword" href="javascrpit:;">忘记密码?</a>
+      <div class="login-input">
+        <el-input placeholder="请输入验证码" prefix-icon="el-icon-lock" v-model="input2"></el-input>
       </div>
-      <el-button class="login-btn">登入</el-button>
+      <el-button class="login-btn" @click="changeShow">下一步</el-button>
+    </form>
+    <form class="login-box" v-show="!show">
+      <h2>motherAdmin</h2>
+      <p>妈妈怀孕管理系统</p>
+      <div class="login-input">
+        <el-input type="password" placeholder="请输入新密码" prefix-icon="el-icon-lock" v-model="input1"></el-input>
+      </div>
+      
+      <div class="login-input">
+        <el-input type="password" placeholder="请再次输入密码" prefix-icon="el-icon-lock" v-model="input2"></el-input>
+      </div>
+      <el-button class="login-btn" @click="changeShow">确定</el-button>
     </form>
   </div>
 </template>
 
 <script>
 
-import SIdentify from '@/components/SIdentify.vue'
 
 export default {
   data() {
@@ -37,31 +45,18 @@ export default {
       input1: '',
       input2: '',
       input3: '',
-      identifyCodes: '1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZ', // 验证码字符的集合
-      identifyCode: ''
-
+      show: true
     }
   },
   components: {
-    SIdentify
+    
   },
   mounted () {
-    this.identifyCode = ''
-    this.makeCode(this.identifyCodes, 4)
+    
   },
   methods:{
-    randomNum (min, max) {
-      return Math.floor(Math.random() * (max - min) + min)
-    },
-    refreshCode () {
-      this.identifyCode = ''
-      this.makeCode(this.identifyCodes, 4)
-      console.log('当前验证码==', this.identifyCode)
-    },
-    makeCode (o, l) {
-      for (let i = 0; i < l; i++) {
-        this.identifyCode += this.identifyCodes[this.randomNum(0, this.identifyCodes.length)]
-      }
+    changeShow(){
+      this.show = !this.show
     }
   }
 }
@@ -71,7 +66,7 @@ export default {
   
   .login-box {
     width: 400px;
-    height: 500px;
+    height: 400px;
     background: rgb(242, 242, 242);
     position: absolute;
     top: 0;
@@ -110,6 +105,17 @@ export default {
     .login-input-three {
       text-align: left;
       height: 40px;
+      .getCode {
+        width: 100%;
+        height: 100%;
+        background: #fff;
+        outline: none;
+        border: 1px solid #C9C9C9;
+        cursor: pointer;
+      }
+      .getCode:hover {
+        border-color: #009688;
+      }
     }
     .login-about-password {
       width: 80%;
