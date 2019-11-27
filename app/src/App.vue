@@ -8,6 +8,9 @@
 <style lang="less">
 @import "./assets/style/base.less";
 
+#app {
+  margin-top: 40px;
+}
 #nav {
   width: 100%;
   height: 40px;
