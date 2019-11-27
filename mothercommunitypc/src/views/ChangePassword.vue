@@ -5,20 +5,20 @@
       <div class="basicInformation-form-item">
         <label class="basicInformation-form-item-label">当前密码</label>
         <div class="basicInformation-form-item-input">
-          <el-input v-model="input"></el-input>
+          <el-input v-model="input1"></el-input>
         </div>
       </div>
       <div class="basicInformation-form-item">
         <label class="basicInformation-form-item-label">新密码</label>
         <div class="basicInformation-form-item-input">
-          <el-input v-model="input"></el-input>
+          <el-input v-model="input2"></el-input>
         </div>
         <label class="basicInformation-form-item-label">6到16个字符</label>
       </div>
       <div class="basicInformation-form-item">
         <label class="basicInformation-form-item-label">确认新密码</label>
         <div class="basicInformation-form-item-input">
-          <el-input v-model="input"></el-input>
+          <el-input v-model="input3"></el-input>
         </div>
       </div>
       <div class="basicInformation-form-item">
@@ -30,7 +30,14 @@
 
 <script>
 export default {
-  
+  name: 'changePassword',
+  data() {
+    return {
+      input1: '',
+      input2: '',
+      input3: ''
+    }
+  }
 }
 </script>
 
