@@ -1,19 +1,34 @@
 <template>
   <div class="my">
+    <!-- 个人中心头部 -->
     <div class="top">
       <h3>我的</h3>
-
       <div class="user">
         <div class="portrait">
           <p>头像</p>
           <!-- <img src="" alt=""> -->
         </div>
-        <span class="username">辣妈676879</span><br>
+        <span class="username">辣妈676879</span>
+        <br />
         <span class="state">备孕中</span>
         <span class="address">四川 成都</span>
       </div>
     </div>
+
+    <div class="nav">
+      <div class="attention">
+        <p>关注</p>
+        <p>0</p>
+      </div>
+      <div class="fans">
+        <p>粉丝</p>
+        <p>0</p>
+      </div>
+    </div>
+    
   </div>
+
+  
 </template>
 
 <script>
@@ -35,11 +50,11 @@ export default {
     height: 300px;
     background: @themeColor;
     border-bottom-left-radius: 460px 200px;
-    border-bottom-right-radius: 460px 200px;
+    /* border-bottom-right-radius: 460px 200px; */
     h3 {
       text-align: center;
       color: white;
-      font-weight: 300;
+      font-weight: 500;
     }
     .user {
       width: 750px;
@@ -52,10 +67,10 @@ export default {
         background: white;
         border-radius: 50%;
         float: left;
-        margin-left: 130px;
+        margin-left: 80px;
         margin-top: -26px;
         margin-right: 20px;
-       /*  position: absolute;
+        /*  position: absolute;
         left: 60px;
         top: 140px; */
         p {
@@ -80,5 +95,28 @@ export default {
       }
     }
   }
+
+  .nav {
+    margin: 20px auto;
+    width: 710px;
+    height: 120px;
+    background: white;
+    border-radius: 40px;
+    .attention,
+    .fans {
+      width: 100px;
+      height: 120px;
+      float: left;
+    /*   background: gray; */
+      margin: 0 10px 0 160px;
+      p {
+        font-size: 36px;
+        line-height: 60px;
+        text-align: center;
+      }
+    }
+  }
+
+  
 }
 </style>
