@@ -15,6 +15,8 @@
   line-height: 40px;
   font-size: 20px;
   background: rgba(0, 0, 0, 0.1);
+  position: fixed;
+  top: 0;
 }
 </style>
 

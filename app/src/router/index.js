@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Home from '../views/Home.vue'
+import Forum from '../views/Forum.vue'
 
 Vue.use(VueRouter)
 
@@ -21,8 +22,7 @@ const routes = [
 
       }, {
         path: 'forum',
-        name: 'Forum',//圈子
-        component: () => import('../views/Forum.vue'),
+        component: Forum,//圈子
         children: [
           {
             path: '',
