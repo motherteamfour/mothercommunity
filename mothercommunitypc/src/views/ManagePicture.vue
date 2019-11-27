@@ -1,6 +1,8 @@
 <template>
   <div class="manngePicture">
+    <div class="manngePicture-search">
 
+    </div>
   </div>
 </template>
 

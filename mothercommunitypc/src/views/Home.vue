@@ -18,7 +18,7 @@
               <span>用户管理</span>
             </template>
             <el-menu-item-group>
-              <el-menu-item index="1-1" disabled>管理员</el-menu-item>
+              <el-menu-item index="1-1">管理员</el-menu-item>
               <el-menu-item index="1-2">
                 <router-link to="/login">用户</router-link>
               </el-menu-item>
