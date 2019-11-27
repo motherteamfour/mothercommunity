@@ -49,5 +49,8 @@ export default {
 }
 .home-tabbar li {
     display: inline-block;
+    a{
+      font-size: 24px;
+    }
 }
 </style>
