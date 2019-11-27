@@ -5,15 +5,15 @@
       <h3 class="title">圈子</h3>
       <ul>
         <li class="recommend" @click="select">
-          推荐
+          <router-link to="/forum">推荐</router-link>
           <div class="line" v-bind:style="{ left:lineLeft }"></div>
         </li>
-        <li class="followed" @click="select">关注</li>
+        <li class="followed" @click="select">
+          <router-link to="/forum/followed">关注</router-link>
+        </li>
       </ul>
     </header>
-    <div class="banner">
-
-    </div>
+    <router-view />
   </div>
 </template>
 
@@ -64,6 +64,7 @@ export default {
       color: #fff;
       text-align: center;
       margin-bottom: 10px;
+      font-size: 44px;
     }
     ul {
       width: 100%;
@@ -77,6 +78,9 @@ export default {
         padding: 10px;
         text-align: center;
         position: relative;
+        a {
+          color: #fff;
+        }
       }
       .recommend .line {
         width: 100%;
@@ -90,13 +94,6 @@ export default {
     }
   }
 
-  .banner {
-    width: calc(100% - 40px);
-    height: 30%;
-    background: #ccc;
-    box-sizing: border-box;
-    margin: 20px;
-    border-radius: 10px;
-  }
+
 }
 </style>
