@@ -4,6 +4,8 @@ import './registerServiceWorker'
 import router from './router'
 import store from './store'
 import 'amfe-flexible'
+import './assets/style/resize.css'
+
 
 Vue.config.productionTip = false
 
