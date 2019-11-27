@@ -39,7 +39,7 @@ export default {
 <style lang="less" scoped>
 .home-tabbar {
   width: 750px;
-  height: 100px;
+  height: 88px;
   position: fixed;
   bottom: 0;
   display: flex;
@@ -49,6 +49,9 @@ export default {
 }
 .home-tabbar li {
     display: inline-block;
+    width: 100px;
+    height: 80px;
+    text-align: center;
     a{
       font-size: 24px;
     }
