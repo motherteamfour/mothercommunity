@@ -25,13 +25,48 @@
         <p>0</p>
       </div>
     </div>
-    
+    <ul class="lists">
+      <li>
+        <img src="../assets/img/my/fatie.png" alt />
+        <span class="title">我的发帖</span>
+        <span class="num">0</span>
+        <img src="../assets/img/my/youjiantou.png" alt />
+      </li>
+      <li>
+        <img src="../assets/img/my/jinrutiezihuitie.png" alt />
+        <span class="title">我的回帖</span>
+        <span class="num">0</span>
+        <img src="../assets/img/my/youjiantou.png" alt />
+      </li>
+      <li style="border-bottom: none">
+        <img src="../assets/img/my/shoucang.png" alt />
+        <span class="title">我的收藏</span>
+        <span class="num">0</span>
+        <img src="../assets/img/my/youjiantou.png" alt />
+      </li>
+    </ul>
+    <ul class="lists">
+      <li>
+        <img src="../assets/img/my/shouji.png" alt />
+        <span class="title">手机绑定</span>
+        <span class="num telphone">17780837103</span>
+        <img src="../assets/img/my/youjiantou.png" alt />
+      </li>
+      <li>
+        <img src="../assets/img/my/yidenglu5.png" alt />
+        <span class="title">已登录</span>
+        <span class="num tel">手机号码</span>
+      </li>
+    </ul>
+    <div class="btnbox">
+      <button type="button" class="btn">退出登录</button>
+    </div>
   </div>
-
-  
 </template>
 
 <script>
+/* import MyLists from "../components/MyLists"; */
+
 export default {
   name: "My"
 };
@@ -44,8 +79,9 @@ export default {
   height: 100vh;
   background: rgb(248, 248, 248);
   overflow: hidden;
+ 
   .top {
-    padding-top: 20px;
+    padding-top: 40px;
     width: 100%;
     height: 300px;
     background: @themeColor;
@@ -107,7 +143,7 @@ export default {
       width: 100px;
       height: 120px;
       float: left;
-    /*   background: gray; */
+      /*   background: gray; */
       margin: 0 10px 0 160px;
       p {
         font-size: 36px;
@@ -117,6 +153,65 @@ export default {
     }
   }
 
-  
+  .lists {
+    width: 710px;
+    border-radius: 20px;
+    background: white;
+    margin: 40px auto;
+    /* box-shadow: 0 0 15px #ddd; */
+    line-height: 100px;
+    li {
+      padding-left: 40px;
+
+      height: 100px;
+      border-bottom: 1px solid rgb(226, 226, 225);
+      img {
+        width: 44px;
+        height: 44px;
+        display: inline-block;
+        vertical-align: middle;
+      }
+      .title {
+        display: inline-block;
+        font-size: 36px;
+        width: calc(100%-44px);
+        height: 60px;
+        margin-left: 20px;
+      }
+      .num {
+        display: inline-block;
+        height: 60px;
+        width: 400px;
+        font-size: 36px;
+        text-align: right;
+      }
+      .telphone {
+        font-size: 28px;
+        color: red;
+      }
+      .tel {
+        font-size: 28px;
+        margin-left: 70px;
+        color: rgb(186, 189, 182);
+      }
+    }
+  }
+
+  .btnbox {
+    width: 100%;
+    height: 80px;
+ text-align: center;
+    .btn {
+      width: 400px;
+      height: 80px;
+      background: @themeColor;
+      color: white;
+      border: none;
+      border-radius: 30px;
+      font-size: 30px;
+      outline: none;
+    
+    }
+  }
 }
 </style>
