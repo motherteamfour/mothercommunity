@@ -23,6 +23,19 @@ const routes = [
         path: 'forum',
         name: 'Forum',//圈子
         component: () => import('../views/Forum.vue'),
+        children: [
+          {
+            path: '',
+            name: 'Recommend',
+            component: () => import('../views/Recommend.vue'),
+          },
+          {
+            path: 'followed',
+            name: 'Followed',
+            component: () => import('../views/Followed.vue'),
+          }
+
+        ]
 
       },
       {
