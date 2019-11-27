@@ -20,9 +20,9 @@ const routes = [
         component: () => import('../views/Community.vue'),
 
       }, {
-        path: 'circle',
-        name: 'Circle',//圈子
-        component: () => import('../views/Circle.vue'),
+        path: 'forum',
+        name: 'Forum',//圈子
+        component: () => import('../views/Forum.vue'),
 
       },
       {

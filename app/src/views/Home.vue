@@ -7,7 +7,7 @@
           <router-link to="/">社区</router-link>
         </li>
         <li>
-          <router-link to="/circle">圈子</router-link>
+          <router-link to="/Forum">圈子</router-link>
         </li>
         <li>
           <router-link to="/qanda">问答</router-link>
@@ -22,7 +22,7 @@
     </div>
     <div class="home-main">
       <!-- 允许哪些可以被缓存 -->
-      <keep-alive include="Community,Circle,QandA,Encyclopedia,My">
+      <keep-alive include="Community,Forum,QandA,Encyclopedia,My">
         <router-view />
       </keep-alive>
     </div>
@@ -38,13 +38,22 @@ export default {
 
 <style lang="less" scoped>
 .home-tabbar {
-  width: 100%;
-  height: 60px;
-  position: absolute;
+  width: 750px;
+  height: 88px;
+  position: fixed;
   bottom: 0;
-  left: 0;
   display: flex;
-  justify-content: space-between;
+  justify-content: space-around;
+  align-items: center;
   background: #eee;
+}
+.home-tabbar li {
+    display: inline-block;
+    width: 100px;
+    height: 80px;
+    text-align: center;
+    a{
+      font-size: 24px;
+    }
 }
 </style>

@@ -1,8 +1,7 @@
 <template>
   <div id="app">
     <div id="nav">
-      <!-- <router-link to="/">Home</router-link> |
-      <router-link to="/about">About</router-link>-->
+      状态栏
     </div>
     <router-view />
   </div>
@@ -10,4 +9,17 @@
 
 <style lang="less">
 @import "./assets/style/base.less";
+
+#app {
+  padding-bottom: 100px;
+  #nav {
+    width: 100%;
+    height: 40px;
+    text-align: center;
+    line-height: 40px;
+    font-size: 20px;
+    background: rgba(0, 0, 0,0.1);
+  }
+}
 </style>
+
