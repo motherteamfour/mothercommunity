@@ -77,14 +77,18 @@
 
       </div>
       <router-view></router-view>
+      <users></users>
     </div>
   </div>
 </template>
 
 <script>
+import users from './users'
 export default {
   name: "home",
-  components: {},
+  components: {
+    users
+  },
   methods: {
     handleOpen(key, keyPath) {
       console.log(key, keyPath);
