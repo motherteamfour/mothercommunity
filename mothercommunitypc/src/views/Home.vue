@@ -18,7 +18,7 @@
               <span>用户管理</span>
             </template>
             <el-menu-item-group>
-              <el-menu-item index="1-1" disabled>管理员</el-menu-item>
+              <el-menu-item index="1-1">管理员</el-menu-item>
               <el-menu-item index="1-2">
                 <router-link to="/login">用户</router-link>
               </el-menu-item>
@@ -73,15 +73,18 @@
     </div>
 
     <div class="right">
-
+      <users></users>
     </div>
   </div>
 </template>
 
 <script>
+import users from './users'
 export default {
   name: "home",
-  components: {},
+  components: {
+    users
+  },
   methods: {
     handleOpen(key, keyPath) {
       console.log(key, keyPath);
@@ -136,5 +139,6 @@ a {
 .right {
   height: 716px;
   background: rgb(242,242,242);
+  margin-left: 200px
 }
 </style>
