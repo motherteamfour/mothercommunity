@@ -12,7 +12,7 @@ export default {
   .banner {
     width: calc(100% - 40px);
     height: 30%;
-    background: #ccc;
+    background: #fff;
     box-sizing: border-box;
     margin: 20px;
     border-radius: 10px;
