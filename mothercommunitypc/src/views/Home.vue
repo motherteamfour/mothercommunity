@@ -121,6 +121,7 @@ a {
   margin-left: 200px;
   text-align: right;
   border-bottom: 1px solid rgb(194, 194, 194);
+  background: white;
 
   .head {
     margin-right: 20px;
@@ -136,5 +137,6 @@ a {
 .right {
   height: 716px;
   background: rgb(242,242,242);
+  margin-left: 200px;
 }
 </style>
