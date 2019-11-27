@@ -22,7 +22,7 @@
     </div>
     <div class="home-main">
       <!-- 允许哪些可以被缓存 -->
-      <keep-alive include="Community,Circle,QandA,Encyclopedia,My">
+      <keep-alive include="Community,Forum,QandA,Encyclopedia,My">
         <router-view />
       </keep-alive>
     </div>
@@ -39,7 +39,7 @@ export default {
 <style lang="less" scoped>
 .home-tabbar {
   width: 750px;
-  height: 120px;
+  height: 100px;
   position: fixed;
   bottom: 0;
   display: flex;
