@@ -64,6 +64,7 @@ export default {
       color: #fff;
       text-align: center;
       margin-bottom: 10px;
+      font-size: 36px;
     }
     ul {
       width: 100%;
