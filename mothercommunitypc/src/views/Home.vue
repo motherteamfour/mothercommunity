@@ -18,9 +18,14 @@
               <span>用户管理</span>
             </template>
             <el-menu-item-group>
-              <el-menu-item index="1-1">管理员</el-menu-item>
+              <el-menu-item index="1-1">
+                <router-link to="addUsers">管理员</router-link>
+              </el-menu-item>
               <el-menu-item index="1-2">
-                <router-link to="/login">用户</router-link>
+                <router-link to="users">用户</router-link>
+              </el-menu-item>
+              <el-menu-item index="1-3">
+                已删除用户
               </el-menu-item>
             </el-menu-item-group>
           </el-submenu>
@@ -77,17 +82,15 @@
 
       </div>
       <router-view></router-view>
-      <users></users>
     </div>
   </div>
 </template>
 
 <script>
-import users from './users'
 export default {
   name: "home",
   components: {
-    users
+    
   },
   methods: {
     handleOpen(key, keyPath) {

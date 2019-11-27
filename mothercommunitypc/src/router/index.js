@@ -41,6 +41,22 @@ const routes = [
         meta: {
           auth: true
         }
+      },
+      {
+        path: 'users',
+        name: 'users',
+        component: () => import('../views/users.vue'),
+        meta: {
+          auth: true
+        }
+      },
+      {
+        path: 'addUsers',
+        name: 'addUsers',
+        component: () => import('../views/addUsers.vue'),
+        meta: {
+          auth: true
+        }
       }
     ]
   },
