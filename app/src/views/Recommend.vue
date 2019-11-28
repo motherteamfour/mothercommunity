@@ -1,13 +1,13 @@
 <template>
   <div class="wrap">
-<!--     <van-swipe :autoplay="6000" indicator-color="white">
-      <van-swipe-item>
-        <img src="@/assets/img/circleswipetest/swipe1.jpg" alt />
-      </van-swipe-item>
-      <van-swipe-item>
-        <img src="@/assets/img/circleswipetest/swipe2.jpg" alt />
-      </van-swipe-item>
-    </van-swipe> -->
+    <div class="swiper-container" ref="slider">
+      <div class="swiper-wrapper">
+        <div class="swiper-slide" v-for="(item, index) in swipeImg" :key="index">
+          <img :src="item" alt />
+        </div>
+      </div>
+      <div class="swiper-pagination"></div>
+    </div>
     <section class="circle-recommend">
       <p class="circle-title">圈子推荐</p>
       <ul>
@@ -47,19 +47,31 @@
     </section>
     <section class="hot">
       <p class="hot-title">热门帖子</p>
-      <HotList v-for="(item, index) in contact" :key="index" :list="item" @followFn="follow"></HotList>
+      <HotList
+        v-for="(item, index) in contact"
+        :key="index"
+        :list="item"
+        @followFn="follow"
+        @praiseFn="praise"
+        @collectFn="collect"
+      ></HotList>
     </section>
   </div>
 </template>
 
 <script>
 import HotList from "@/components/HotList.vue";
+import "@/assets/style/swiper.min.css";
+import Swiper from "swiper";
+
 var contact = [
   {
     id: 0,
     imgUrl: "",
     username: "jack",
     isFollowed: 0,
+    isPraise: 0,
+    isCollect: 0,
     title: "标题",
     content:
       "大富翁发大水发射点法撒旦发射点分啊违法违法的是妇科检查士大夫哦额罚你发viji",
@@ -72,6 +84,8 @@ var contact = [
     imgUrl: "",
     username: "张三",
     isFollowed: 1,
+    isPraise: 0,
+    isCollect: 1,
     title: "标题2",
     content:
       "大富翁发大水发射点法撒旦发射点分啊违法违法的是妇科检查士大夫哦额罚你发viji",
@@ -84,6 +98,8 @@ var contact = [
     imgUrl: "",
     username: "李四",
     isFollowed: 1,
+    isPraise: 1,
+    isCollect: 0,
     title: "朋友",
     content:
       "大富翁发大水发射点法撒旦发射点分啊违法违法的是妇科检查士大夫哦额罚你发viji",
@@ -96,6 +112,8 @@ var contact = [
     imgUrl: "",
     username: "王五",
     isFollowed: 1,
+    isPraise: 1,
+    isCollect: 1,
     title: "同学",
     content:
       "大富翁发大水发射点法撒旦发射点分啊违法违法的是妇科检查士大夫哦额罚你发viji",
@@ -111,8 +129,8 @@ export default {
     return {
       contact: [],
       swipeImg: [
-        "@/assets/img/circleswipetest/swipe1.jpg",
-        "@/assets/img/circleswipetest/swipe2.jpg"
+        require("@/assets/img/circleswipetest/swipe1.jpg"),
+        require("@/assets/img/circleswipetest/swipe2.jpg")
       ]
     };
   },
@@ -122,7 +140,32 @@ export default {
   methods: {
     follow(i) {
       this.contact[i].isFollowed = !this.contact[i].isFollowed;
+    },
+    praise(i) {
+      this.contact[i].isPraise = !this.contact[i].isPraise;
+    },
+    collect(i) {
+      this.contact[i].isCollect = !this.contact[i].isCollect;
     }
+  },
+  mounted() {
+    new Swiper(".swiper-container", {
+      autoplay: true,
+      loop: true,
+      speed: 1000,
+      // 如果需要分页器
+      pagination: {
+        el: ".swiper-pagination",
+        clickable: true
+      },
+      // 如果需要前进后退按钮
+      navigation: {
+        nextEl:".swiper-button-next",
+        prevEl: ".swiper-button-prev"
+      },
+      // 如果需要滚动条
+      scrollbar: ".swiper-scrollbar"
+    });
   },
   created() {
     this.contact = contact;
@@ -134,19 +177,14 @@ export default {
 .wrap {
   padding-bottom: 80px;
 }
-/* .van-swipe {
-    width: calc(100% - 40px);
+.swiper-slide {
   height: auto;
-  overflow: hidden;
-  .van-swipe-item {
+  margin-top: 20px;
+  img {
     width: 100%;
     height: 100%;
-    img {
-      width: 100%;
-      height: 100%
-    }
   }
-} */
+}
 .circle-recommend {
   border-radius: 10px;
   box-shadow: 0 0 15px #ddd;

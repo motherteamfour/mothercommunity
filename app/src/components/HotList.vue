@@ -21,17 +21,25 @@
       </div>
     </div>
     <div class="options">
-      <div>
+      <div @click="praise(list.id)" v-if="list.isPraise">
         <i class="fa fa-heart-o" aria-hidden="true"></i>
-        <span>赞{{list.praise}}</span>
+        <span>赞({{list.praise}})</span>
+      </div>
+      <div @click="praise(list.id)" style="color: red" v-else>
+        <i class="fa fa-heart" aria-hidden="true"></i>
+        <span>已赞({{list.praise+1}})</span>
       </div>
       <div>
         <i class="fa fa-comment-o" aria-hidden="true"></i>
         <span>评论{{list.comments}}</span>
       </div>
-      <div>
+      <div @click="collect(list.id)" v-if="list.isCollect">
         <i class="fa fa-star-o" aria-hidden="true"></i>
-        <span>收藏{{list.collect}}</span>
+        <span>收藏({{list.collect}})</span>
+      </div>
+      <div @click="collect(list.id)"  style="color: #f8d742" v-else>
+        <i class="fa fa-star" aria-hidden="true"></i>
+        <span>已收藏({{list.collect}})</span>
       </div>
     </div>
   </div>
@@ -59,8 +67,14 @@ export default {
     },
     follow(i) {
       this.$emit("followFn", i);
+    },
+    praise(i) {
+      this.$emit("praiseFn", i);
+    },
+    collect(i) {
+      this.$emit("collectFn", i);
     }
-  },
+  }
   
 };
 </script>
@@ -145,6 +159,7 @@ export default {
   }
   .options {
     font-size: 28px;
+    font-weight: 600;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -158,5 +173,12 @@ export default {
       vertical-align: middle;
     }
   }
+}
+
+.praised {
+  color: rgb(241, 86, 86);
+}
+.collected {
+  color: #f8d742;
 }
 </style>

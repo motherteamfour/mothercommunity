@@ -29,10 +29,10 @@ export default {
   methods: {
     select(e) {
       //导航选择
-      if(e.target.innerText == '推荐') {
+      if (e.target.innerText == "推荐") {
         this.lineLeft = "0px";
-      } else if(e.target.innerText == '关注') {
-        this.lineLeft = '100%';
+      } else if (e.target.innerText == "关注") {
+        this.lineLeft = "100%";
       }
     }
   }
@@ -50,14 +50,14 @@ export default {
     width: 750px;
     padding-top: 40px;
     .header-bg {
-    width: 100%;
-    height: 250px;;
-    position: absolute;
-    top: 0;
-    border-bottom-left-radius: 350px 220px;
-    border-bottom-right-radius: 350px 220px;
-    background: @themeColor;
-    z-index: -1;
+      width: 100%;
+      height: 250px;
+      position: absolute;
+      top: 0;
+      border-bottom-left-radius: 350px 220px;
+      border-bottom-right-radius: 350px 220px;
+      background: @themeColor;
+      z-index: -1;
     }
     h3 {
       font-weight: 500;
