@@ -7,7 +7,6 @@ import 'amfe-flexible'
 import './assets/style/resize.css'
 import './assets/font-awesome/css/font-awesome.min.css'
 
-
 Vue.config.productionTip = false
 
 new Vue({
@@ -15,3 +14,4 @@ new Vue({
   store,
   render: h => h(App)
 }).$mount('#app')
+
