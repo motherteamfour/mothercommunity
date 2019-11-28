@@ -4,7 +4,7 @@
     <div class="top">
       <h3>我的</h3>
       <div class="user">
-        <div class="portrait">
+        <div class="portrait" @click="goMyResourcePage()">
           <p>头像</p>
           <!-- <img src="" alt=""> -->
         </div>
@@ -79,6 +79,9 @@ export default {
     },
     goCollectPage() {
       this.$router.push('/collect');
+    },
+    goMyResourcePage() {
+      this.$router.push('/resource');
     }
   }
 };

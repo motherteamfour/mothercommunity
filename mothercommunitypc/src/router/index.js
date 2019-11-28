@@ -57,6 +57,47 @@ const routes = [
         meta: {
           auth: true
         }
+      },
+      {
+        path: 'delUsers',
+        name: 'delUsers',
+        component: () => import('../views/delUsers.vue'),
+        meta: {
+          auth: true
+        }
+      },
+      {
+        path: 'recommend',
+        name: 'recommend',
+        component: () => import('../views/recommend.vue'),
+        meta: {
+          auth: true
+        }
+      },
+      {
+        path: 'delAticle',
+        name: 'delAticle',
+        component: () => import('../views/delAticle.vue'),
+        meta: {
+          auth: true
+        }
+      },
+      {
+        path: 'investigate',
+        name: 'investigate',
+        component: () => import('../views/investigate.vue'),
+        meta: {
+          auth: true
+        }
+      }
+      ,
+      {
+        path: 'delUsers',
+        name: 'delUsers',
+        component: () => import('../views/delUsers.vue'),
+        meta: {
+          auth: true
+        }
       }
     ]
   },

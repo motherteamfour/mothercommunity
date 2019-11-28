@@ -37,6 +37,9 @@ export default {
       input2: '',
       input3: ''
     }
+  },
+  methods: {
+    
   }
 }
 </script>
