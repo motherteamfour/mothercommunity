@@ -6,9 +6,68 @@ Vue.use(VueRouter)
 
 const routes = [
   {
-    path: '/',
+    path: '/home',
     name: 'home',
-    component: Home
+    component: Home,
+    children: [
+      {
+        path: 'managePicture',
+        name: 'ManagePicture',
+        component: () => import('../views/ManagePicture.vue'),
+        meta: {
+          auth: true
+        }
+      },
+      {
+        path: 'messageManage',
+        name: 'MessageManage',
+        component: () => import('../views/MessageManage.vue'),
+        meta: {
+          auth: true
+        }
+      },
+      {
+        path: 'basicInformation',
+        name: 'BasicInformation',
+        component: () => import('../views/BasicInformation.vue'),
+        meta: {
+          auth: true
+        }
+      },
+      {
+        path: 'changePassword',
+        name: 'ChangePassword',
+        component: () => import('../views/ChangePassword.vue'),
+        meta: {
+          auth: true
+        }
+      },
+      {
+        path: 'users',
+        name: 'users',
+        component: () => import('../views/users.vue'),
+        meta: {
+          auth: true
+        }
+      },
+      {
+        path: 'addUsers',
+        name: 'addUsers',
+        component: () => import('../views/addUsers.vue'),
+        meta: {
+          auth: true
+        }
+      }
+      ,
+      {
+        path: 'delUsers',
+        name: 'delUsers',
+        component: () => import('../views/delUsers.vue'),
+        meta: {
+          auth: true
+        }
+      }
+    ]
   },
   {
     path: '/about',
@@ -28,6 +87,8 @@ const routes = [
 ]
 
 const router = new VueRouter({
+  mode: 'history',
+  base: process.env.BASE_URL,
   routes
 })
 
