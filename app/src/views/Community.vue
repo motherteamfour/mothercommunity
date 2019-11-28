@@ -20,7 +20,16 @@
         </div>
       </div>
     </div>
-    <div class="wrapper">轮播图</div>
+    <!-- <div class="wrapper"> -->
+      <div class="swiper-container wrapper" ref="slider">
+        <div class="swiper-wrapper">
+          <div class="swiper-slide" v-for="(item, index) in swipeImg" :key="index">
+            <img :src="item" alt />
+          </div>
+        </div>
+        <div class="swiper-pagination"></div>
+      </div>
+  <!--   </div> -->
     <div class="wrapper1">
       <div class="cycle">
         <div class="left-arrow">
@@ -65,11 +74,41 @@
 </template>
 
 <script>
-import RecommentLists from '../components/RecommentLists';
+import RecommentLists from "../components/RecommentLists";
+import "@/assets/style/swiper.min.css";
+import Swiper from "swiper";
 export default {
   name: "Community",
+  data() {
+    return {
+      contact: [],
+      swipeImg: [
+        require("@/assets/img/circleswipetest/swipe1.jpg"),
+        require("@/assets/img/circleswipetest/swipe2.jpg")
+      ]
+    };
+  },
   components: {
     RecommentLists
+  },
+  mounted() {
+    new Swiper(".swiper-container", {
+      autoplay: true,
+      loop: true,
+      speed: 1000,
+      // 如果需要分页器
+      pagination: {
+        el: ".swiper-pagination",
+        clickable: true
+      },
+      // 如果需要前进后退按钮
+      navigation: {
+        nextEl:".swiper-button-next",
+        prevEl: ".swiper-button-prev"
+      },
+      // 如果需要滚动条
+      scrollbar: ".swiper-scrollbar"
+    });
   }
 };
 </script>
@@ -78,7 +117,7 @@ export default {
 @import "../assets/style/base.less";
 .community {
   width: 750px;
-/*   height: 100vh; */
+  /*   height: 100vh; */
   /*  height: auto */
   background: rgb(248, 248, 248);
   padding-bottom: 100px;
@@ -131,6 +170,17 @@ export default {
   }
   .form-group input {
     text-indent: 30px;
+  }
+}
+.wrap {
+  padding-bottom: 80px;
+}
+.swiper-slide {
+  height: auto;
+  margin-top: 20px;
+  img {
+    width: 100%;
+    height: 100%;
   }
 }
 .wrapper {
@@ -223,5 +273,4 @@ export default {
   line-height: 100px;
   color: @themeColor;
 }
-
 </style>
