@@ -10,6 +10,7 @@
       </select>
       <button type="button" class="seek-btn">搜索</button>
       <button type="button" class="del-btn" @click="delAll">删除</button>
+      <button type="button" class="check-btn">恢复</button>
     </div>
     <div class="table">
       <table>
@@ -30,6 +31,7 @@
           <td>
             <button type="button" class="check-btn">查看</button>
             <button type="button" class="del-btn" @click="del(index)">删除</button>
+            <button type="button" class="check-btn">恢复</button>
           </td>
         </tr>
       </table>
