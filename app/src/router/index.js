@@ -12,8 +12,8 @@ Vue.use(Search);
 const routes = [
   {
     path: '/login',
-    name: 'login',
-    component: () => import('../views/Login.vue')
+    name: 'Entrance',
+    component: () => import('../views/Entrance.vue')
   },
   {
     path: '/',
