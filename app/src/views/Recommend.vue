@@ -11,37 +11,17 @@
     <section class="circle-recommend">
       <p class="circle-title">圈子推荐</p>
       <ul>
-        <li>
-          <div class="circle-pic"></div>
-          <p class="circle-name">备孕交流</p>
+        <li v-for="(item, index) in circle" :key="index">
+          <router-link :to="'/group/' + item.circleId">
+            <div class="circle-pic">
+              <img :src="item.imgUrl" alt />
+            </div>
+            <p class="circle-name">{{item.circleName}}</p>
+          </router-link>
         </li>
         <li>
           <div class="circle-pic"></div>
-          <p class="circle-name">备孕交流</p>
-        </li>
-        <li>
-          <div class="circle-pic"></div>
-          <p class="circle-name">备孕交流</p>
-        </li>
-        <li>
-          <div class="circle-pic"></div>
-          <p class="circle-name">备孕交流</p>
-        </li>
-        <li>
-          <div class="circle-pic"></div>
-          <p class="circle-name">备孕交流</p>
-        </li>
-        <li>
-          <div class="circle-pic"></div>
-          <p class="circle-name">备孕交流</p>
-        </li>
-        <li>
-          <div class="circle-pic"></div>
-          <p class="circle-name">备孕交流</p>
-        </li>
-        <li>
-          <div class="circle-pic"></div>
-          <p class="circle-name">备孕交流</p>
+          <p class="circle-name">更多圈子</p>
         </li>
       </ul>
     </section>
@@ -131,6 +111,43 @@ export default {
       swipeImg: [
         require("@/assets/img/circleswipetest/swipe1.jpg"),
         require("@/assets/img/circleswipetest/swipe2.jpg")
+      ],
+      circle: [
+        {
+          circleId: 1,
+          imgUrl: "",
+          circleName: "备孕交流"
+        },
+        {
+          circleId: 2,
+          imgUrl: "",
+          circleName: "怀孕"
+        },
+        {
+          circleId: 3,
+          imgUrl: "",
+          circleName: "产后"
+        },
+        {
+          circleId: 4,
+          imgUrl: "",
+          circleName: "备孕交流"
+        },
+        {
+          circleId: 5,
+          imgUrl: "",
+          circleName: "备孕交流"
+        },
+        {
+          circleId: 6,
+          imgUrl: "",
+          circleName: "备孕交流"
+        },
+        {
+          circleId: 7,
+          imgUrl: "",
+          circleName: "备孕交流"
+        }
       ]
     };
   },
@@ -160,7 +177,7 @@ export default {
       },
       // 如果需要前进后退按钮
       navigation: {
-        nextEl:".swiper-button-next",
+        nextEl: ".swiper-button-next",
         prevEl: ".swiper-button-prev"
       },
       // 如果需要滚动条
@@ -179,7 +196,7 @@ export default {
 }
 .swiper-slide {
   height: auto;
-  margin-top: 20px;
+  margin-top: 10px;
   img {
     width: 100%;
     height: 100%;

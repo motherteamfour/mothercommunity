@@ -1,8 +1,7 @@
 <template>
   <div>
     <div class="top">
-      <input type="text" class="userId" placeholder="请输入需要搜索的id">
-      <input type="text" class="username" placeholder="请输入需要搜索的账号">
+      <input type="text" class="username" placeholder="请输入需要搜索的用户名">
       <select class="conition">
         <option value="备孕中">备孕中</option>
         <option value="已怀孕">已怀孕</option>
@@ -19,7 +18,7 @@
           <th>用户名</th>
           <th>年龄</th>
           <th>备孕状态</th>
-          <th>操作</th>
+          <th class="caozuo">操作</th>
         </tr>
         <tr v-for="(item,index) in comsts" :key="index.id">
           <td><input type="checkbox" v-model="item.isSel"></td>
@@ -73,12 +72,12 @@ export default {
     this.comsts = comsts;
   },
   computed: {
-    // isSelectAll:function(){
-    //   return this.comsts.every(function(val) {
-    //     return val.isSel
-    //   })
+    isSelectAll:function(){
+      return this.comsts.every(function(val) {
+        return val.isSel
+      })
       
-    // }
+    }
   },
   methods: {
     selectAll:function(e){
@@ -162,6 +161,9 @@ table{
 tr,th,td{
   border: @tab-border;
   height: 28px;
+}
+.caozuo{
+  width: @two;  
 }
 
 </style>

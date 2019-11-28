@@ -20,18 +20,18 @@
               <span>用户管理</span>
             </template>
             <el-menu-item-group>
-              <el-menu-item index="addUsers">管理员</el-menu-item>
-              <el-menu-item index="users">用户</el-menu-item>
-              <el-menu-item index="delUsers">
+              <el-menu-item index="/home/addUsers">管理员</el-menu-item>
+              <el-menu-item index="/home/users">用户</el-menu-item>
+              <el-menu-item index="/home/delUsers">
                 已删除用户
               </el-menu-item>
             </el-menu-item-group>
           </el-submenu>
-          <el-menu-item index="managePicture">
+          <el-menu-item index="/home/managePicture">
             <i class="el-icon-menu"></i>
             <span slot="title">图片管理</span>
           </el-menu-item>
-          <el-menu-item index="messageManage">
+          <el-menu-item index="/home/messageManage">
             <i class="el-icon-document"></i>
             <span slot="title">消息管理</span>
           </el-menu-item>
@@ -41,8 +41,9 @@
               <span slot="title">文章管理</span>
             </template>
             <el-menu-item-group>
-              <el-menu-item index="1-1">管理员</el-menu-item>
-              <el-menu-item index="1-2">用户</el-menu-item>
+              <el-menu-item index="investigate">文章审核</el-menu-item>
+              <el-menu-item index="recommend">文章推荐</el-menu-item>
+              <el-menu-item index="delAticle">已删除文章</el-menu-item>
             </el-menu-item-group>
           </el-submenu>
           <el-submenu index="5">
@@ -51,8 +52,8 @@
               <span slot="title">设置</span>
             </template>
             <el-menu-item-group>
-              <el-menu-item index="basicInformation">基本资料</el-menu-item>
-              <el-menu-item index="changePassword">修改密码</el-menu-item>
+              <el-menu-item index="/home/basicInformation">基本资料</el-menu-item>
+              <el-menu-item index="/home/changePassword">修改密码</el-menu-item>
             </el-menu-item-group>
           </el-submenu>
         </el-menu>
@@ -68,9 +69,7 @@
           <i class="el-icon-arrow-down el-icon--right"></i>
         </span>
         <el-dropdown-menu slot="dropdown">
-          <el-dropdown-item>基本资料</el-dropdown-item>
-          <el-dropdown-item>修改密码</el-dropdown-item>
-          <el-dropdown-item divided>退出</el-dropdown-item>
+          <el-dropdown-item>退出</el-dropdown-item>
         </el-dropdown-menu>
       </el-dropdown>
     </div>
