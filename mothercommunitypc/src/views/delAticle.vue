@@ -2,11 +2,8 @@
   <div>
     <div class="top">
       <input type="text" class="username" placeholder="请输入需要搜索的用户名">
-      <select class="conition">
-        <option value="备孕中">备孕中</option>
-        <option value="已怀孕">已怀孕</option>
-        <option value="已出生">已出生</option>
-      </select>
+      <input type="text" class="title" placeholder="请输入需要搜索的标题">
+      <input type="text" class="delCause" placeholder="请输入删除的原因">
       <button type="button" class="seek-btn">搜索</button>
       <button type="button" class="del-btn" @click="delAll">删除</button>
       <button type="button" class="recover">恢复</button>
@@ -17,16 +14,20 @@
           <th><input type="checkbox" @click="selectAll"></th>
           <th>ID</th>
           <th>用户名</th>
-          <th>年龄</th>
-          <th>备孕状态</th>
+          <th>标题</th>
+          <th>内容</th>
+          <th>删除原因</th>
+          <th>删除时间</th>
           <th class="caozuo">操作</th>
         </tr>
         <tr v-for="(item,index) in comsts" :key="index.id">
           <td><input type="checkbox" v-model="item.isSel"></td>
           <td>{{item.id}}</td>
           <td>{{item.username}}</td>
-          <td>{{item.age}}</td>
-          <td>{{item.type}}</td>
+          <td>{{item.title}}</td>
+          <td>{{item.time}}</td>
+          <td>{{item.collect}}</td>
+          <td>{{item.praise}}</td>
           <td>
             <button type="button" class="check-btn">查看</button>
             <button type="button" class="del-btn" @click="del(index)">删除</button>
@@ -44,23 +45,26 @@ const comsts = [
   {
     id:1,
     username:"lilei",
-    age:25,
-    type:"已怀孕",
-    isSel:false
+    title:"朝花夕拾",
+    time:"2017.1.5",
+    collect:20,
+    praise:30
   },
   {
     id:2,
     username:"haiqiong",
-    age:22,
-    type:"备孕中",
-    isSel:false
+    title:"朝花夕拾",
+    time:"2017.1.5",
+    collect:20,
+    praise:30
   },
   {
     id:3,
     username:"lilei",
-    age:26,
-    type:"已出生",
-    isSel:true
+    title:"朝花夕拾",
+    time:"2017.1.5",
+    collect:20,
+    praise:30
   }
 ]
 export default {
@@ -119,7 +123,7 @@ export default {
   
 }
 
-.userId,.username,select{
+.userId,.username,.title,.delCause{
   width: 182px;
   height: 38px;
   background: #fff;
@@ -166,13 +170,14 @@ tr,th,td{
 }
 
 .recover{
-  background: red;
+  background: #ebe71d;
   margin-left: 10px
 }
 .recover:hover {
-  background: rgba(255, 0, 0, 0.699)
+  background: #ebe81dc4
 }
 .caozuo{
-  width: @three;
+  width:@three;
 }
+
 </style>
