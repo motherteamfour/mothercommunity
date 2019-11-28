@@ -41,8 +41,9 @@
               <span slot="title">文章管理</span>
             </template>
             <el-menu-item-group>
-              <el-menu-item index="1-1">管理员</el-menu-item>
-              <el-menu-item index="1-2">用户</el-menu-item>
+              <el-menu-item index="investigate">文章审核</el-menu-item>
+              <el-menu-item index="recommend">文章推荐</el-menu-item>
+              <el-menu-item index="delAticle">已删除文章</el-menu-item>
             </el-menu-item-group>
           </el-submenu>
           <el-submenu index="5">
