@@ -18,19 +18,24 @@
               <span>用户管理</span>
             </template>
             <el-menu-item-group>
-              <el-menu-item index="1-1" disabled>管理员</el-menu-item>
+              <el-menu-item index="1-1">
+                <router-link to="addUsers">管理员</router-link>
+              </el-menu-item>
               <el-menu-item index="1-2">
-                <router-link to="/login">用户</router-link>
+                <router-link to="users">用户</router-link>
+              </el-menu-item>
+              <el-menu-item index="1-3">
+                已删除用户
               </el-menu-item>
             </el-menu-item-group>
           </el-submenu>
           <el-menu-item index="2">
             <i class="el-icon-menu"></i>
-            <span slot="title">图片管理</span>
+            <span slot="title"><router-link to="managePicture">图片管理</router-link></span>
           </el-menu-item>
           <el-menu-item index="3">
             <i class="el-icon-document"></i>
-            <span slot="title">消息管理</span>
+            <router-link to="messageManage" slot="title">消息管理</router-link>
           </el-menu-item>
           <el-submenu index="4">
             <template slot="title">
@@ -48,8 +53,8 @@
               <span slot="title">设置</span>
             </template>
             <el-menu-item-group>
-              <el-menu-item index="1-1">基本资料</el-menu-item>
-              <el-menu-item index="1-2">修改密码</el-menu-item>
+              <el-menu-item index="1-1"><router-link to="basicInformation">基本资料</router-link></el-menu-item>
+              <el-menu-item index="1-2"><router-link to="changePassword">修改密码</router-link></el-menu-item>
             </el-menu-item-group>
           </el-submenu>
         </el-menu>
@@ -73,7 +78,10 @@
     </div>
 
     <div class="right">
+      <div class="right-head">
 
+      </div>
+      <router-view></router-view>
     </div>
   </div>
 </template>
@@ -81,7 +89,9 @@
 <script>
 export default {
   name: "home",
-  components: {},
+  components: {
+    
+  },
   methods: {
     handleOpen(key, keyPath) {
       console.log(key, keyPath);
@@ -102,7 +112,7 @@ a {
   width: 1366px;
   height: 768px;
   margin: 0 auto;
-  overflow: hidden;
+  /* overflow: hidden; */
 }
 .left {
   width: 200px;
@@ -135,8 +145,17 @@ a {
   }
 }
 .right {
-  height: 716px;
+  height: 658px;
   background: rgb(242,242,242);
   margin-left: 200px;
+  
+  .right-head {
+    height: 50px;
+    border-bottom: 1px solid rgb(194, 194, 194);
+    background: #fff;
+  }
+}
+.router-link-exact-active.router-link-active {
+  color: rgb(255, 208, 75);
 }
 </style>
