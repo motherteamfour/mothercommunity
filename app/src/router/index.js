@@ -3,9 +3,11 @@ import VueRouter from 'vue-router'
 import Home from '../views/Home.vue'
 import Forum from '../views/Forum.vue'
 import My from '../views/My.vue'
+import { Search } from 'vant'
 /* import NewPost from '../views/NewPost.vue' */
 
 Vue.use(VueRouter)
+Vue.use(Search);
 
 const routes = [
   {
@@ -77,6 +79,12 @@ const routes = [
         path: 'collect', //我的收藏
         name: 'Collect',
         component: () => import('../views/Collect.vue')
+        
+      },
+      {
+        path: 'resource', //我的资料
+        name: 'Resource',
+        component: () => import('../views/MyResources.vue')
         
       }
 
