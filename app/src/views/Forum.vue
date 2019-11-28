@@ -43,12 +43,12 @@ export default {
 @import "../assets/style/base.less";
 .circle {
   width: 750px;
-  height: 100vh;
   position: absolute;
   z-index: -9999;
   background: rgb(248, 248, 248);
   header {
     width: 750px;
+    padding-top: 40px;
     .header-bg {
     width: 100%;
     height: 250px;;
@@ -64,14 +64,14 @@ export default {
       color: #fff;
       text-align: center;
       margin-bottom: 10px;
-      font-size: 44px;
+      font-size: 36px;
     }
     ul {
       width: 100%;
       display: flex;
       justify-content: center;
       color: #fff;
-      font-size: 40px;
+      font-size: 36px;
       li {
         box-sizing: border-box;
         width: 120px;
@@ -93,7 +93,5 @@ export default {
       }
     }
   }
-
-
 }
 </style>
