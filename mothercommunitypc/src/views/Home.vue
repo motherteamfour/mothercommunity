@@ -22,7 +22,7 @@
             <el-menu-item-group>
               <el-menu-item index="addUsers">管理员</el-menu-item>
               <el-menu-item index="users">用户</el-menu-item>
-              <el-menu-item index="1-3">
+              <el-menu-item index="delUsers">
                 已删除用户
               </el-menu-item>
             </el-menu-item-group>
