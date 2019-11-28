@@ -26,21 +26,14 @@ export default {
   },
   methods: {
     getLogin() {
-      // console.log("访问查询参数：", this.$route.query.id);
-      // this.$route：保存了当前路由信息
-      console.log("登录", this.username, this.userpass);
-
       this.axios
         .post("/api/zp/user/loginByPassword", {
-          phone: this.username,
-          password: this.userpass
-          // .post("/api/users/login", {
-          //   username: this.username,
-          //   userpass: this.userpass
+          userPhone: this.username,
+          userPassword: this.userpass
         })
         .then(res => {
           console.log(res.data);
-          if (res.data.state == "200") {
+          if (res.data.code == "200") {
             // var token = "njaksxbxkjasbkjcxasbjk" // 模拟后台返回的token
             var token = res.data.token;
             sessionStorage.setItem("token", token);
@@ -48,7 +41,7 @@ export default {
             // 获取参数（未登录时想访问的路由）
             var url = this.$route.query.redirect;
 
-            url = url ? url : "/my";
+            url = url ? url : "/";
             // 切换路由
             this.$router.replace(url);
           } else {
