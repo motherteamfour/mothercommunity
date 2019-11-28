@@ -90,6 +90,15 @@ const routes = [
           auth: true
         }
       }
+      ,
+      {
+        path: 'delUsers',
+        name: 'delUsers',
+        component: () => import('../views/delUsers.vue'),
+        meta: {
+          auth: true
+        }
+      }
     ]
   },
   {

@@ -29,10 +29,10 @@ export default {
   methods: {
     select(e) {
       //导航选择
-      if(e.target.innerText == '推荐') {
+      if (e.target.innerText == "推荐") {
         this.lineLeft = "0px";
-      } else if(e.target.innerText == '关注') {
-        this.lineLeft = '100%';
+      } else if (e.target.innerText == "关注") {
+        this.lineLeft = "100%";
       }
     }
   }
@@ -43,35 +43,35 @@ export default {
 @import "../assets/style/base.less";
 .circle {
   width: 750px;
-  height: 100vh;
   position: absolute;
   z-index: -9999;
   background: rgb(248, 248, 248);
   header {
     width: 750px;
+    padding-top: 40px;
     .header-bg {
-    width: 100%;
-    height: 250px;;
-    position: absolute;
-    top: 0;
-    border-bottom-left-radius: 350px 220px;
-    border-bottom-right-radius: 350px 220px;
-    background: @themeColor;
-    z-index: -1;
+      width: 100%;
+      height: 250px;
+      position: absolute;
+      top: 0;
+      border-bottom-left-radius: 350px 220px;
+      border-bottom-right-radius: 350px 220px;
+      background: @themeColor;
+      z-index: -1;
     }
     h3 {
       font-weight: 500;
       color: #fff;
       text-align: center;
       margin-bottom: 10px;
-      font-size: 44px;
+      font-size: 36px;
     }
     ul {
       width: 100%;
       display: flex;
       justify-content: center;
       color: #fff;
-      font-size: 40px;
+      font-size: 36px;
       li {
         box-sizing: border-box;
         width: 120px;
@@ -93,7 +93,5 @@ export default {
       }
     }
   }
-
-
 }
 </style>
