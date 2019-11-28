@@ -18,11 +18,11 @@
     <div class="nav">
       <div class="attention">
         <p>关注</p>
-        <p>0</p>
+        <p class="fansnum">0</p>
       </div>
       <div class="fans">
         <p>粉丝</p>
-        <p>0</p>
+        <p class="fansnum">0</p>
       </div>
     </div>
     <ul class="lists">
@@ -30,19 +30,19 @@
         <img src="../assets/img/my/fatie.png" alt />
         <span class="title">我的发帖</span>
         <span class="num">0</span>
-        <img src="../assets/img/my/youjiantou.png" alt />
+        <img src="../assets/img/my/youjiantou.png" alt @click="goNewpostPage()" />
       </li>
       <li>
         <img src="../assets/img/my/jinrutiezihuitie.png" alt />
         <span class="title">我的回帖</span>
         <span class="num">0</span>
-        <img src="../assets/img/my/youjiantou.png" alt />
+        <img src="../assets/img/my/youjiantou.png" alt @click="goReplyPage()" />
       </li>
       <li style="border-bottom: none">
         <img src="../assets/img/my/shoucang.png" alt />
         <span class="title">我的收藏</span>
         <span class="num">0</span>
-        <img src="../assets/img/my/youjiantou.png" alt />
+        <img src="../assets/img/my/youjiantou.png" alt @click="goCollectPage()" />
       </li>
     </ul>
     <ul class="lists">
@@ -52,7 +52,7 @@
         <span class="num telphone">17780837103</span>
         <img src="../assets/img/my/youjiantou.png" alt />
       </li>
-      <li>
+      <li style="border-bottom: none">
         <img src="../assets/img/my/yidenglu5.png" alt />
         <span class="title">已登录</span>
         <span class="num tel">手机号码</span>
@@ -68,7 +68,19 @@
 /* import MyLists from "../components/MyLists"; */
 
 export default {
-  name: "My"
+  name: "My",
+  
+  methods: {
+    goNewpostPage() {
+      this.$router.push('/newpost');
+    },
+    goReplyPage() {
+      this.$router.push('/reply');
+    },
+    goCollectPage() {
+      this.$router.push('/collect');
+    }
+  }
 };
 </script>
 
@@ -78,7 +90,7 @@ export default {
   width: 750px;
   height: 100vh;
   background: rgb(248, 248, 248);
-  overflow: hidden;
+ /*  overflow: hidden; */
  
   .top {
     padding-top: 40px;
@@ -91,6 +103,7 @@ export default {
       text-align: center;
       color: white;
       font-weight: 500;
+      font-size: 36px;
     }
     .user {
       width: 750px;
@@ -150,6 +163,10 @@ export default {
         line-height: 60px;
         text-align: center;
       }
+      .fansnum {
+        font-size: 34px;
+        color: rgb(168, 170, 165);
+      }
     }
   }
 
@@ -173,17 +190,18 @@ export default {
       }
       .title {
         display: inline-block;
-        font-size: 36px;
+        font-size: 30px;
         width: calc(100%-44px);
         height: 60px;
         margin-left: 20px;
       }
       .num {
         display: inline-block;
-        height: 60px;
-        width: 400px;
+        height: 70px;
+        width: 430px;
         font-size: 36px;
         text-align: right;
+        color: rgb(168, 170, 165);
       }
       .telphone {
         font-size: 28px;
@@ -200,7 +218,7 @@ export default {
   .btnbox {
     width: 100%;
     height: 80px;
- text-align: center;
+    text-align: center;
     .btn {
       width: 400px;
       height: 80px;

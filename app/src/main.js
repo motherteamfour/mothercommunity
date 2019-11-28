@@ -6,7 +6,6 @@ import store from './store'
 import 'amfe-flexible'
 import './assets/style/resize.css'
 
-
 Vue.config.productionTip = false
 
 new Vue({
@@ -14,3 +13,4 @@ new Vue({
   store,
   render: h => h(App)
 }).$mount('#app')
+
