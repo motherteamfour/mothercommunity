@@ -15,7 +15,7 @@
         </div>
       </div>
       <div class="basicInformation-form-item">
-        <label class="basicInformation-form-item-label">姓名</label>
+        <label class="basicInformation-form-item-label">昵称</label>
         <div class="basicInformation-form-item-input">
           <el-input v-model="input2"></el-input>
         </div>

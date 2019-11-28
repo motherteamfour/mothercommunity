@@ -6,7 +6,7 @@ Vue.use(VueRouter)
 
 const routes = [
   {
-    path: '/',
+    path: '/home',
     name: 'home',
     component: Home,
     children: [
@@ -54,6 +54,15 @@ const routes = [
         path: 'addUsers',
         name: 'addUsers',
         component: () => import('../views/addUsers.vue'),
+        meta: {
+          auth: true
+        }
+      }
+      ,
+      {
+        path: 'delUsers',
+        name: 'delUsers',
+        component: () => import('../views/delUsers.vue'),
         meta: {
           auth: true
         }
