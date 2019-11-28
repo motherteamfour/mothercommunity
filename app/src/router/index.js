@@ -2,6 +2,8 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Home from '../views/Home.vue'
 import Forum from '../views/Forum.vue'
+import My from '../views/My.vue'
+/* import NewPost from '../views/NewPost.vue' */
 
 Vue.use(VueRouter)
 
@@ -20,7 +22,8 @@ const routes = [
         name: 'Community',//社区
         component: () => import('../views/Community.vue'),
 
-      }, {
+      }, 
+      {
         path: 'forum',
         component: Forum,//圈子
         children: [
@@ -67,10 +70,31 @@ const routes = [
 
       },
       {
-        path: 'my',
-        name: 'My',//我的
-        component: () => import('../views/My.vue'),
-
+        path: 'my',//我的
+        component: My,     
+      },
+      {
+        path: 'newpost', //我的发帖
+        name: 'NewPost',
+        component: () => import('../views/NewPost.vue'),
+        /* children: [
+          {
+            path: 'newpostlists',
+            name: NewPostLists,
+            component: () => import('../views/NewPostLists.vue')
+          }
+        ] */
+      }, 
+      {
+        path: 'reply', //我的回帖
+        name: 'Reply',
+        component: () => import('../views/Reply.vue')
+      },
+      {
+        path: 'collect', //我的收藏
+        name: 'Collect',
+        component: () => import('../views/Collect.vue')
+        
       }
 
     ]

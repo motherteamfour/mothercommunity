@@ -11,6 +11,8 @@
           background-color="#545c64"
           text-color="#fff"
           active-text-color="#ffd04b"
+          unique-opened
+          router
         >
           <el-submenu index="1">
             <template slot="title">
@@ -18,17 +20,18 @@
               <span>用户管理</span>
             </template>
             <el-menu-item-group>
-              <el-menu-item index="1-1" disabled>管理员</el-menu-item>
-              <el-menu-item index="1-2">
-                <router-link to="/login">用户</router-link>
+              <el-menu-item index="addUsers">管理员</el-menu-item>
+              <el-menu-item index="users">用户</el-menu-item>
+              <el-menu-item index="1-3">
+                已删除用户
               </el-menu-item>
             </el-menu-item-group>
           </el-submenu>
-          <el-menu-item index="2">
+          <el-menu-item index="managePicture">
             <i class="el-icon-menu"></i>
             <span slot="title">图片管理</span>
           </el-menu-item>
-          <el-menu-item index="3">
+          <el-menu-item index="messageManage">
             <i class="el-icon-document"></i>
             <span slot="title">消息管理</span>
           </el-menu-item>
@@ -48,8 +51,8 @@
               <span slot="title">设置</span>
             </template>
             <el-menu-item-group>
-              <el-menu-item index="1-1">基本资料</el-menu-item>
-              <el-menu-item index="1-2">修改密码</el-menu-item>
+              <el-menu-item index="basicInformation">基本资料</el-menu-item>
+              <el-menu-item index="changePassword">修改密码</el-menu-item>
             </el-menu-item-group>
           </el-submenu>
         </el-menu>
@@ -57,7 +60,7 @@
     </div>
 
     <div class="top">
-      <img class="head-picture" src="../assets/images/001.jpg" alt="">
+      <img class="head-picture" src="../assets/images/001.jpg" alt="头像">
       <el-dropdown class="head">
         
         <span class="el-dropdown-link">
@@ -73,7 +76,10 @@
     </div>
 
     <div class="right">
+      <div class="right-head">
 
+      </div>
+      <router-view></router-view>
     </div>
   </div>
 </template>
@@ -81,7 +87,9 @@
 <script>
 export default {
   name: "home",
-  components: {},
+  components: {
+    
+  },
   methods: {
     handleOpen(key, keyPath) {
       console.log(key, keyPath);
@@ -102,7 +110,7 @@ a {
   width: 1366px;
   height: 768px;
   margin: 0 auto;
-  overflow: hidden;
+  /* overflow: hidden; */
 }
 .left {
   width: 200px;
@@ -135,8 +143,14 @@ a {
   }
 }
 .right {
-  height: 716px;
+  height: 658px;
   background: rgb(242,242,242);
   margin-left: 200px;
+  
+  .right-head {
+    height: 50px;
+    border-bottom: 1px solid rgb(194, 194, 194);
+    background: #fff;
+  }
 }
 </style>
