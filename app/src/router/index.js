@@ -42,6 +42,23 @@ const routes = [
         path: 'qanda',
         name: 'QandA',//问答
         component: () => import('../views/QandA.vue'),
+        children: [ // 子路由
+          {
+            path: "",
+            name: "HotQuestion",
+            component: () => import('../views/HotQuestion.vue'),
+
+          },
+          {
+            path: 'unsolved',
+            name: 'Unsolved',
+            // 路由懒加载：访问时才加载
+            component: () => import('../views/Unsolved.vue'),
+            meta: {
+              auth: true
+            }
+          }
+        ]
       },
       {
         path: 'encyclopedia',
