@@ -4,24 +4,24 @@
       <table>
         <tr>
           <td>账号：</td>
-          <td><input type="text" placeholder="输入创建的账号" class="userId mod"></td>
+          <td><input type="text" placeholder="输入创建的账号" class="userId mod" v-model="inputUsername"></td>
         </tr>
         <tr>
           <td>密码：</td>
-          <td><input type="text" placeholder="请输入密码" class="password mod"></td>
+          <td><input type="text" placeholder="请输入密码" class="password mod" v-model="inputPassword"></td>
         </tr>
         <tr>
           <td>姓名：</td>
-          <td><input type="text" placeholder="请输入姓名" class="name mod"></td>
+          <td><input type="text" placeholder="请输入姓名" class="name mod" v-model="inputName"></td>
         </tr>
         <tr>
           <td>联系方式：</td>
-          <td><input type="text" placeholder="请输入联系电话" class="tel mod"></td>
+          <td><input type="text" placeholder="请输入联系电话" class="tel mod" v-model="inputTel"></td>
         </tr>
         <tr>
           <td colspan="2">
-            <button type="button" class="add">添加</button>
-            <button type="button" class="exit">取消</button>
+            <button type="button" class="add" >添加</button>
+            <button type="button" class="exit" @click="exit">清空</button>
           </td>
         </tr>
       </table>
@@ -29,11 +29,10 @@
     <div class="tab-two">
       <div>
         <div class="top">
-          <input type="text" class="userId" placeholder="请输入需要搜索的id">
-          <input type="text" class="user" placeholder="请输入需要搜索的账号">
+          <input type="text" class="user" placeholder="请输入需要搜索的用户名">
           <input type="text" class="username" placeholder="请输入需要搜索的姓名">
           <button type="button" class="seek-btn">搜索</button>
-          <button type="button" class="del-btn" @click="delAll">删除</button>
+          <button type="button" class="del-btn">删除</button>
         </div>
       </div>
       <table>
@@ -43,7 +42,7 @@
           <th>用户名</th>
           <th>姓名</th>
           <th>联系方式</th>
-          <th>操作</th>
+          <th class="caozuo">操作</th>
         </tr>
         <tr v-for="(item,index) in trs" :key="index.id">
           <td><input type="checkbox"></td>
@@ -53,7 +52,7 @@
           <td>{{item.tel}}</td>
           <td>
             <button type="button" class="compile">编辑</button>
-            <button type="button" class="del">删除</button>
+            <button type="button" class="del" @click="del">删除</button>
           </td>
         </tr>
       </table>
@@ -88,12 +87,46 @@ export default {
   name:"addUsers",
   data(){
     return {
-      trs:[]
+      trs:[],
+      // 对添加账户的清空
+      inputUsername : "",
+      inputPassword : "",
+      inputName : "",
+      inputTel : ""
     }
   },
   created() {
     this.trs = trs
-  }
+  },
+  methods:{
+    //清空效果
+    exit:function(){
+      this.inputUsername = "",
+      this.inputPassword = "",
+      this.inputName = "",
+      this.inputTel = ""
+      
+    },
+    
+    del() {
+      this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        this.$message({
+          type: 'success',
+          message: '删除成功!'
+        });
+      }).catch(() => {
+        this.$message({
+          type: 'info',
+          message: '已取消删除'
+        });          
+      });
+    }
+    
+  } 
 }
 </script>
 
@@ -156,5 +189,11 @@ button:hover {
     height: 28px;
   }
 }
-
+.caozuo{
+  width: @two;
+}
+// .top{
+//   text-align: right
+// }
 </style>
+

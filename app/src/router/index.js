@@ -102,7 +102,11 @@ const routes = [
         path: 'resource', //我的资料
         name: 'Resource',
         component: () => import('../views/MyResources.vue')
-        
+      },
+      {
+        path: 'group/:id',
+        name: 'Group',
+        component: () => import('../views/Group.vue') 
       }
 
     ]

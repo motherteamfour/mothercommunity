@@ -50,7 +50,7 @@
         </div>
       </div>
     </div>
-    <EditSendMessage v-show="!showEdit"></EditSendMessage>
+    <EditSendMessage v-show="!showEdit" @showEditFn="changeShow"></EditSendMessage>
   </div>
 </template>
 
