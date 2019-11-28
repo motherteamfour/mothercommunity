@@ -93,8 +93,12 @@ const routes = [
       {
         path: 'collect', //我的收藏
         name: 'Collect',
-        component: () => import('../views/Collect.vue')
-        
+        component: () => import('../views/Collect.vue') 
+      },
+      {
+        path: 'group/:id',
+        name: 'Group',
+        component: () => import('../views/Group.vue') 
       }
 
     ]
