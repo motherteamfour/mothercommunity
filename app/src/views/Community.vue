@@ -11,7 +11,7 @@
             <div class="form-wrapper">
               <i class="fa fa-search fa-lg"></i>
             </div>
-            <input type="text" placeholder="输入搜索关键词并按回车键" class="form-control" />
+            <input type="text" placeholder="输入搜索关键词并按回车键" class="form-control" @click="goSearchPages()" />
           </div>
         </form>
         <div>
@@ -91,6 +91,11 @@ export default {
   components: {
     RecommentLists
   },
+  methods: {
+    goSearchPages() {
+      this.$router.push('/search')
+    }
+  },
   mounted() {
     new Swiper(".swiper-container", {
       autoplay: true,
@@ -123,7 +128,7 @@ export default {
   padding-bottom: 100px;
 }
 .top {
-  margin-top: 40px;
+  padding-top: 40px;
   width: 750px;
   height: 280px;
   background: @themeColor;
@@ -177,7 +182,7 @@ export default {
 }
 .swiper-slide {
   height: auto;
-  margin-top: 20px;
+/*   margin-top: 20px; */
   img {
     width: 100%;
     height: 100%;
@@ -185,7 +190,7 @@ export default {
 }
 .wrapper {
   width: 710px;
-  height: 300px;
+  height: 280px;
   background: white;
   margin: 0 auto;
   margin-top: -160px;
@@ -224,11 +229,11 @@ export default {
         .weight {
           margin-right: 20px;
           i {
-            font-size: 30px;
+            font-size: 28px;
             color: @themeColor;
           }
           span {
-            font-size: 30px;
+            font-size: 28px;
             color: rgb(190, 190, 190);
             padding-left: 10px;
           }
@@ -254,7 +259,7 @@ export default {
       /*     background: yellow; */
       p {
         color: rgb(83, 82, 82);
-        font-size: 30px;
+        font-size: 26px;
         line-height: 40px;
         padding: 10px;
         letter-spacing: 3px;
@@ -267,10 +272,11 @@ export default {
 }
 .recommend {
   width: 100%;
-  height: 100px;
+  height: 60px;
   /*   background: greenyellow; */
   text-align: center;
-  line-height: 100px;
+  line-height: 60px;
   color: @themeColor;
+  font-size: 36px;
 }
 </style>

@@ -107,6 +107,11 @@ const routes = [
         path: 'group/:id',
         name: 'Group',
         component: () => import('../views/Group.vue') 
+      },
+      {
+        path: 'search', // 搜索
+        name: 'Search',
+        component: () => import('../views/Search.vue')
       }
 
     ]
