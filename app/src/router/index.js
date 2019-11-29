@@ -4,7 +4,8 @@ import Home from '../views/Home.vue'
 import Forum from '../views/Forum.vue'
 import My from '../views/My.vue'
 import { Search } from 'vant'
-/* import NewPost from '../views/NewPost.vue' */
+import Searchs from '../views/Search.vue'
+import InfoComment from '../views/InfoComment.vue'
 
 Vue.use(VueRouter)
 Vue.use(Search);
@@ -109,9 +110,47 @@ const routes = [
         component: () => import('../views/Group.vue') 
       },
       {
-        path: 'search', // 搜索
-        name: 'Search',
-        component: () => import('../views/Search.vue')
+        path: 'searchs', // 搜索
+        
+        component: Searchs,
+        children: [
+          {
+            path: '',
+            name: 'SearchPost',
+            component: () => import('../views/SearchPost.vue')
+          },
+          {
+            path: 'userpage',
+            name: 'Userpage',
+            component: () => import('../views/Userpage.vue'),
+          }
+        ]
+      },
+      {
+        path: 'infomation',
+        name: "Infomation",
+        component: () => import('../views/Infomation.vue')
+      },
+      {
+        path: 'trigger',
+        name: "Trigger",
+        component: () => import('../views/Trigger.vue')
+      },
+      {
+        path: 'infocomment',
+        component: InfoComment,
+        children: [
+          {
+            path: '',
+            name: 'Received',
+            component: () => import('../views/Received.vue')
+          },
+          {
+            path: 'sented',
+            name: 'Sented',
+            component: () => import('../views/Sented.vue'),
+          }
+        ]
       }
 
     ]

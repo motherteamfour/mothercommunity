@@ -2,7 +2,7 @@
   <div class="community">
     <div class="top">
       <div class="search">
-        <div>
+        <div @click="goTrigger()">
           <i class="fa fa-lastfm" aria-hidden="true"></i>
           <span>切换</span>
         </div>
@@ -14,7 +14,7 @@
             <input type="text" placeholder="输入搜索关键词并按回车键" class="form-control" @click="goSearchPages()" />
           </div>
         </form>
-        <div>
+        <div @click="goInfo()">
           <i class="fa fa-envelope-o" aria-hidden="true"></i>
           <span>消息</span>
         </div>
@@ -93,7 +93,13 @@ export default {
   },
   methods: {
     goSearchPages() {
-      this.$router.push('/search')
+      this.$router.push('/searchs')
+    },
+    goInfo() {
+      this.$router.push('/infomation')
+    },
+    goTrigger() {
+      this.$router.push('/trigger')
     }
   },
   mounted() {
@@ -198,9 +204,10 @@ export default {
 .wrapper1 {
   width: 710px;
   height: 370px;
-
+  background: white;
   margin: 0 auto;
   margin-top: 30px;
+  border-radius: 30px;
   .cycle {
     width: 100%;
     height: 180px;
@@ -273,10 +280,11 @@ export default {
 .recommend {
   width: 100%;
   height: 60px;
+  margin-top: 20px;
   /*   background: greenyellow; */
   text-align: center;
   line-height: 60px;
-  color: @themeColor;
+  color: gray;
   font-size: 36px;
 }
 </style>

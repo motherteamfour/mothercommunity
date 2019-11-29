@@ -4,94 +4,38 @@
       <input type="text" placeholder="妈妈优选" /><span @click="goback()">取消</span>
     </div>
     <nav>
-      <div @click="select">帖子</div>
-      <div @click="select">用户</div>
+      <router-link to="/searchs" ><div>帖子</div></router-link>
+      <router-link to="/searchs/userpage"><div>用户</div></router-link>
     </nav>
-    <p class="hint">热门搜索</p>
-    <ul class="hotsearch">
-      <li v-for="(item, index) in searchlists" :key="index">{{item.keywords}}</li>
-    </ul>
-    <p class="hint">热门搜索</p>
-    <ul class="history">
-      <li v-for="(item, index) in history" :key="index">
-        <span>
-          <i class="fa fa-clock-o" aria-hidden="true"></i>
-          <span>着床</span>
-        </span>
-        <span>
-          <i class="fa fa-times" aria-hidden="true"></i>
-        </span>
-      </li>
-      <li class="remove">
-        <span></span>
-        <span>清除消息记录</span>
-        <span></span>
-      </li>
-    </ul>
+    <router-view />
   </div>
 </template>
 
 <script>
+/* import SearchPost from '' */
 export default {
-  data() {
+  data () {
     return {
-      searchlists: [
-        {
-          keywords: "着床"
-        },
-        {
-          keywords: "着床"
-        },
-        {
-          keywords: "着床"
-        },
-        {
-          keywords: "怀孕"
-        },
-        {
-          keywords: "着床"
-        },
-        {
-          keywords: "怀孕"
-        },
-        {
-          keywords: "着床"
-        },
-        {
-          keywords: "怀孕"
-        }
-      ],
-      history: [
-        {
-          name: "着床"
-        },
-        {
-          name: "着床"
-        },
-        {
-          name: "着床"
-        },
-        {
-          name: "着床"
-        }
-      ]
-    };
+      
+    }
   },
+  /* components: {
+    SearchPost,
+    UserPage
+  }, */
   methods: {
-    select() {
+    /* select() { */
       //导航选择
       /* if (e.target.innerText == "帖子") {
         
       } else if (e.target.innerText == "用户") {
         
       } */
-    },
-    
+   /*  }, */
+   
     goback() {
       this.$router.push('/');
     }
-  
-
   }
 };
 </script>
