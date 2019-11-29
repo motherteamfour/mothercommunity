@@ -33,7 +33,18 @@
 
 <script>
 export default {
-  name: "QandA"
+  name: "QandA",
+  data(){
+  return{
+    
+  }
+  },
+  created(){
+    console.log("组件创建");
+  },
+  destroyed(){
+    console.log("组件销毁")
+  }
 };
 </script>
 <style lang="less" scoped>
