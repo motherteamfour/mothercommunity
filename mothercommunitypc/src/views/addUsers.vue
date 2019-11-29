@@ -4,11 +4,11 @@
       <table>
         <tr>
           <td>账号：</td>
-          <td><input type="text" placeholder="输入创建的账号" class="userId mod" v-model="inputUsername" @blur="username"></td>
+          <td><input type="text" placeholder="输入创建的账号" class="userId mod" v-model="inputUsername" @blur="username(inputUsername)" ></td>
         </tr>
         <tr>
           <td>密码：</td>
-          <td><input type="text" placeholder="请输入密码" class="password mod" v-model="inputPassword"></td>
+          <td><input type="text" placeholder="请输入密码" class="password mod" v-model="inputPassword" @blur="userpass(inputPassword)"></td>
         </tr>
         <tr>
           <td>姓名：</td>
@@ -16,12 +16,12 @@
         </tr>
         <tr>
           <td>联系方式：</td>
-          <td><input type="text" placeholder="请输入联系电话" class="tel mod" v-model="inputTel"></td>
+          <td><input type="text" placeholder="请输入联系电话" class="tel mod" v-model="inputTel" @blur="tel(inputTel)"></td>
         </tr>
         <tr>
           <td colspan="2">
-            <button type="button" class="add" >添加</button>
-            <button type="button" class="exit" @click="exit">清空</button>
+            <el-button type="button" class="add" :disabled="disadd1 && disadd2 && disadd3">添加</el-button>
+            <el-button type="button" class="exit" @click="exit">清空</el-button>
           </td>
         </tr>
       </table>
@@ -88,11 +88,14 @@ export default {
   data(){
     return {
       trs:[],
-      // 对添加账户的清空
+      // 对添加账户添加初始值
       inputUsername : "",
       inputPassword : "",
       inputName : "",
-      inputTel : ""
+      inputTel : "",
+      disadd1 : false,
+      disadd2 : false,
+      disadd3 : false,
     }
   },
   created() {
@@ -126,12 +129,51 @@ export default {
       });
        
     },
+    defeated(msg) {
+      this.$message({
+          showClose: true,
+          message: msg,
+          type: 'error'
+        });
+    },
+    //正则判断
     username(message){
-      var pat = /\w{5,15}/,
-      if(pat.ta){}
-    }
-    
-  } 
+      var pat = /^[a-zA-Z]{5,15}$/;
+      if(!pat.test(message)){
+        this.defeated("请输入5-15位的字母") 
+        if(message!=""){
+        return  this.disadd1 = true
+      }
+      }
+      
+    },
+    userpass(message){
+      var pat = /^[a-zA-Z0-9_]{5,15}$/;
+      if(!pat.test(message)){
+        this.defeated("请输入5-15位的字母、数字和下划线")
+        if(message!=""){
+        return this.disadd2= true
+      }
+      }
+    },
+    tel(message){
+      var pat = /^1[3|4|5|6|7|8|9]\d{9}/;
+      if(!pat.test(message)){
+        this.defeated("电话号码格式不正确")
+        if(message!=""){
+        return this.disadd3 = true
+      }
+      }
+    },
+   
+  },
+  // computed:{
+  //   disadd(){
+  //     if(this.inputUsername=="" || this.inputPassword=="" || this.inputTel==""){
+  //       return this.disadd = true
+  //     }
+  //   }
+  // }
 }
 </script>
 
@@ -164,6 +206,9 @@ button:hover {
 .add,.exit,.compile,.del{
   background: @bg-btn;
   margin: 5px
+}
+.add,.exit:hover{
+  color: white;
 }
 .mod{
   width: 182px;

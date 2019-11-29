@@ -93,12 +93,16 @@ export default {
         });
       }
     },
-    del:function(i) {
-      this.comsts.splice(i,1)
-    },
-    delAll: function(){
+    getAllUsers(){
+      this.axios.get()
+      .then(res => {
 
-    }
+        console.log(res.data)
+      })
+      .then(res =>{
+        console.log(error)
+      })
+    },
   }
 
 }
