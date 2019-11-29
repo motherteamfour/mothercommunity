@@ -5,7 +5,8 @@ module.exports = {
         plugins: [
           require('postcss-pxtorem')({
             rootValue: 75,
-            propList: ['*'] // 决定哪些属性自动转化
+            propList: ['*'], // 决定哪些属性自动转化
+            selectorBlackList:['van']
           })
         ]
       }
