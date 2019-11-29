@@ -11,7 +11,7 @@
           ></el-option>
         </el-select>
         <el-input class="messageManage-search-input" v-model="input" placeholder="请输入用户名字"></el-input>
-        <el-button class="messageManage-search-btn" icon="el-icon-search">搜索</el-button>
+        <el-button class="messageManage-search-btn" icon="el-icon-search" @click="getAllUsers">搜索</el-button>
       </div>
 
       <div class="messageManage-content">
@@ -23,12 +23,12 @@
           @selection-change="handleSelectionChange"
         >
           <el-table-column type="selection" width="120"></el-table-column>
-          <el-table-column prop="number" label="序号" width="120"></el-table-column>
-          <el-table-column prop="name" label="姓名" width="120"></el-table-column>
-          <el-table-column prop="state" label="状态" show-overflow-tooltip></el-table-column>
+          <el-table-column prop="userName" label="姓名" width="120"></el-table-column>
+          <el-table-column prop="state.stateMessage" label="状态" width="120"></el-table-column>
+          <el-table-column prop="userPhone" label="电话号码" show-overflow-tooltip></el-table-column>
           <el-table-column label="头像" width="240">
             <template slot-scope="scope">
-              <img class="user-picture" :src="scope.row.picture" alt="头像" />
+              <img class="user-picture" :src="scope.row.userImgUrl" alt="头像" />
             </template>
           </el-table-column>
         </el-table>
@@ -38,8 +38,8 @@
           @current-change="handleCurrentChange"
           background
           layout="prev, pager, next"
-          :page-size="6"
-          :total="18"
+          :page-size="sizePage"
+          :total="userTotal"
         ></el-pagination>
         <div style="margin-left: 10%; text-align: left;">
           <el-button class="messageManage-content-btn" @click="toggleSelection()">取消选择</el-button>
@@ -76,45 +76,10 @@ export default {
       ],
       value: "",
       input: "",
-      tableData: [
-        {
-          number: "1",
-          name: "王小虎",
-          state: "备孕中",
-          picture: "/img/001.19fd437c.jpg"
-        },
-        {
-          number: "1",
-          name: "王小虎",
-          state: "备孕中",
-          picture: "/img/001.19fd437c.jpg"
-        },
-        {
-          number: "1",
-          name: "王小虎",
-          state: "备孕中",
-          picture: "/img/001.19fd437c.jpg"
-        },
-        {
-          number: "1",
-          name: "王小虎",
-          state: "备孕中",
-          picture: "/img/001.19fd437c.jpg"
-        },
-        {
-          number: "1",
-          name: "王小虎",
-          state: "备孕中",
-          picture: "/img/001.19fd437c.jpg"
-        },
-        {
-          number: "1",
-          name: "王小虎",
-          state: "备孕中",
-          picture: "/img/001.19fd437c.jpg"
-        }
-      ],
-      showEdit: true
+      tableData: [],
+      showEdit: true,
+      userTotal: 0,
+      sizePage: 6
     };
   },
   components: {
@@ -138,10 +103,38 @@ export default {
     },
     handleCurrentChange(val) {
       console.log(`当前页: ${val}`);
+      console.log(this.sizePage);
+      this.getAllUsers(val,this.sizePage)
     },
     changeShow() {
       this.showEdit = !this.showEdit;
+    },
+    getAllUsers(size,sizePage) {
+      this.axios
+        .get("/admin/userList?size=" + size + "&sizePage=" + sizePage)
+        .then((res) => {
+            if (res.data.code == 200) {
+            this.tableData = res.data.data.list;
+          }
+        })
+        .catch(function(error) {
+          console.log(error);
+        });
     }
+  },
+  mounted() {
+    this.axios
+      .get("/admin/userList?size=1&sizePage=6")
+      .then((res) => {
+        console.log(res.data);
+        if (res.data.code == 200) {
+          this.userTotal = res.data.data.total;
+          this.tableData = res.data.data.list;
+        }
+      })
+      .catch(function(error) {
+        console.log(error);
+      });
   }
 };
 </script>
