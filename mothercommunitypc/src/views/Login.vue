@@ -4,10 +4,10 @@
       <h2>motherAdmin</h2>
       <p>妈妈怀孕管理系统</p>
       <div class="login-input">
-        <el-input placeholder="用户名" prefix-icon="el-icon-user" v-model="input1"></el-input>
+        <el-input placeholder="用户名" prefix-icon="el-icon-user" v-model="username" @blur="judgeName(username)"></el-input>
       </div>
       <div class="login-input">
-        <el-input placeholder="密码" prefix-icon="el-icon-lock" v-model="input2"></el-input>
+        <el-input placeholder="密码" prefix-icon="el-icon-lock" v-model="userpass" @blur="judgePassword(userpass)"></el-input>
       </div>
       <div class="login-input login-input-three">
         <div class="login-input-verification">
@@ -20,9 +20,9 @@
       </div>
       <div class="login-about-password">
         <el-checkbox label="记住密码" name="type"></el-checkbox>
-        <a class="login-forgetPassword" href="javascrpit:;">忘记密码?</a>
+        <router-link class="login-forgetPassword" to="/forgetPassword">忘记密码?</router-link>
       </div>
-      <el-button class="login-btn">登入</el-button>
+      <el-button class="login-btn" @click="getLogin">登入</el-button>
     </form>
   </div>
 </template>
@@ -34,11 +34,12 @@ import SIdentify from '@/components/SIdentify.vue'
 export default {
   data() {
     return {
-      input1: '',
-      input2: '',
+      username: '',
+      userpass: '',
       input3: '',
       identifyCodes: '1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZ', // 验证码字符的集合
-      identifyCode: ''
+      identifyCode: '',
+      passwordFormat: false
 
     }
   },
@@ -50,6 +51,20 @@ export default {
     this.makeCode(this.identifyCodes, 4)
   },
   methods:{
+    success(msg) {
+      this.$message({
+          showClose: true,
+          message: msg,
+          type: 'success'
+        });
+    },
+    defeated(msg) {
+      this.$message({
+          showClose: true,
+          message: msg,
+          type: 'error'
+        });
+    },
     randomNum (min, max) {
       return Math.floor(Math.random() * (max - min) + min)
     },
@@ -62,6 +77,45 @@ export default {
       for (let i = 0; i < l; i++) {
         this.identifyCode += this.identifyCodes[this.randomNum(0, this.identifyCodes.length)]
       }
+    },
+    judgePassword(msg) {
+      var reg = /^(\w){5,15}$/;
+      if(!reg.test(msg)) {
+        this.defeated('密码格式不正确')
+      }
+    },
+    judgeName(msg) {
+      var reg = /^[a-zA-Z]{5,15}$/;
+      if(!reg.test(msg)) {
+        this.defeated('用户名格式不正确')
+      }
+    },
+    getLogin() {
+      this.axios
+        .post("/api/admin/login1", {
+          adminName: this.username,
+          adminPassword: this.userpass
+        })
+        .then(res => {
+          console.log(res.data);
+          if (res.data.code == "200") {
+            // var token = "njaksxbxkjasbkjcxasbjk" // 模拟后台返回的token
+            var token = res.data.token;
+            sessionStorage.setItem("token", token);
+
+            // 获取参数（未登录时想访问的路由）
+            var url = this.$route.query.redirect;
+
+            url = url ? url : "/home";
+            // 切换路由
+            this.$router.replace(url);
+          } else {
+            console.log("登陆失败");
+          }
+        })
+        .catch(err => {
+          console.log(err);
+        });
     }
   }
 }
