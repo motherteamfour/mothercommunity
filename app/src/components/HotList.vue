@@ -5,9 +5,7 @@
         <div class="avater"></div>
         <p class="username">{{list.username}}</p>
       </div>
-      <div class="follow" :userid="list.id" v-if="!list.isFollowed" @click="follow(list.id)">
-        +关注
-      </div>
+      <div class="follow" :userid="list.id" v-if="!list.isFollowed" @click="follow(list.id)">+关注</div>
       <div class="followed" :userid="list.id" v-else @click="follow(list.id)">
         <i class="fa fa-check"></i>
         已关注
@@ -21,25 +19,25 @@
       </div>
     </div>
     <div class="options">
-      <div @click="praise(list.id)" v-if="list.isPraise">
-        <i class="fa fa-heart-o" aria-hidden="true"></i>
-        <span>赞({{list.praise}})</span>
+      <div v-if="list.isPraise" class="praise-wrap">
+        <i @click="praise(list.id)" class="fa fa-heart-o" aria-hidden="true"></i>
+        <span @click="praise(list.id)">赞({{list.praise}})</span>
       </div>
-      <div @click="praise(list.id)" style="color: red" v-else>
-        <i class="fa fa-heart" aria-hidden="true"></i>
-        <span>已赞({{list.praise+1}})</span>
+      <div style="color: red" v-else class="praise-wrap">
+        <i @click="praise(list.id)" class="fa fa-heart" aria-hidden="true"></i>
+        <span @click="praise(list.id)">已赞({{list.praise+1}})</span>
       </div>
       <div>
         <i class="fa fa-comment-o" aria-hidden="true"></i>
         <span>评论{{list.comments}}</span>
       </div>
-      <div @click="collect(list.id)" v-if="list.isCollect">
-        <i class="fa fa-star-o" aria-hidden="true"></i>
-        <span>收藏({{list.collect}})</span>
+      <div v-if="list.isCollect" class="collect-wrap">
+        <i @click="collect(list.id)" class="fa fa-star-o" aria-hidden="true"></i>
+        <span @click="collect(list.id)">收藏({{list.collect}})</span>
       </div>
-      <div @click="collect(list.id)"  style="color: #f8d742" v-else>
-        <i class="fa fa-star" aria-hidden="true"></i>
-        <span>已收藏({{list.collect}})</span>
+      <div style="color: #f8d742" v-else class="collect-wrap">
+        <i class="fa fa-star" aria-hidden="true" @click="collect(list.id)"></i>
+        <span @click="collect(list.id)">已收藏({{list.collect}})</span>
       </div>
     </div>
   </div>
@@ -49,8 +47,7 @@
 export default {
   name: "HotList",
   data() {
-    return {
-    };
+    return {};
   },
   props: ["list"],
   methods: {
@@ -75,7 +72,6 @@ export default {
       this.$emit("collectFn", i);
     }
   }
-  
 };
 </script>
 
@@ -180,5 +176,12 @@ export default {
 }
 .collected {
   color: #f8d742;
+}
+.praise-wrap {
+  width: 200px;
+}
+.collect-wrap {
+  width: 200px;
+  text-align: right;
 }
 </style>

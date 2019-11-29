@@ -2,19 +2,19 @@
   <div class="app-entrance">
     <div class="header">
       <div class="status-bar"></div>
-      <div class="navigation"></div>
+      <div class="navigation">登录</div>
     </div>
 
     <div class="app-entrance-wrap">
       <div class="app-entrance-title">
-        <a class="login" href="javascript:;" @click="com='Login'" :class="{on: com=='Login'}">登录</a>
+        <a class="login" href="javascript:;" @click="com='Login'" :class="{on: com=='Login'}">密码登录</a>
 
         <a
-          class="register"
+          class="verify-code-login"
           href="javascript:;"
-          @click="com='Register'"
-          :class="{on: com=='Register'}"
-        >注册</a>
+          @click="com='VerifyCodeLogin'"
+          :class="{on: com=='VerifyCodeLogin'}"
+        >验证码登录</a>
       </div>
 
       <keep-alive>
@@ -26,13 +26,15 @@
 </template>
 
 <script>
-import Login from "../components/Login";
-import Register from "../components/Register";
+import Login from "../components/Login";//登录
+import VerifyCodeLogin from "../components/VerifyCodeLogin";//验证码登录
+import Register from "../components/Register";//注册
 
 export default {
   name: "login",
   components: {
     Login,
+    VerifyCodeLogin,
     Register
   },
   data() {
@@ -56,6 +58,10 @@ export default {
   }
   .navigation {
     height: 88px;
+    line-height: 88px;
+    color: white;
+    text-align: center;
+    font-size: 36px;
   }
 }
 .app-entrance-wrap {
@@ -68,7 +74,8 @@ export default {
     display: flex;
     justify-content: center; // 让子元素水平居中
     align-items: center; // 让子元素垂直居中
-    margin: 60px 0;
+    margin-top: 120px;
+    margin-bottom: 60px;
     height: 60px;
     line-height: 60px;
     width: 400px;

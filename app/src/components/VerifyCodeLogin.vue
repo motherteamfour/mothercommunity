@@ -5,10 +5,10 @@
       <input type="text" placeholder="输入手机号" v-model="username" />
     </div>
     <div class="form-group">
-      <span>密码</span>
+      <span>验证码</span>
 
-      <input type="password" placeholder="6-16位" v-model="userpass" @keyup.enter="getLogin" />
-      <button type="button" class="forget-password">忘记密码</button>
+      <input type="password" placeholder="输入验证码" v-model="userpass" @keyup.enter="getLogin" />
+      <button type="button" class="send-verify" @click="getVerifyCode">验证码</button>
     </div>
     <div class="form-group login-from-group">
       <input type="button" value="登录" @click="getLogin" />
@@ -28,7 +28,7 @@ export default {
   methods: {
     getLogin() {
       this.axios
-        .post("/zp/user/loginByPassword", {
+        .post("/api/zp/user/loginByPassword", {
           userPhone: this.username,
           userPassword: this.userpass
         })
@@ -52,14 +52,23 @@ export default {
         .catch(err => {
           console.log(err);
         });
+    },
+    getVerifyCode(){
+       this.axios
+        .get("获取验证码的接口")
+        .then()
+        .catch(err => {
+          console.log(err);
+        });
+
     }
+
   }
 };
 </script>
 <style lang="less" scoped>
 @import "../assets/style/base.less";
 @zitiColor:#ccc;
-
 
 .login-form {
   padding: 0 20px;
@@ -83,16 +92,7 @@ export default {
       color: @themeColor;
       vertical-align: top;
     }
-
-    input[type="text"],
-    input[type="password"] {
-      width: 360px;
-      height: 98px;
-      line-height: 98px;
-      border: none;
-      outline: none;
-    }
-    .forget-password{
+    .send-verify{
       width: 120px;
       height: 50px;
       line-height: 50px;
@@ -105,6 +105,17 @@ export default {
       &:active {
         color:@zitiColor; 
       }
+    }
+
+    input[type="text"],
+    input[type="password"] {
+      width: 360px;
+      height: 98px;
+      line-height: 98px;
+      border: none;
+      outline: none;
+      font-size: 28px;
+      color: @zitiColor;
     }
 
     input[type="button"] {

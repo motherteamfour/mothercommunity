@@ -13,6 +13,10 @@
         </li>
       </ul>
     </header>
+    <router-link to="/post/fromhome" class="post">
+    <!--   <img src="@/assets/img/circleswipetest/post.png" alt=""> -->
+      <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+    </router-link>
     <router-view />
   </div>
 </template>
@@ -93,5 +97,18 @@ export default {
       }
     }
   }
+}
+.post {
+  width: 90px;
+  height: 90px;
+  border-radius: 50%;
+  position: fixed;
+  bottom: 150px;
+  right: 50px;
+  background: rgba(255, 228, 105,0.9);
+  color: #fff;
+  text-align: center;
+  line-height: 90px;
+  text-indent: 3px;
 }
 </style>

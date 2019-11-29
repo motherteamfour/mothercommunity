@@ -41,9 +41,9 @@
               <span slot="title">文章管理</span>
             </template>
             <el-menu-item-group>
-              <el-menu-item index="investigate">文章审核</el-menu-item>
-              <el-menu-item index="recommend">文章推荐</el-menu-item>
-              <el-menu-item index="delAticle">已删除文章</el-menu-item>
+              <el-menu-item index="/home/investigate">文章审核</el-menu-item>
+              <el-menu-item index="/home/recommend">文章推荐</el-menu-item>
+              <el-menu-item index="/home/delAticle">已删除文章</el-menu-item>
             </el-menu-item-group>
           </el-submenu>
           <el-submenu index="5">
@@ -76,7 +76,7 @@
 
     <div class="right">
       <div class="right-head">
-
+        <ShowTime></ShowTime>
       </div>
       <router-view></router-view>
     </div>
@@ -84,10 +84,12 @@
 </template>
 
 <script>
+import ShowTime from "@/components/ShowTime.vue"
+
 export default {
   name: "home",
   components: {
-    
+    ShowTime
   },
   methods: {
     handleOpen(key, keyPath) {

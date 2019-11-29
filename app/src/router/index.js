@@ -25,7 +25,7 @@ const routes = [
         name: 'Community',//社区
         component: () => import('../views/Community.vue'),
 
-      }, 
+      },
       {
         path: 'forum',
         component: Forum,//圈子
@@ -74,7 +74,7 @@ const routes = [
       },
       {
         path: 'my',//我的
-        component: My,     
+        component: My,
       },
       {
         path: 'newpost', //我的发帖
@@ -87,7 +87,7 @@ const routes = [
             component: () => import('../views/NewPostLists.vue')
           }
         ] */
-      }, 
+      },
       {
         path: 'reply', //我的回帖
         name: 'Reply',
@@ -97,7 +97,7 @@ const routes = [
         path: 'collect', //我的收藏
         name: 'Collect',
         component: () => import('../views/Collect.vue')
-        
+
       },
       {
         path: 'resource', //我的资料
@@ -151,15 +151,42 @@ const routes = [
             component: () => import('../views/Sented.vue'),
           }
         ]
+        
+      },
+      {
+        path: 'post/:id',
+        name: 'Post',
+        component: () => import('../views/Post.vue')
       }
 
     ]
   }
 ]
 
+
 const router = new VueRouter({
-  routes,
-  mode: 'history'
+  mode: 'history',
+  base: process.env.BASE_URL,
+  routes
 })
 
+// 注册全局守卫
+// 在访问路由之前进行拦截
+router.beforeEach((to, from, next) => {
+  // 获取 token，登录的标识
+  var token = sessionStorage.getItem("token")
+
+  if (to.meta.auth) { // 判断是否需要权限
+    if (token) { // 再次判断是否已经有权限了
+      next()
+    } else {
+      next({ // 没有权限，导向登录页
+        path: "/login",
+        query: { redirect: to.fullPath } // 记录原本想访问的路由
+      })
+    }
+  } else {
+    next() // 想去哪就去哪
+  }
+})
 export default router
