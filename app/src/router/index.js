@@ -3,15 +3,17 @@ import VueRouter from 'vue-router'
 import Home from '../views/Home.vue'
 import Forum from '../views/Forum.vue'
 import My from '../views/My.vue'
+import { Search } from 'vant'
 /* import NewPost from '../views/NewPost.vue' */
 
 Vue.use(VueRouter)
+Vue.use(Search);
 
 const routes = [
   {
     path: '/login',
-    name: 'login',
-    component: () => import('../views/Login.vue')
+    name: 'Entrance',
+    component: () => import('../views/Entrance.vue')
   },
   {
     path: '/',
@@ -95,6 +97,21 @@ const routes = [
         name: 'Collect',
         component: () => import('../views/Collect.vue')
         
+      },
+      {
+        path: 'resource', //我的资料
+        name: 'Resource',
+        component: () => import('../views/MyResources.vue')
+      },
+      {
+        path: 'group/:id',
+        name: 'Group',
+        component: () => import('../views/Group.vue') 
+      },
+      {
+        path: 'post/:id',
+        name: 'Post',
+        component: () => import('../views/Post.vue') 
       }
 
     ]

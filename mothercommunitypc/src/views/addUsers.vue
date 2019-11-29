@@ -127,8 +127,8 @@ export default {
        
     },
     username(message){
-      pat = /\w{5,15}/,
-      if(pat){}
+      var pat = /\w{5,15}/,
+      if(pat.ta){}
     }
     
   } 

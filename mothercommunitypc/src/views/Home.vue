@@ -77,7 +77,7 @@
 
     <div class="right">
       <div class="right-head">
-
+        <ShowTime></ShowTime>
       </div>
       <router-view></router-view>
     </div>
@@ -85,10 +85,12 @@
 </template>
 
 <script>
+import ShowTime from "@/components/ShowTime.vue"
+
 export default {
   name: "home",
   components: {
-    
+    ShowTime
   },
   methods: {
     handleOpen(key, keyPath) {
