@@ -4,7 +4,7 @@
       <table>
         <tr>
           <td>账号：</td>
-          <td><input type="text" placeholder="输入创建的账号" class="userId mod" v-model="inputUsername"></td>
+          <td><input type="text" placeholder="输入创建的账号" class="userId mod" v-model="inputUsername" @blur="username"></td>
         </tr>
         <tr>
           <td>密码：</td>
@@ -52,7 +52,7 @@
           <td>{{item.tel}}</td>
           <td>
             <button type="button" class="compile">编辑</button>
-            <button type="button" class="del" @click="del">删除</button>
+            <button type="button" class="del" @click="del(index)">删除</button>
           </td>
         </tr>
       </table>
@@ -107,13 +107,13 @@ export default {
       this.inputTel = ""
       
     },
-    
-    del() {
+    del(i) {
       this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
+        this.trs.splice(i, 1);
         this.$message({
           type: 'success',
           message: '删除成功!'
@@ -124,6 +124,11 @@ export default {
           message: '已取消删除'
         });          
       });
+       
+    },
+    username(message){
+      pat = /\w{5,15}/,
+      if(pat){}
     }
     
   } 

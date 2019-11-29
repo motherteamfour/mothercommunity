@@ -1,11 +1,23 @@
 <template>
   <div>
     <div class="top">
+      <select>
+        <option value="selected"></option>
+        <option>怀孕</option>
+        <option>备孕</option>
+        <option>出生</option>
+      </select>
+      <select>
+        <option value="selected"></option>
+        <option>怀孕</option>
+        <option>备孕</option>
+        <option>出生</option>
+      </select>
       <input type="text" class="username" placeholder="请输入需要搜索的用户名">
       <input type="text" class="title" placeholder="请输入需要搜索的标题">
       <button type="button" class="seek-btn">搜索</button>
       <button type="button" class="del-btn">删除</button>
-      <button type="button" class="unRecommend">取消推荐</button>
+      <button type="button" class="unRecommend">推荐</button>
     </div>
     <div class="table">
       <table>
@@ -14,6 +26,7 @@
           <th>ID</th>
           <th>用户名</th>
           <th>标题</th>
+          <th>文章类型</th>
           <th>发布时间</th>
           <th>收藏数量</th>
           <th>点赞数量</th>
@@ -24,13 +37,14 @@
           <td>{{item.id}}</td>
           <td>{{item.username}}</td>
           <td>{{item.title}}</td>
+          <td>{{item.type}}</td>
           <td>{{item.time}}</td>
           <td>{{item.collect}}</td>
           <td>{{item.praise}}</td>
           <td>
             <button type="button" class="check-btn">查看</button>
             <button type="button" class="del-btn" @click="del(index)">删除</button>
-            <button type="button" class="unRecommend">取消推荐</button>
+            <button type="button" class="unRecommend">推荐</button>
           </td>
         </tr>
       </table>
@@ -46,6 +60,7 @@ const comsts = [
     username:"lilei",
     title:"朝花夕拾",
     time:"2017.1.5",
+    type:"怀孕",
     collect:20,
     praise:30
   },
@@ -54,6 +69,7 @@ const comsts = [
     username:"haiqiong",
     title:"朝花夕拾",
     time:"2017.1.5",
+     type:"怀孕",
     collect:20,
     praise:30
   },
@@ -62,6 +78,7 @@ const comsts = [
     username:"lilei",
     title:"朝花夕拾",
     time:"2017.1.5",
+     type:"怀孕",
     collect:20,
     praise:30
   }
