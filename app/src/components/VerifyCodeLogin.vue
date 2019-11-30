@@ -22,13 +22,15 @@ export default {
   data() {
     return {
       username: "",
-      userpass: ""
+      userpass: "",
+      info:""
     };
   },
   methods: {
+    // 验证码登录
     getLogin() {
       this.axios
-        .post("/api/zp/user/loginByPassword", {
+        .post("/zp/user/loginByPassword", {
           userPhone: this.username,
           userPassword: this.userpass
         })
@@ -53,22 +55,26 @@ export default {
           console.log(err);
         });
     },
-    getVerifyCode(){
-       this.axios
-        .get("获取验证码的接口")
-        .then()
+    // 获取验证码
+    getVerifyCode() {
+      this.axios
+        .post("zp/user/sendcode", {
+          phone: this.username
+        })
+        .then(res => {
+          console.log("获取验证码：", res.data);
+          this.info = res.data.data;
+        })
         .catch(err => {
           console.log(err);
         });
-
     }
-
   }
 };
 </script>
 <style lang="less" scoped>
 @import "../assets/style/base.less";
-@zitiColor:#ccc;
+@zitiColor: #ccc;
 
 .login-form {
   padding: 0 20px;
@@ -92,7 +98,7 @@ export default {
       color: @themeColor;
       vertical-align: top;
     }
-    .send-verify{
+    .send-verify {
       width: 120px;
       height: 50px;
       line-height: 50px;
@@ -103,7 +109,7 @@ export default {
       outline: none;
       background-color: @themeColor;
       &:active {
-        color:@zitiColor; 
+        color: @zitiColor;
       }
     }
 
@@ -130,7 +136,7 @@ export default {
       border-radius: 45px;
 
       &:active {
-        color:@zitiColor; 
+        color: @zitiColor;
       }
     }
   }
