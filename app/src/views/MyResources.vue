@@ -19,42 +19,43 @@
     </ul>
     <ul class="lists">
       <li style="border-bottom: none">
-        <span class="title">宝宝管理</span>
+        <span class="title">宝宝状态</span>
         <span class="num">
-          0
+          <span>备孕中</span>
           <i class="fa fa-angle-right" aria-hidden="true"></i>
         </span>
       </li>
     </ul>
     <ul class="lists">
-      <li>
+      <li @click="gonicknamepage()">
         <span class="title">昵称</span>
         <span class="num">
-          0
+          <span>0</span>
           <i class="fa fa-angle-right" aria-hidden="true"></i>
         </span>
       </li>
       <li>
         <span class="title">城市</span>
         <span class="num">
-          0
+          <span>0</span>
           <i class="fa fa-angle-right" aria-hidden="true"></i>
         </span>
       </li>
       <li style="border-bottom: none">
         <span class="title">宝妈生日</span>
         <span class="num">
-          0
+          <span>0</span>
           <i class="fa fa-angle-right" aria-hidden="true"></i>
         </span>
       </li>
     </ul>
     <ul class="lists">
       <li style="border-bottom: none">
-        <span class="title">用户ID:1212121212</span>
-        <!-- <span class="num tel">手机号码</span> -->
+        <span class="title">用户ID：1212121212</span>
+        
       </li>
     </ul>
+    
   </div>
 </template>
 
@@ -63,6 +64,9 @@ export default {
   methods: {
     goback() {
       this.$router.push("./my");
+    },
+    gonicknamepage() {
+      this.$router.push("/altername")
     }
   }
 };
@@ -106,9 +110,9 @@ export default {
     background: white;
     margin: 40px auto;
     li {
-      height: 140px;
+     /*  height: 140px; */
       display: flex;
-      
+      justify-content: space-between;
       align-items: center;
       padding: 0 40px;
 
@@ -118,8 +122,11 @@ export default {
         font-size: 30px;
       }
       .num {
-        height: 140px;
-        line-height: 140px;
+       height: 140px;
+       /*   line-height: 140px; */
+        display: flex;
+        justify-content: flex-start;
+        align-items: center;
         .portrait {
           display: inline-block;
           width: 120px;
@@ -127,6 +134,7 @@ export default {
           background: yellow;
           border-radius: 50%;
           vertical-align: baseline;
+          margin-right: 14px;
         }
       }
     }
@@ -145,37 +153,23 @@ export default {
       justify-content: space-between;
       align-items: center;
       padding: 0 40px;
-      /*  img {
-        width: 44px;
-        height: 44px;
-        display: inline-block;
-        vertical-align: middle;
-      } */
+     
       .title {
         display: inline-block;
         font-size: 30px;
-        /*         width: calc(100%-44px);
- */
-        /* height: 60px; */
-        /* margin-left: 20px; */
+     
       }
       .num {
-        /* display: inline-block;
-        height: 70px;
-        width: 430px;
-        font-size: 36px;
-        text-align: right;
-        color: rgb(168, 170, 165); */
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        color: grey;
+        span {
+          font-size: 30px;
+          margin-right: 14px;
+        }
       }
-      /*.telphone {
-        font-size: 28px;
-        color: red;
-      }
-      .tel {
-        font-size: 28px;
-        margin-left: 70px;
-        color: rgb(186, 189, 182);
-      } */
+      
     }
   }
 }
