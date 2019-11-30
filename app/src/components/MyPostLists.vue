@@ -39,7 +39,7 @@ export default {
 .newposts {
   width: 710px;
   margin: 40px auto;
-  height: 180px;
+  margin-bottom: 20px;
   background: white;
   display: flex;
   justify-content: flex-start;
@@ -52,35 +52,36 @@ export default {
     /* background: yellow; */
     .user-por {
       width: 100%;
-      height: 120px;
+      height: 100px;
       display: flex;
       justify-content: center;
       .portrait {
-        width: 120px;
-        height: 120px;
+        width: 100px;
+        height: 100px;
         background: rgb(151, 135, 135);
         border-radius: 50%;
       }
     }
     .user-name {
       width: 100%;
-      height: 60px;
+      height: 30px;
       /* overflow: hidden; */
       display: flex;
       justify-content: center;
       align-items: center;
       p {
-        font-size: 40px;
+        font-size: 30px;
       }
     }
   }
   .right {
     width: 70%;
-    height: 130px; /*  */
+    height: 100px; /*  */
 
     .titlee {
       width: 100%;
-      height: 130px;
+      font-size: 34px;
+      height: 100px;
       line-height: 100px; /*  */
     }
     .state {
@@ -88,7 +89,7 @@ export default {
       justify-content: space-between;
       align-items: flex-end;
       span {
-        font-size: 30px;
+        font-size: 20px;
         span {
           margin-left: 20px;
         }

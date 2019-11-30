@@ -3,11 +3,10 @@ import VueRouter from 'vue-router'
 import Home from '../views/Home.vue'
 import Forum from '../views/Forum.vue'
 import My from '../views/My.vue'
-import { Search } from 'vant'
-/* import NewPost from '../views/NewPost.vue' */
+import Searchs from '../views/Search.vue'
+import InfoComment from '../views/InfoComment.vue'
 
 Vue.use(VueRouter)
-Vue.use(Search);
 
 const routes = [
   {
@@ -106,15 +105,78 @@ const routes = [
       {
         path: 'group/:id',
         name: 'Group',
-        component: () => import('../views/Group.vue')
+        component: () => import('../views/Group.vue') 
       },
-
+      {
+        path: 'searchs', // 搜索
+        
+        component: Searchs,
+        children: [
+          {
+            path: '',
+            name: 'SearchPost',
+            component: () => import('../views/SearchPost.vue')
+          },
+          {
+            path: 'userpage',
+            name: 'Userpage',
+            component: () => import('../views/Userpage.vue'),
+          }
+        ]
+      },
+      {
+        path: 'infomation', // 消息
+        name: "Infomation",
+        component: () => import('../views/Infomation.vue')
+      },
+      {
+        path: 'trigger',
+        name: "Trigger",
+        component: () => import('../views/Trigger.vue')
+      },
+      {
+        path: 'infocomment', // 消息中的评论
+        component: InfoComment,
+        children: [
+          {
+            path: '',
+            name: 'Received',
+            component: () => import('../views/Received.vue')
+          },
+          {
+            path: 'sented',
+            name: 'Sented',
+            component: () => import('../views/Sented.vue'),
+          }
+        ]
+        
+      },
+      {
+        path: 'infolike', // 消息中的点赞
+        name: 'InfoLike',
+        component: () => import('../views/InfoLike.vue')
+      },
+      {
+        path: 'inform', //消息中通知
+        name: 'Inform',
+        component: () => import('../views/Inform.vue')
+      },
+      {
+        path: 'altername', //消息中通知
+        name: 'Altername',
+        component: () => import('../views/AlterName.vue')
+      }
     ]
   },
   {
-    path: '/post/:id',
+    path: '/post/:id',//发布帖子
     name: 'Post',
     component: () => import('../views/Post.vue')
+  },
+  {
+    path: '/circlegourp', //所有圈子
+    name: 'circlegourp',
+    component: () => import('../views/CircleGourp.vue')
   }
 ]
 

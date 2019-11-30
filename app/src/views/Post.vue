@@ -10,29 +10,54 @@
     <form>
       <div class="input-box">
         <div class="title-wrap">
-          <input type="text" class="title" placeholder="来个标题" />
+          <input type="text" class="title" placeholder="标题" />
         </div>
         <div class="line"></div>
         <div class="content-wrap">
           <textarea class="text-content" placeholder="写点内容"></textarea>
           <div class="post-pic">
-            <van-uploader v-model="fileList" multiple :preview-size="80" />
+            <van-uploader v-model="fileList" multiple :preview-size="100" />
           </div>
         </div>
       </div>
     </form>
-    <div class="select-circle" @click="show = !show">
+    <div class="select-circle" @click="circleShow = !circleShow">
       <p class="left">
         <i class="fa fa-globe fa-2x" aria-hidden="true"></i>
-        选择圈子
+        {{groupName}}
       </p>
       <p class="right">
         <span>帮你找到更多的小伙伴</span>
         <i class="fa fa-angle-right fa-2x" aria-hidden="true"></i>
       </p>
     </div>
-    <van-action-sheet v-model="show" title="标题">
-      <p>内容</p>
+    <van-action-sheet v-model="circleShow" title="选择圈子">
+      <div class="option-wrap">
+        <div class="select-followed">
+          <h3>我关注的圈子</h3>
+          <ul>
+            <li v-for="(item, index) in circleOptions" :key="index" @click="selected" :classid="item.classid">
+              <div>
+                <img src alt />
+              </div>
+              <p>{{item.name}}</p>
+            </li>
+          </ul>
+        </div>
+        <div class="select-all">
+          <div class="wrap">
+            <h3>全部圈子</h3>
+          </div>
+          <ul>
+            <li v-for="(item, index) in circleOptions" :key="index" @click="selected">
+              <div>
+                <img src alt />
+              </div>
+              <p>{{item.name}}</p>
+            </li>
+          </ul>
+        </div>
+      </div>
     </van-action-sheet>
   </div>
 </template>
@@ -46,8 +71,47 @@ export default {
   name: "Post",
   data() {
     return {
+      circleOptions: [
+        {
+          url: "",
+          classid: 1,
+          name: "怀孕圈"
+        },
+        {
+          url: "",
+          classid: 2,
+          name: "夫妻感情"
+        },
+        {
+          url: "",
+          classid: 3,
+          name: "育儿圈"
+        },
+        {
+          url: "",
+          classid: 4,
+          name: "育儿圈"
+        },
+        {
+          url: "",
+          classid: 5,
+          name: "育儿圈"
+        },
+        {
+          url: "",
+          classid: 6,
+          name: "育儿圈"
+        },
+        {
+          url: "",
+          classid: 7,
+          name: "育儿圈"
+        }
+      ],
       fileList: [],
-      show: false
+      circleShow: false,
+      groupName: '请选择圈子',
+      classid: 0
     };
   },
   components: {
@@ -59,6 +123,11 @@ export default {
   methods: {
     back() {
       this.$router.go(-1); //返回上一层
+    },
+    selected(e) {
+      this.circleShow = !this.circleShow
+      this.groupName = e.target.children[1].innerText;
+      this.classid = e.target.getAttribute('classid');
     }
   }
 };
@@ -92,16 +161,19 @@ nav {
     color: #000;
   }
   .confirm {
-    width: 120px;
-    height: 60px;
+    width: 110px;
+    height: 50px;
     border: none;
     border-radius: 40px;
-    font-size: 32px;
+    font-size: 30px;
     background: #ffe469;
     color: #fff;
     outline: none;
     margin-right: 10px;
-    box-shadow: 0 0 10px #ccc;
+    box-shadow: 0 0 15px #ffe469;
+    &:active {
+      background: #e7d37a;
+    }
   }
 }
 
@@ -123,7 +195,9 @@ form {
       .title {
         height: 60px;
         width: 100%;
-        font-size: 30px;
+        font-size: 32px;
+        box-sizing: border-box;
+        padding: 0 10px;
         border: none;
         outline: none;
         &::-webkit-input-placeholder {
@@ -142,12 +216,14 @@ form {
       width: 100%;
       padding: 10px 20px;
       .text-content {
+        box-sizing: border-box;
+        padding: 0 10px;
         width: 100%;
         height: 400px;
         resize: none;
         border: none;
         outline: none;
-        font-size: 30px;
+        font-size: 28px;
         &::-webkit-input-placeholder {
           font-size: 30px;
           color: rgb(100, 100, 100);
@@ -191,8 +267,46 @@ form {
   }
 }
 
-.van-uploader__input {
-  width: 80px;
-  height: 80px;
+.option-wrap {
+  background: rgb(248, 248, 248);
+}
+.select-followed,
+.select-all {
+  width: 100%;
+  height: 100%;
+  background: #fff;
+  h3 {
+    font-size: 30px;
+    font-weight: 500;
+    margin: 20px 20px;
+  }
+  li {
+    width: 100%;
+    height: 100px;
+    box-sizing: border-box;
+    padding: 0 20px;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    font-size: 28px;
+    border-bottom: 1px solid #eee;
+    &:active {
+      background: rgb(248, 248, 248);
+    }
+    div {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      background: lightseagreen;
+      margin-right: 50px;
+    }
+  }
+}
+
+.select-all {
+  margin-top: 20px;
+  .wrap {
+    overflow: hidden;
+  }
 }
 </style>
