@@ -21,7 +21,7 @@
           </div>
         </div>
       </li>
-      <li>
+      <li @click="goInfoLike()">
         <div class="photo orange"><i class="fa fa-thumbs-o-up" aria-hidden="true"></i></div>
         <div class="right">
           <div class="category">
@@ -31,7 +31,7 @@
           <div class="gray">帮小友思考思考时时刻刻是给你点了一个赞</div>
         </div>
       </li>
-      <li>
+      <li @click="goInform()">
         <div class="photo pink"><i class="fa fa-volume-up" aria-hidden="true"></i></div>
         <div class="category">
           <div class="right">
@@ -55,6 +55,12 @@ export default {
     },
     goInfoComment() {
       this.$router.push('/infocomment')
+    },
+    goInfoLike() {
+      this.$router.push('/infolike')
+    },
+    goInform() {
+      this.$router.push('/inform')
     }
   }
 };

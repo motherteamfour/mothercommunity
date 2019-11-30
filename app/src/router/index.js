@@ -3,12 +3,10 @@ import VueRouter from 'vue-router'
 import Home from '../views/Home.vue'
 import Forum from '../views/Forum.vue'
 import My from '../views/My.vue'
-import { Search } from 'vant'
 import Searchs from '../views/Search.vue'
 import InfoComment from '../views/InfoComment.vue'
 
 Vue.use(VueRouter)
-Vue.use(Search);
 
 const routes = [
   {
@@ -127,7 +125,7 @@ const routes = [
         ]
       },
       {
-        path: 'infomation',
+        path: 'infomation', // 消息
         name: "Infomation",
         component: () => import('../views/Infomation.vue')
       },
@@ -137,7 +135,7 @@ const routes = [
         component: () => import('../views/Trigger.vue')
       },
       {
-        path: 'infocomment',
+        path: 'infocomment', // 消息中的评论
         component: InfoComment,
         children: [
           {
@@ -157,7 +155,23 @@ const routes = [
         path: 'post/:id',
         name: 'Post',
         component: () => import('../views/Post.vue')
+      },
+      {
+        path: 'infolike', // 消息中的点赞
+        name: 'InfoLike',
+        component: () => import('../views/InfoLike.vue')
+      },
+      {
+        path: 'inform', //消息中通知
+        name: 'Inform',
+        component: () => import('../views/Inform.vue')
+      },
+      {
+        path: 'altername', //消息中通知
+        name: 'Altername',
+        component: () => import('../views/AlterName.vue')
       }
+
 
     ]
   }

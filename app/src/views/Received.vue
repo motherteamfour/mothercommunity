@@ -1,12 +1,15 @@
 <template>
   <div class="commpages">
-    评论页xxxxxxxxxxxxxxxxxx
+    <InfoComm></InfoComm>
   </div>
 </template>
 
 <script>
+import InfoComm from '../components/InfoComm'
 export default {
-  
+  components: {
+    InfoComm
+  }
 }
 </script>
 
