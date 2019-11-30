@@ -3,7 +3,8 @@
     <div class="top">轮播图</div>
     <div class="main">
       <div class="one">
-        <div class="ask">
+
+        <router-link :to="'/ask'" class="ask">
           <i class="fa fa-pencil-square-o fa-lg" aria-hidden="true"></i>
           <div>
             <p class="one-text">我要提问</p>
@@ -11,7 +12,7 @@
               <span>X</span>人正在提问
             </p>
           </div>
-        </div>
+        </router-link>
         <div class="search">
           <i class="fa fa-search fa-lg" aria-hidden="true"></i>
           <div>

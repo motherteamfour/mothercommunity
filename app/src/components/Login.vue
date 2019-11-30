@@ -8,7 +8,10 @@
       <span>密码</span>
 
       <input type="password" placeholder="6-16位" v-model="userpass" @keyup.enter="getLogin" />
-      <button type="button" class="forget-password">忘记密码</button>
+
+      <router-link :to="'/login/findpassword'">
+        <button type="button" class="forget-password">忘记密码</button>
+      </router-link>
     </div>
     <div class="form-group login-from-group">
       <input type="button" value="登录" @click="getLogin" />
@@ -35,9 +38,10 @@ export default {
         .then(res => {
           console.log(res.data);
           if (res.data.code == "200") {
-            // var token = "njaksxbxkjasbkjcxasbjk" // 模拟后台返回的token
             var token = res.data.data;
+            var userId = res.data.id;
             sessionStorage.setItem("token", token);
+            sessionStorage.setItem("userId", userId);
 
             // 获取参数（未登录时想访问的路由）
             var url = this.$route.query.redirect;
@@ -58,8 +62,7 @@ export default {
 </script>
 <style lang="less" scoped>
 @import "../assets/style/base.less";
-@zitiColor:#ccc;
-
+@zitiColor: #ccc;
 
 .login-form {
   padding: 0 20px;
@@ -92,7 +95,7 @@ export default {
       border: none;
       outline: none;
     }
-    .forget-password{
+    .forget-password {
       width: 120px;
       height: 50px;
       line-height: 50px;
@@ -103,7 +106,7 @@ export default {
       outline: none;
       background-color: @themeColor;
       &:active {
-        color:@zitiColor; 
+        color: @zitiColor;
       }
     }
 
@@ -119,7 +122,7 @@ export default {
       border-radius: 45px;
 
       &:active {
-        color:@zitiColor; 
+        color: @zitiColor;
       }
     }
   }

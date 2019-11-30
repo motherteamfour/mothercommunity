@@ -3,6 +3,7 @@ import VueRouter from 'vue-router'
 import Home from '../views/Home.vue'
 import Forum from '../views/Forum.vue'
 import My from '../views/My.vue'
+import Entrance from '../views/Entrance.vue'
 import { Search } from 'vant'
 /* import NewPost from '../views/NewPost.vue' */
 
@@ -12,8 +13,20 @@ Vue.use(Search);
 const routes = [
   {
     path: '/login',
-    name: 'Entrance',
-    component: () => import('../views/Entrance.vue')
+    component: Entrance,
+    children: [
+      {
+        path: '',
+        name: 'Entrance',
+        component: () => import('../views/Entrance.vue'),
+      },
+      {
+        path: '/findpassword',
+        name: 'FindPassword',
+        component: () => import('../views/FindPassword.vue'),
+
+      }
+    ]
   },
   {
     path: '/',
@@ -23,7 +36,6 @@ const routes = [
         path: '',
         name: 'Community',//社区
         component: () => import('../views/Community.vue'),
-
       },
       {
         path: 'forum',
@@ -57,13 +69,17 @@ const routes = [
           {
             path: 'unsolved',
             name: 'Unsolved',
-            // 路由懒加载：访问时才加载
             component: () => import('../views/Unsolved.vue'),
-            meta: {
-              auth: true
-            }
           }
         ]
+      },
+      {
+        path: 'ask', // id 代表动态路由，意味着值是不固定的
+        name: 'Ask',
+        component: () => import('../views/Ask.vue'),
+        meta: {
+          auth: true
+        }
       },
       {
         path: 'encyclopedia',
@@ -127,21 +143,21 @@ const router = new VueRouter({
 
 // 注册全局守卫
 // 在访问路由之前进行拦截
-router.beforeEach((to, from, next) => {
-  // 获取 token，登录的标识
-  var token = sessionStorage.getItem("token")
+// router.beforeEach((to, from, next) => {
+//   // 获取 token，登录的标识
+//   var token = sessionStorage.getItem("token")
 
-  if (to.meta.auth) { // 判断是否需要权限
-    if (token) { // 再次判断是否已经有权限了
-      next()
-    } else {
-      next({ // 没有权限，导向登录页
-        path: "/login",
-        query: { redirect: to.fullPath } // 记录原本想访问的路由
-      })
-    }
-  } else {
-    next() // 想去哪就去哪
-  }
-})
+//   if (to.meta.auth) { // 判断是否需要权限
+//     if (token) { // 再次判断是否已经有权限了
+//       next()
+//     } else {
+//       next({ // 没有权限，导向登录页
+//         path: "/login",
+//         query: { redirect: to.fullPath } // 记录原本想访问的路由
+//       })
+//     }
+//   } else {
+//     next() // 想去哪就去哪
+//   }
+// })
 export default router
