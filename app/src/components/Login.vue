@@ -40,6 +40,7 @@ export default {
           if (res.data.code == "200") {
             var token = res.data.data;
             var userId = res.data.id;
+            // 将token和userId保存
             sessionStorage.setItem("token", token);
             sessionStorage.setItem("userId", userId);
 

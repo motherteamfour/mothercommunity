@@ -13,16 +13,17 @@ Vue.use(VueRouter)
 
 const routes = [
   {
+    // 登陆--曾晶
     path: '/login',
     component: Entrance,
     children: [
       {
         path: '',
-        name: 'Entrance',
+        name: 'Entrance',//登陆-(密码登陆/验证码登陆)
         component: () => import('../views/Entrance.vue'),
       },
       {
-        path: '/findpassword',
+        path: '/findpassword',//找回密码
         name: 'FindPassword',
         component: () => import('../views/FindPassword.vue'),
 
@@ -33,14 +34,16 @@ const routes = [
     path: '/',
     component: Home,
     children: [
+      //社区--赵蕊
       {
         path: '',
-        name: 'Community',//社区
+        name: 'Community',
         component: () => import('../views/Community.vue'),
       },
+      //圈子--颜志鹏
       {
         path: 'forum',
-        component: Forum,//圈子
+        component: Forum,
         children: [
           {
             path: '',
@@ -56,26 +59,28 @@ const routes = [
         ]
 
       },
+      //问答-曾晶
       {
         path: 'qanda',
-        name: 'QandA',//问答
+        name: 'QandA',
         component: () => import('../views/QandA.vue'),
         children: [ // 子路由
           {
             path: "",
-            name: "HotQuestion",
+            name: "HotQuestion",//热门问题
             component: () => import('../views/HotQuestion.vue'),
 
           },
           {
-            path: 'unsolved',
+            path: 'unsolved',//未解决的问题
             name: 'Unsolved',
             component: () => import('../views/Unsolved.vue'),
-          }
+          },
+
         ]
       },
       {
-        path: 'ask', // id 代表动态路由，意味着值是不固定的
+        path: 'ask',
         name: 'Ask',
         component: () => import('../views/Ask.vue'),
         meta: {
@@ -83,11 +88,32 @@ const routes = [
         }
       },
       {
+
+        path: 'searchquestion',//搜索问题
+        name: 'SearchQuestion',
+        component: () => import('../views/SearchQuestion.vue'),
+        meta: {
+          auth: true
+        }
+      },
+      {
+        path: 'questiondetail/:questionId',// 问题详情页
+        name: 'QuestionDetail',
+        component: () => import('../views/QuestionDetail.vue'),
+      },
+      {
+        path: 'suresearch',// 确定搜索
+        name: 'SureSearch',
+        component: () => import('../views/SureSearch.vue'),
+      },
+      // 百科
+      {
         path: 'encyclopedia',
         name: 'Encyclopedia',//百科
         component: () => import('../views/Encyclopedia.vue'),
 
       },
+      // 我的-赵蕊
       {
         path: 'my',//我的
         component: My,
@@ -123,11 +149,11 @@ const routes = [
       {
         path: 'group/:id',
         name: 'Group',
-        component: () => import('../views/Group.vue') 
+        component: () => import('../views/Group.vue')
       },
       {
         path: 'searchs', // 搜索
-        
+
         component: Searchs,
         children: [
           {
@@ -167,7 +193,7 @@ const routes = [
             component: () => import('../views/Sented.vue'),
           }
         ]
-        
+
       },
       {
         path: 'post/:id',
@@ -188,7 +214,8 @@ const routes = [
         path: 'altername', //消息中通知
         name: 'Altername',
         component: () => import('../views/AlterName.vue')
-      }
+      },
+
 
 
     ]

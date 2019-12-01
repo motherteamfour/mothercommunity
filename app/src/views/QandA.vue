@@ -3,7 +3,6 @@
     <div class="top">轮播图</div>
     <div class="main">
       <div class="one">
-
         <router-link :to="'/ask'" class="ask">
           <i class="fa fa-pencil-square-o fa-lg" aria-hidden="true"></i>
           <div>
@@ -13,13 +12,13 @@
             </p>
           </div>
         </router-link>
-        <div class="search">
+        <router-link :to="'/searchquestion'" class="search">
           <i class="fa fa-search fa-lg" aria-hidden="true"></i>
           <div>
             <p class="one-text">搜索</p>
             <p class="two-text">精准 经验 精彩</p>
           </div>
-        </div>
+        </router-link>
       </div>
       <div class="two">
         <router-link class="hot" to="/qanda">热门问题</router-link>
@@ -27,7 +26,9 @@
       </div>
     </div>
     <div class="footer">
-      <router-view></router-view>
+      <keep-alive include="HotQuestion,Unsolved">
+        <router-view></router-view>
+      </keep-alive>
     </div>
   </div>
 </template>
@@ -35,16 +36,14 @@
 <script>
 export default {
   name: "QandA",
-  data(){
-  return{
-    
-  }
+  data() {
+    return {};
   },
-  created(){
+  created() {
     console.log("组件创建");
   },
-  destroyed(){
-    console.log("组件销毁")
+  destroyed() {
+    console.log("组件销毁");
   }
 };
 </script>
@@ -111,7 +110,7 @@ export default {
     }
   }
 }
- .router-link-exact-active.router-link-active{
-   font-weight: bold;
- }
+.router-link-exact-active.router-link-active {
+  font-weight: bold;
+}
 </style>

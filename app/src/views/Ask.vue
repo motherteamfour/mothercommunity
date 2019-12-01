@@ -54,20 +54,22 @@ export default {
       // console.log("访问查询参数：", this.$route.query.id);
       // this.$route：保存了当前路由信息
       var userId = sessionStorage.getItem("userId");
-      console.log(userId,this.title,this.content);
-      this.axios
-        .post("/question/addQuestion", {
-          userId: userId,
-          questionTitle: this.title,
-          questionContent: this.content,
-        })
+      console.log(typeof userId);
+      console.log(userId, this.title, this.content);
+      this.axios({
+        url: "/question/addQuestion",
+        method: "post",
+        data: `userId=${userId}&questionTitle=${this.title}&questionContent=${this.content}`,
+        header: {
+          "Content-Type": "application/x-www-form-urlencoded"
+        }
+      })
         .then(res => {
           console.log(res.data);
-          if (res.data.state == "200") {
-            console.log("提交问题成功，跳转到该问题的问题详情页");
+          if (res.data.code == "200") {
             // 切换路由
-            var url = "/"; //后端应该返回问题id,然后跳转到详情页（保留）
-            this.$router.replace(url);
+            // var url = "/"; //后端应该返回问题id,然后跳转到详情页（保留）
+            // this.$router.replace(url);
           } else {
             console.log("提交失败");
           }
@@ -153,6 +155,7 @@ export default {
 button[type="submit"] {
   width: 420px;
   height: 100px;
+  font-size: 32px;
   margin: 60px auto;
   border-radius: 50px;
   background-color: @themeColor;
