@@ -36,7 +36,12 @@
         <div class="select-followed">
           <h3>我关注的圈子</h3>
           <ul>
-            <li v-for="(item, index) in circleOptions" :key="index" @click="selected" :classid="item.classid">
+            <li
+              v-for="(item, index) in circleOptions"
+              :key="index"
+              @click="selected"
+              :classid="item.classid"
+            >
               <div>
                 <img src alt />
               </div>
@@ -110,7 +115,7 @@ export default {
       ],
       fileList: [],
       circleShow: false,
-      groupName: '请选择圈子',
+      groupName: "请选择圈子",
       classid: 0
     };
   },
@@ -125,9 +130,9 @@ export default {
       this.$router.go(-1); //返回上一层
     },
     selected(e) {
-      this.circleShow = !this.circleShow
+      this.circleShow = !this.circleShow;
       this.groupName = e.target.children[1].innerText;
-      this.classid = e.target.getAttribute('classid');
+      this.classid = e.target.getAttribute("classid");
     }
   }
 };
@@ -196,6 +201,7 @@ form {
         height: 60px;
         width: 100%;
         font-size: 32px;
+        font-weight: 600;
         box-sizing: border-box;
         padding: 0 10px;
         border: none;
@@ -275,30 +281,38 @@ form {
   width: 100%;
   height: 100%;
   background: #fff;
+
   h3 {
     font-size: 30px;
     font-weight: 500;
     margin: 20px 20px;
   }
-  li {
-    width: 100%;
-    height: 100px;
+  ul {
     box-sizing: border-box;
+    width: 100%;
     padding: 0 20px;
-    display: flex;
-    justify-content: flex-start;
-    align-items: center;
-    font-size: 28px;
-    border-bottom: 1px solid #eee;
-    &:active {
-      background: rgb(248, 248, 248);
-    }
-    div {
-      width: 80px;
-      height: 80px;
-      border-radius: 50%;
-      background: lightseagreen;
-      margin-right: 50px;
+    li {
+      width: 100%;
+      height: 100px;
+      box-sizing: border-box;
+      padding: 0 20px;
+      margin: 10px 0;
+      display: flex;
+      justify-content: flex-start;
+      align-items: center;
+      font-size: 28px;
+      border: 1px solid #ddd;
+      border-radius: 20px;
+      &:active {
+        background: rgb(248, 248, 248);
+      }
+      div {
+        width: 80px;
+        height: 80px;
+        border-radius: 50%;
+        background: lightseagreen;
+        margin-right: 100px;
+      }
     }
   }
 }
@@ -307,6 +321,9 @@ form {
   margin-top: 20px;
   .wrap {
     overflow: hidden;
+    h3 {
+      margin-bottom: 10px;
+    }
   }
 }
 </style>
