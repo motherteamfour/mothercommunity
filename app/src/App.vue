@@ -17,6 +17,7 @@
   background: rgba(255, 255, 255, 0.3);
   position: fixed;
   top: 0;
+  z-index: 99999;
 }
 </style>
 

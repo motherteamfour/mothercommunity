@@ -196,11 +196,6 @@ const routes = [
 
       },
       {
-        path: 'post/:id',
-        name: 'Post',
-        component: () => import('../views/Post.vue')
-      },
-      {
         path: 'infolike', // 消息中的点赞
         name: 'InfoLike',
         component: () => import('../views/InfoLike.vue')
@@ -214,11 +209,18 @@ const routes = [
         path: 'altername', //消息中通知
         name: 'Altername',
         component: () => import('../views/AlterName.vue')
-      },
-
-
-
+      }
     ]
+  },
+  {
+    path: '/post/:id',//发布帖子
+    name: 'Post',
+    component: () => import('../views/Post.vue')
+  },
+  {
+    path: '/circlegourp', //所有圈子
+    name: 'circlegourp',
+    component: () => import('../views/CircleGourp.vue')
   }
 ]
 

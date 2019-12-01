@@ -20,8 +20,10 @@
           </router-link>
         </li>
         <li>
-          <div class="circle-pic"></div>
-          <p class="circle-name">更多圈子</p>
+          <router-link to="/circlegourp">
+            <div class="circle-pic"></div>
+            <p class="circle-name">更多圈子</p>
+          </router-link>
         </li>
       </ul>
     </section>
