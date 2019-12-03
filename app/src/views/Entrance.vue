@@ -23,15 +23,18 @@
       </keep-alive>
     </div>
     <div class="footer">
-      <p>没有账号吗？<a>注册登陆</a></p>
+      <p>
+        没有账号吗？
+        <router-link :to="'/register'">注册登陆</router-link>
+      </p>
     </div>
   </div>
 </template>
 
 <script>
-import Login from "../components/Login";//登录
-import VerifyCodeLogin from "../components/VerifyCodeLogin";//验证码登录
-import Register from "../components/Register";//注册
+import Login from "../components/Login"; //登录
+import VerifyCodeLogin from "../components/VerifyCodeLogin"; //验证码登录
+import Register from "../components/Register"; //注册
 
 export default {
   name: "login",
@@ -96,6 +99,17 @@ export default {
         color: white;
         background-color: @themeColor;
       }
+    }
+  }
+}
+.footer {
+  margin-top: 200px;
+  p {
+    text-align: center;
+    font-size: 24px;
+    color: #d0d0d0;
+    a {
+      color: @themeColor;
     }
   }
 }

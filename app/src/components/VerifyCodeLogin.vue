@@ -23,17 +23,16 @@ export default {
     return {
       username: "",
       userpass: "",
-      info:""
+      info: ""
     };
   },
   methods: {
     // 验证码登录
     getLogin() {
       this.axios
-        .post("/zp/user/loginByPassword", {
-          userPhone: this.username,
-          userPassword: this.userpass
-        })
+        .post(
+          `/zp/user/loginByCode?phone=${this.username}&code=${this.userpass}`
+        )
         .then(res => {
           console.log(res.data);
           if (res.data.code == "200") {
@@ -57,17 +56,21 @@ export default {
     },
     // 获取验证码
     getVerifyCode() {
-      this.axios
-        .post("zp/user/sendcode", {
-          phone: this.username
-        })
-        .then(res => {
-          console.log("获取验证码：", res.data);
-          this.info = res.data.data;
-        })
-        .catch(err => {
-          console.log(err);
-        });
+      var value = this.username.trim();
+      console.log("用户名", value);
+      if (!value.length) {
+        alert("搜索关键词不能为空");
+      } else {
+        this.axios
+          .post(`zp/user/sendcode?phone=${this.username}`)
+          .then(res => {
+            console.log("获取验证码：", res.data);
+            this.info = res.data.data;
+          })
+          .catch(err => {
+            console.log(err);
+          });
+      }
     }
   }
 };
@@ -121,7 +124,6 @@ export default {
       border: none;
       outline: none;
       font-size: 28px;
-      color: @zitiColor;
     }
 
     input[type="button"] {

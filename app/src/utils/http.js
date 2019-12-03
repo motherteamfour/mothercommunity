@@ -28,7 +28,7 @@ http.interceptors.request.use(function (config) {
 // 响应拦截response，处理错误，如token不合法
 http.interceptors.response.use(function (response) {
   if (response.data.data) {
-    sessionStorage.setItem('token', response.data.data) // 将服务器返回的最新token更新到本地中
+    // sessionStorage.setItem('token', response.data.token) // 将服务器返回的最新token更新到本地中
   }
 
   return response;

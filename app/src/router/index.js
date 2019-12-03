@@ -27,8 +27,19 @@ const routes = [
         name: 'FindPassword',
         component: () => import('../views/FindPassword.vue'),
 
-      }
+      },
+
     ]
+  },
+  {
+    path: '/register',//注册
+    name: 'Register',
+    component: () => import('../views/Register.vue'),
+  },
+  {
+    path: '/registerPass',//注册
+    name: 'RegisterPass',
+    component: () => import('../views/RegisterPass.vue'),
   },
   // app
   {
@@ -84,9 +95,7 @@ const routes = [
         path: 'ask',
         name: 'Ask',
         component: () => import('../views/Ask.vue'),
-        meta: {
-          auth: true
-        }
+
       },
       {
 

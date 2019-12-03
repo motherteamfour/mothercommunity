@@ -30,6 +30,7 @@ export default {
   },
   methods: {
     getLogin() {
+      console.log("登录");
       this.axios
         .post("/zp/user/loginByPassword", {
           userPhone: this.username,
@@ -38,8 +39,8 @@ export default {
         .then(res => {
           console.log(res.data);
           if (res.data.code == "200") {
-            var token = res.data.data;
-            var userId = res.data.id;
+            var token = res.data.token;
+            var userId = res.data.data;
             // 将token和userId保存
             sessionStorage.setItem("token", token);
             sessionStorage.setItem("userId", userId);

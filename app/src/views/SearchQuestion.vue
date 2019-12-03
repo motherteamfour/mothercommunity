@@ -55,18 +55,19 @@ export default {
     },
     // 确认搜索问题 /question/ordinarySearch
     handleSure() {
+      var userId = sessionStorage.getItem("userId");
       var value = this.keyword.trim();
       console.log(value);
       if (!value.length) {
         alert("搜索关键词不能为空");
       } else {
-        this.axios({
-          url: `/question/ordinarySearch?questionTitle=${value}`,
-          method: "get",
-          header: {
-            "Content-Type": "application/x-www-form-urlencoded"
-          }
-        })
+        
+        let param = new URLSearchParams();
+        param.append("questionTitle",value);
+        param.append("userId",userId);
+        this.axios
+          .get( `/question/ordinarySearch`,param)
+          // .get( `/question/ordinarySearch?questionTitle=${value}&userId=${userId}`)
           .then(res => {
             console.log(res.data);
             // 跳转到下一个页面,将数据传递给下一个页面
