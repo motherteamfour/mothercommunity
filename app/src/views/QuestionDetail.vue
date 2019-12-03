@@ -6,7 +6,7 @@
         <i class="fa fa-angle-left" @click="back"></i>
         问题详情
         <i class="fa fa-star-o"></i>
-        <i class="fa fa-star" aria-hidden="true"></i>
+        <!-- <i class="fa fa-star" aria-hidden="true"></i> -->
       </div>
     </div>
     <div class="main">
@@ -29,8 +29,10 @@ export default {
   created() {
     console.log("当前文章 id", this.$route.params.questionId);
     var questionId = this.$route.params.questionId;
+    var userId = sessionStorage.getItem("userId");
+
     this.axios({
-      url: `/question/questionDetail?questionId=${questionId}`,
+      url: `/question/questionDetail?questionId=${questionId}&userId=${userId} `,
       method: "get",
       header: {
         "Content-Type": "application/x-www-form-urlencoded"
@@ -77,11 +79,14 @@ export default {
       float: left;
     }
     .fa-star-o {
-      font-size: 60px;
+      font-size: 50px;
       vertical-align: top;
       color: #ccc;
-      display: inline-block;
+      // display: inline-block;
+      float: right;
       height: 80px;
+      line-height: 80px;
+      vertical-align:middle;
     }
   }
 }
