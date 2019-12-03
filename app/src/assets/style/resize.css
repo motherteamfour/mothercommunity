@@ -8,6 +8,26 @@ li {
   list-style: none;
 }
 
+
+/*包含以下五种的链接*/
 a {
   text-decoration: none;
+  color: black;
+}
+/*正常的未被访问过的链接*/
+a:link {
+  text-decoration: none;
+}
+/*已经访问过的链接*/
+a:visited {
+  text-decoration: none;
+}
+/*鼠标划过(停留)的链接*/
+a:hover {
+  text-decoration: none;
+}
+/* 正在点击的链接，鼠标在元素上按下还没有松开*/
+a:active {
+  text-decoration: none;
+
 }

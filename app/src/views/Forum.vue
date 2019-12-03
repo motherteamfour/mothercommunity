@@ -4,17 +4,19 @@
       <div class="header-bg"></div>
       <h3 class="title">圈子</h3>
       <ul>
-        <li class="recommend" @click="select">
-          <router-link to="/forum">推荐</router-link>
-          <div class="line" v-bind:style="{ left:lineLeft }"></div>
-        </li>
-        <li class="followed" @click="select">
-          <router-link to="/forum/followed">关注</router-link>
-        </li>
+        <router-link to="/forum">
+          <li class="recommend" @click="select">
+            推荐
+            <div class="line" v-bind:style="{ left:lineLeft }"></div>
+          </li>
+        </router-link>
+        <router-link to="/forum/followed">
+          <li class="followed" @click="select">关注</li>
+        </router-link>
       </ul>
     </header>
     <router-link to="/post/fromhome" class="post">
-    <!--   <img src="@/assets/img/circleswipetest/post.png" alt=""> -->
+      <!--   <img src="@/assets/img/circleswipetest/post.png" alt=""> -->
       <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
     </router-link>
     <router-view />
@@ -79,12 +81,10 @@ export default {
       li {
         box-sizing: border-box;
         width: 120px;
-        padding: 10px;
+        padding: 10px 0;
         text-align: center;
         position: relative;
-        a {
-          color: #fff;
-        }
+        color: #fff;
       }
       .recommend .line {
         width: 100%;
@@ -105,7 +105,8 @@ export default {
   position: fixed;
   bottom: 150px;
   right: 50px;
-  background: rgba(255, 228, 105,0.9);
+  background: rgba(255, 228, 105, 0.9);
+  box-shadow: 0 0 15px #ffe469;
   color: #fff;
   text-align: center;
   line-height: 90px;
