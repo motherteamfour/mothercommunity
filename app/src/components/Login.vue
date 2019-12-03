@@ -7,11 +7,11 @@
     <div class="form-group">
       <span>密码</span>
 
-      <input type="password" placeholder="6-16位" v-model="userpass" @keyup.enter="getLogin" />
+      <input type="password" srcpalaceholder="6-16位" v-model="userpass" @keyup.enter="getLogin" />
 
-      <router-link :to="'/login/findpassword'">
+      <a src="/findpassword">
         <button type="button" class="forget-password">忘记密码</button>
-      </router-link>
+      </a>
     </div>
     <div class="form-group login-from-group">
       <input type="button" value="登录" @click="getLogin" />

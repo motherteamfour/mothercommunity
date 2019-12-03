@@ -22,6 +22,9 @@
         <component :is="com"></component>
       </keep-alive>
     </div>
+    <div class="footer">
+      <p>没有账号吗？<a>注册登陆</a></p>
+    </div>
   </div>
 </template>
 
