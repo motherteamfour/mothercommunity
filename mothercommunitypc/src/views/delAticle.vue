@@ -5,7 +5,7 @@
       <input type="text" class="title" placeholder="请输入需要搜索的标题">
       <input type="text" class="delCause" placeholder="请输入删除的原因">
       <button type="button" class="seek-btn">搜索</button>
-      <button type="button" class="del-btn" @click="delAll">删除</button>
+      <button type="button" class="del-btn">删除</button>
       <button type="button" class="recover">恢复</button>
     </div>
     <div class="table">
@@ -99,11 +99,24 @@ export default {
         });
       }
     },
-    del:function(i) {
-      this.comsts.splice(i,1)
-    },
-    delAll: function(){
-
+    del(i) {
+      this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        this.comsts.splice(i, 1);
+        this.$message({
+          type: 'success',
+          message: '删除成功!'
+        });
+      }).catch(() => {
+        this.$message({
+          type: 'info',
+          message: '已取消删除'
+        });          
+      });
+       
     }
   }
 
