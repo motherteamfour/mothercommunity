@@ -2,26 +2,26 @@
   <div class="post">
     <nav>
       <div class="back" @click="back">
-        <i class="fa fa-angle-left fa-2x"></i>
+        <i class="fa fa-angle-left"></i>
       </div>
       <span>发帖</span>
-      <button class="confirm">发布</button>
+      <button class="confirm" @click="postImg">发布</button>
     </nav>
     <form>
       <div class="input-box">
         <div class="title-wrap">
-          <input type="text" class="title" placeholder="标题" />
+          <input type="text" class="title" placeholder="标题" v-model="title" />
         </div>
         <div class="line"></div>
         <div class="content-wrap">
-          <textarea class="text-content" placeholder="写点内容"></textarea>
+          <textarea class="text-content" placeholder="写点内容" v-model="content"></textarea>
           <div class="post-pic">
             <van-uploader v-model="fileList" multiple :preview-size="100" />
           </div>
         </div>
       </div>
     </form>
-    <div class="select-circle" @click="circleShow = !circleShow">
+    <div class="select-circle" @click="getCircle">
       <p class="left">
         <i class="fa fa-globe fa-2x" aria-hidden="true"></i>
         {{groupName}}
@@ -37,15 +37,14 @@
           <h3>我关注的圈子</h3>
           <ul>
             <li
-              v-for="(item, index) in circleOptions"
+              v-for="(item, index) in followedCircle"
               :key="index"
-              @click="selected"
-              :classid="item.classid"
+              @click="selected(item.circleId)"
             >
-              <div>
-                <img src alt />
+              <div class="img-wrap">
+                <img :src="'http://172.16.6.45:8989' + item.circles.circleUrl" alt />
               </div>
-              <p>{{item.name}}</p>
+              <p>{{item.circles.circleName}}</p>
             </li>
           </ul>
         </div>
@@ -54,11 +53,11 @@
             <h3>全部圈子</h3>
           </div>
           <ul>
-            <li v-for="(item, index) in circleOptions" :key="index" @click="selected">
+            <li v-for="(item, index) in allCircle" :key="index" @click="selected(item.circleId)">
               <div>
-                <img src alt />
+                <img :src="'http://172.16.6.45:8989' + item.circleUrl" alt />
               </div>
-              <p>{{item.name}}</p>
+              <p>{{item.circleName}}</p>
             </li>
           </ul>
         </div>
@@ -68,7 +67,7 @@
 </template>
 
 <script>
-import { Uploader, Button } from "vant";
+import { Uploader } from "vant";
 import { ImagePreview } from "vant";
 import { ActionSheet } from "vant";
 
@@ -76,63 +75,63 @@ export default {
   name: "Post",
   data() {
     return {
-      circleOptions: [
-        {
-          url: "",
-          classid: 1,
-          name: "怀孕圈"
-        },
-        {
-          url: "",
-          classid: 2,
-          name: "夫妻感情"
-        },
-        {
-          url: "",
-          classid: 3,
-          name: "育儿圈"
-        },
-        {
-          url: "",
-          classid: 4,
-          name: "育儿圈"
-        },
-        {
-          url: "",
-          classid: 5,
-          name: "育儿圈"
-        },
-        {
-          url: "",
-          classid: 6,
-          name: "育儿圈"
-        },
-        {
-          url: "",
-          classid: 7,
-          name: "育儿圈"
-        }
-      ],
+      followedCircle: [],
+      allCircle: [],
       fileList: [],
       circleShow: false,
       groupName: "请选择圈子",
-      classid: 0
+      groupid: -1,
+      title: "",
+      content: ""
     };
   },
   components: {
     [ActionSheet.name]: ActionSheet,
     [ImagePreview.name]: ImagePreview,
-    [Uploader.name]: Uploader,
-    [Button.name]: Button
+    [Uploader.name]: Uploader
   },
   methods: {
     back() {
       this.$router.go(-1); //返回上一层
     },
-    selected(e) {
+    selected(i) {
       this.circleShow = !this.circleShow;
-      this.groupName = e.target.children[1].innerText;
-      this.classid = e.target.getAttribute("classid");
+      this.groupName = this.allCircle[i - 1].circleName;
+      this.groupid = i;
+    },
+    getCircle() {
+      this.circleShow = !this.circleShow;
+      this.axios.get("/userCircle/list?userId=1001").then(res => {
+        if (res.data.code == 200) {
+          this.followedCircle = res.data.data;
+        }
+      });
+      this.axios.get("/circle/list").then(res => {
+        if (res.data.code == 200) {
+          this.allCircle = res.data.data;
+        }
+      });
+    },
+    postImg() {
+      let fd = new FormData();
+      this.fileList.forEach((item, index) => {
+        fd.append("files" + index, item.file);
+      });
+      this.axios.post("/file/insert", fd).then(res => {
+        console.log(res.data);
+        if (res.data.code == 200) {
+          let param = new URLSearchParams();
+          param.append("circleId", this.groupid);
+          param.append("postContent", this.content);
+          param.append("postImgs", this.content);
+          param.append("postTitle", this.postTitle);
+          param.append("userId", 1001);
+          console.log(param.get("circleId"));
+          this.axios.post("/post/addPost", param).then(res => {
+            console.log(res.data);
+          });
+        }
+      });
     }
   }
 };
@@ -152,6 +151,9 @@ nav {
   justify-content: space-between;
   align-items: center;
   box-shadow: 0 5px 5px #eee;
+  .fa-angle-left {
+    font-size: 1rem;
+  }
   span {
     font-size: 36px;
     color: #000;
@@ -162,7 +164,7 @@ nav {
     text-align: center;
     display: flex;
     align-items: center;
-    margin-left: 10px;
+    margin-left: 20px;
     color: #000;
   }
   .confirm {
@@ -303,6 +305,7 @@ form {
       font-size: 28px;
       border: 1px solid #ddd;
       border-radius: 20px;
+      padding: 0 100px;
       &:active {
         background: rgb(248, 248, 248);
       }
@@ -311,7 +314,10 @@ form {
         height: 80px;
         border-radius: 50%;
         background: lightseagreen;
-        margin-right: 100px;
+        margin-right: 120px;
+        img {
+          width: 100%;
+        }
       }
     }
   }

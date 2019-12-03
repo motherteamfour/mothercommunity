@@ -212,6 +212,7 @@ const routes = [
       }
     ]
   },
+  //home外的单独页面-颜志鹏
   {
     path: '/post/:id',//发布帖子
     name: 'Post',
@@ -221,6 +222,11 @@ const routes = [
     path: '/circlegourp', //所有圈子
     name: 'circlegourp',
     component: () => import('../views/CircleGourp.vue')
+  },
+  {
+    path: '/article/:id',
+    name: 'article',
+    component: () => import('../views/Article.vue')
   }
 ]
 
