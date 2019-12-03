@@ -2,13 +2,13 @@
   <div class="circle-gourp">
     <header>
       <div class="back" @click="back">
-        <i class="fa fa-angle-left fa-2x"></i>
+        <i class="fa fa-angle-left"></i>
       </div>
       <span>圈子</span>
     </header>
     <ul class="category-tab">
       <li class="all" :class="{isall:isAll==1}" @click="isAll=1">所有圈子</li>
-      <li class="followed" :class="{isall:isAll==2}" @click="isAll=2">关注圈子</li>
+      <li class="followed" :class="{isall:isAll==2}" @click="getFollowedCircle">已关注圈子</li>
     </ul>
     <div class="tab-content">
       <div class="all-wrap" v-show="isAll==1">
@@ -20,7 +20,7 @@
               :categoryId="item.categoryId"
               :key="index"
               :class="{on:isActive == item.categoryId}"
-              @click="isActive = item.categoryId"
+              @click="select(item.categoryId)"
             >{{item.categoryName}}</li>
           </ul>
         </div>
@@ -32,117 +32,118 @@
               :key="index"
               :class="setColor(index)"
             >
-              <div
-                class="circle-pic"
-                :style="{background: 'url(require(' + item.circleUrl + ')) no-repeat center'}"
-              ></div>
+              <div class="circle-pic">
+                <img :src="'http://172.16.6.45:8989' + item.circleUrl" alt />
+              </div>
               <p>{{item.circleName}}</p>
-              <button class="circle-follow">+关注</button>
+              <div class="btns">
+                <van-loading v-show="isLoading==item.circleId" size="24px" vertical></van-loading>
+                <button
+                  @click="follow(item.circleId, item.categoryId)"
+                  v-if="!item.isFollow"
+                  class="circle-follow"
+                  v-show="isLoading!==item.circleId"
+                >+关注</button>
+                <button
+                  @click="cancleFollow(item.circleId, item.categoryId)"
+                  v-else
+                  class="circle-followed"
+                  v-show="isLoading!==item.circleId"
+                >
+                  <i class="fa fa-check"></i>已关注
+                </button>
+              </div>
             </li>
           </ul>
         </div>
       </div>
-      <div class="followed-wrap" v-show="isAll==2">12312321</div>
+      <div class="followed-wrap" v-show="isAll==2">
+        <ul>
+          <li class="followed-item" v-for="(item, index) in followedCircle" :key="index">
+            <img :src="'http://172.16.6.45:8989' + item.circles.circleUrl" alt />
+            <p>{{item.circles.circleName}}</p>
+          </li>
+        </ul>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
+import { Loading } from "vant";
+
 export default {
   name: "CircleGourp",
-  components: {},
+  components: {
+    [Loading.name]: Loading
+  },
   data() {
     return {
       isAll: 1,
       isActive: 1,
-      category: [
-        {
-          categoryId: 1,
-          categoryName: "备孕"
-        },
-        {
-          categoryId: 2,
-          categoryName: "孕期"
-        },
-        {
-          categoryId: 3,
-          categoryName: "产后"
-        },
-        {
-          categoryId: 4,
-          categoryName: "情感"
-        }
-      ],
-      subClass: [
-        {
-          circleId: 1,
-          circleName: "孕妇交流圈",
-          circleUrl: "../assets/img/login/denglu.png",
-          isFollowed: true
-        },
-        {
-          circleId: 2,
-          circleName: "减肥瘦身",
-          circleUrl: "../assets/img/login/denglu.png",
-          isFollowed: false
-        },
-        {
-          circleId: 3,
-          circleName: "美容护肤",
-          circleUrl: "../assets/img/login/denglu.png",
-          isFollowed: false
-        },
-        {
-          circleId: 4,
-          circleName: "美容护肤",
-          circleUrl: "../assets/img/login/denglu.png",
-          isFollowed: false
-        },
-        {
-          circleId: 5,
-          circleName: "美容护肤",
-          circleUrl: "../assets/img/login/denglu.png",
-          isFollowed: false
-        },
-        {
-          circleId: 5,
-          circleName: "美容护肤",
-          circleUrl: "../assets/img/login/denglu.png",
-          isFollowed: false
-        },
-        {
-          circleId: 5,
-          circleName: "美容护肤",
-          circleUrl: "../assets/img/login/denglu.png",
-          isFollowed: false
-        },
-        {
-          circleId: 5,
-          circleName: "美容护肤",
-          circleUrl: "../assets/img/login/denglu.png",
-          isFollowed: false
-        },
-        {
-          circleId: 5,
-          circleName: "美容护肤",
-          circleUrl: "../assets/img/login/denglu.png",
-          isFollowed: false
-        },
-        {
-          circleId: 5,
-          circleName: "美容护肤",
-          circleUrl: "../assets/img/login/denglu.png",
-          isFollowed: false
-        },
-      ],
-      colorList: ["ss1", "ss2", "ss3"]
+      category: [],
+      subClass: [],
+      isLoading: -1,
+      followedCircle: []
     };
+  },
+  created() {
+    this.axios.get("/search/searchTop10").then(res => {
+      console.log(res.data);
+    });
+    this.axios.get("/category/list").then(res => {
+      //请求所有圈子大类数据
+      this.category = res.data.data;
+    });
+    this.select(1);
   },
   methods: {
     back() {
       this.$router.go(-1); //返回上一层
     },
-    select() {},
+    select(i) {
+      this.isActive = i;
+
+      this.axios
+        .get(`/circle/byId/list?categoryId=${i}&userId=1001`)
+        .then(res => {
+          //请求圈子数据
+          if (res.data.code == 200) {
+            this.subClass = res.data.data;
+            this.isLoading = -1;
+          }
+        });
+    },
+    follow(i, categoryId) {
+      this.isLoading = i;
+      let param = new URLSearchParams();
+      param.append("circleId", i);
+      param.append("userId", "1001");
+      this.axios.post("/user/addCircle", param).then(res => {
+        //请求圈子数据
+        if (res.data.code == 200) {
+          this.select(categoryId);
+        }
+      });
+    },
+    cancleFollow(i, categoryId) {
+      this.isLoading = i;
+      this.axios
+        .delete(`/user/deleteCircle?circleId=${i}&userId=1001`)
+        .then(res => {
+          //请求圈子数据
+          if (res.data.code == 200) {
+            this.select(categoryId);
+          }
+        });
+    },
+    getFollowedCircle() {
+      this.isAll = 2;
+      this.axios.get("/userCircle/list?userId=1001").then(res => {
+        console.log(res.data);
+        this.followedCircle = res.data.data;
+      });
+    },
     setColor(index) {
       var num = (index % 6) + 1;
       return "ss" + num;
@@ -169,18 +170,23 @@ header {
   line-height: calc(10vh - 40px);
   box-shadow: 0 5px 5px #eee;
   vertical-align: middle;
-  position: relative;
   z-index: 3;
   span {
     font-size: 36px;
     color: #000;
   }
+  .fa-angle-left {
+    font-size: 1rem;
+  }
   .back {
     width: 50px;
-    height: 100px;
+    height: calc(10vh - 40px);
+    display: flex;
+    align-items: center;
     position: absolute;
-    left: 0;
+    left: 20px;
     text-align: center;
+
     color: #000;
   }
 }
@@ -244,11 +250,12 @@ header {
       font-size: 36px;
 
       .circle-pic {
-        width: 100px;
-        height: 100px;
-        border-radius: 50%;
-        background: url("../assets/img/login/denglu.png") no-repeat center;
-        background-size: cover;
+        width: 90px;
+        height: 90px;
+        overflow: hidden;
+        img {
+          width: 100%;
+        }
       }
       .circle-follow {
         width: 90px;
@@ -262,21 +269,72 @@ header {
         box-shadow: 0 0 15px #ffe469;
         background: rgba(248, 248, 248, 0);
       }
+      .circle-followed {
+        width: 120px;
+        height: 42px;
+        border: none;
+        border-radius: 30px;
+        outline: none;
+        font-size: 24px;
+        border: 3px solid #f8d742;
+        color: #fff;
+        box-shadow: 0 0 15px #ffe469;
+        background: #f8d742;
+      }
     }
   }
 }
 
+.followed-wrap {
+  width: 100%;
+  height: 84vh;
+  overflow: scroll;
+  background: rgb(248, 248, 248);
+  ul {
+    width: (100% - 5px);
+    height: 100%;
+    margin: 0 auto;
+
+    .followed-item {
+      display: flex;
+      background: #fff;
+      margin-top: 20px;
+      justify-content: flex-start;
+      align-items: center;
+      font-size: 36px;
+      border: 1px solid #eee;
+      padding: 20px 30px;
+      box-sizing: border-box;
+      border-radius: 20px;
+      box-shadow: 0 0 10px #ddd;
+      img {
+        width: 80px;
+        height: 80px;
+        margin-left: 100px;
+      }
+      p {
+        margin-left: 80px;
+      }
+    }
+  }
+}
+
+.btns {
+  width: 120px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
 .on {
   background: rgb(248, 248, 248);
   font-weight: 600;
   color: #fddb43 !important;
-  border-left: 5px solid #ffe469;
+  border-left: 6px solid #ffe469;
 }
 
 .isall {
-    font-weight: 600;
-    color: #fddb43;
-  border-bottom: 8px solid #ffe469;
+  color: #fddb43;
+  border-bottom: 6px solid #ffe469;
 }
 .all-wrap {
   display: flex;

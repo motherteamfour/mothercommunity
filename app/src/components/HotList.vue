@@ -3,41 +3,43 @@
     <div class="user-info">
       <div class="user-left">
         <div class="avater"></div>
-        <p class="username">{{list.username}}</p>
+        <p class="username">{{list.user.userName}}</p>
       </div>
-      <div class="follow" :userid="list.id" v-if="!list.isFollowed" @click="follow(list.id)">+关注</div>
-      <div class="followed" :userid="list.id" v-else @click="follow(list.id)">
+      <div class="follow" :userid="list.postId" v-if="!list.isFollow" @click="follow(list.postId)">+关注</div>
+      <div class="followed" :userid="list.postId" v-else @click="follow(list.postId)">
         <i class="fa fa-check"></i>
         已关注
       </div>
     </div>
-    <div class="brief clearfix">
-      <p class="title">{{list.title}}</p>
-      <p class="content">{{list.content}}</p>
-      <div class="pic">
-        <img src alt />
+    <router-link :to="'/article/'+ list.postId ">
+      <div class="brief clearfix">
+        <p class="title">{{list.postTitle}}</p>
+        <p class="content">{{list.postContent}}</p>
+        <div class="pic">
+          <img v-for="(img, index) in list.postImgs" :key="index" :src="'http://172.16.6.46:8989/' + img.postUrl">
+        </div>
       </div>
-    </div>
+    </router-link>
     <div class="options">
-      <div v-if="list.isPraise" class="praise-wrap">
+      <div v-if="list.isLike" class="praise-wrap">
         <i @click="praise(list.id)" class="fa fa-heart-o" aria-hidden="true"></i>
-        <span @click="praise(list.id)">赞({{list.praise}})</span>
+        <span @click="praise(list.id)">赞({{list.countFabulous}})</span>
       </div>
       <div style="color: red" v-else class="praise-wrap">
         <i @click="praise(list.id)" class="fa fa-heart" aria-hidden="true"></i>
-        <span @click="praise(list.id)">已赞({{list.praise+1}})</span>
+        <span @click="praise(list.id)">已赞({{list.countFabulous}})</span>
       </div>
       <div>
         <i class="fa fa-comment-o" aria-hidden="true"></i>
-        <span>评论{{list.comments}}</span>
+        <span>评论{{list.countComment}}</span>
       </div>
       <div v-if="list.isCollect" class="collect-wrap">
-        <i @click="collect(list.id)" class="fa fa-star-o" aria-hidden="true"></i>
-        <span @click="collect(list.id)">收藏({{list.collect}})</span>
+        <i @click="collect(list.postId)" class="fa fa-star-o" aria-hidden="true"></i>
+        <span @click="collect(list.postId)">收藏({{list.countCollection}})</span>
       </div>
       <div style="color: #f8d742" v-else class="collect-wrap">
         <i class="fa fa-star" aria-hidden="true" @click="collect(list.id)"></i>
-        <span @click="collect(list.id)">已收藏({{list.collect}})</span>
+        <span @click="collect(list.postId)">已收藏({{list.countCollection}})</span>
       </div>
     </div>
   </div>
