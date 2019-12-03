@@ -43,8 +43,11 @@ export default {
   methods: {
     goback() {
       this.$router.push('./my');
-    }
-  }
+    }/* ,
+    getMypost() {
+      this.$store.commit('mypost'+this.lists.length);
+    }*/
+  } 
 };
 </script>
 

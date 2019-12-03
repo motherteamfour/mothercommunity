@@ -8,6 +8,9 @@ export default new Vuex.Store({
     
   },
   mutations: {
+    /* getMypost (state) {
+      return state.length;
+    } */
   },
   actions: {
   },

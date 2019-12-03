@@ -5,6 +5,7 @@ import Forum from '../views/Forum.vue'
 import My from '../views/My.vue'
 import Searchs from '../views/Search.vue'
 import InfoComment from '../views/InfoComment.vue'
+import Collect from '../views/Collect.vue'
 
 Vue.use(VueRouter)
 
@@ -78,13 +79,7 @@ const routes = [
         path: 'newpost', //我的发帖
         name: 'NewPost',
         component: () => import('../views/NewPost.vue'),
-        /* children: [
-          {
-            path: 'newpostlists',
-            name: NewPostLists,
-            component: () => import('../views/NewPostLists.vue')
-          }
-        ] */
+        
       },
       {
         path: 'reply', //我的回帖
@@ -93,9 +88,19 @@ const routes = [
       },
       {
         path: 'collect', //我的收藏
-        name: 'Collect',
-        component: () => import('../views/Collect.vue')
-
+        component: Collect,
+        children: [
+          {
+            path: '',
+            name: 'CollPost',
+            component: () => import('../views/CollPost.vue')
+          },
+          {
+            path: '/collqa',
+            name: 'CollQA',
+            component: () => import('../views/Userpage.vue')
+          }
+        ]
       },
       {
         path: 'resource', //我的资料
@@ -128,11 +133,6 @@ const routes = [
         path: 'infomation', // 消息
         name: "Infomation",
         component: () => import('../views/Infomation.vue')
-      },
-      {
-        path: 'trigger',
-        name: "Trigger",
-        component: () => import('../views/Trigger.vue')
       },
       {
         path: 'infocomment', // 消息中的评论

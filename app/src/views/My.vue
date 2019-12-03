@@ -65,12 +65,16 @@
 </template>
 
 <script>
-/* import MyLists from "../components/MyLists"; */
+/* import { mapState, mapMutations } from 'vuex'; */
+
 
 export default {
   name: "My",
   
   methods: {
+    /* ...mapState({
+
+    }), */
     goNewpostPage() {
       this.$router.push('/newpost');
     },

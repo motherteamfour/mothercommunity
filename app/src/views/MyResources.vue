@@ -51,7 +51,7 @@
     </ul>
     <ul class="lists">
       <li style="border-bottom: none">
-        <span class="title">用户ID：1212121212</span>
+        <span class="title">用户ID：</span>
         
       </li>
     </ul>
