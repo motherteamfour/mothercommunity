@@ -5,8 +5,7 @@
         <div class="avater"></div>
         <p class="username">{{list.user.userName}}</p>
       </div>
-      <div class="follow" :userid="list.postId" v-if="!list.isFollow" @click="follow(list.postId)">+关注</div>
-      <div class="followed" :userid="list.postId" v-else @click="follow(list.postId)">
+      <div class="followed" @click="follow(list.postId)">
         <i class="fa fa-check"></i>
         已关注
       </div>
