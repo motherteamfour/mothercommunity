@@ -14,9 +14,10 @@
   text-align: center;
   line-height: 40px;
   font-size: 20px;
-  background: rgba(0, 0, 0, 0.1);
+  background: rgba(255, 255, 255, 0.3);
   position: fixed;
   top: 0;
+  z-index: 99999;
 }
 </style>
 

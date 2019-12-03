@@ -4,34 +4,34 @@
       <h2>motherAdmin</h2>
       <p>妈妈怀孕管理系统</p>
       <div class="login-input">
-        <el-input placeholder="用户名" prefix-icon="el-icon-user" v-model="input1"></el-input>
+        <el-input placeholder="用户名" prefix-icon="el-icon-user" v-model="username" @blur="judgeName(username)"></el-input>
       </div>
       
       <div class="login-input login-input-three">
         <div class="login-input-verification">
-          <el-input placeholder="手机号" prefix-icon="el-icon-phone-outline" v-model="input3"></el-input>
+          <el-input placeholder="手机号" prefix-icon="el-icon-phone-outline" v-model="phone" @blur="judgePhone(phone)"></el-input>
         </div>
         
         <div class="verification-code">
-          <button type="button" class="getCode">获取验证码</button>
+          <button type="button" class="getCode" @click="getCode(username,phone)">获取验证码</button>
         </div>
       </div>
       <div class="login-input">
-        <el-input placeholder="请输入验证码" prefix-icon="el-icon-lock" v-model="input2"></el-input>
+        <el-input placeholder="请输入验证码" prefix-icon="el-icon-lock" v-model="verificationCode" @blur="judgeCode(verificationCode)"></el-input>
       </div>
-      <el-button class="login-btn" @click="changeShow">下一步</el-button>
+      <el-button class="login-btn" @click="sendCode">下一步</el-button>
     </form>
     <form class="login-box" v-show="!show">
       <h2>motherAdmin</h2>
       <p>妈妈怀孕管理系统</p>
       <div class="login-input">
-        <el-input type="password" placeholder="请输入新密码" prefix-icon="el-icon-lock" v-model="input1"></el-input>
+        <el-input type="password" placeholder="请输入新密码" prefix-icon="el-icon-lock" v-model="userpass" @blur="judgePassword(userpass)"></el-input>
       </div>
       
       <div class="login-input">
-        <el-input type="password" placeholder="请再次输入密码" prefix-icon="el-icon-lock" v-model="input2"></el-input>
+        <el-input type="password" placeholder="请再次输入密码" prefix-icon="el-icon-lock" v-model="userpass2" @blur="judgePassword(userpass2)"></el-input>
       </div>
-      <el-button class="login-btn" @click="changeShow">确定</el-button>
+      <el-button class="login-btn" @click="changePassword">确定</el-button>
     </form>
   </div>
 </template>
@@ -42,10 +42,17 @@
 export default {
   data() {
     return {
-      input1: '',
-      input2: '',
-      input3: '',
-      show: true
+      username: '',
+      phone: '',
+      userpass: '',
+      userpass2: '',
+      verificationCode: '',
+      show: true,
+      usernameFormat: false,
+      phoneFormat: false,
+      codeFormat: false,
+      userpassFormat: false,
+      userid: 1
     }
   },
   components: {
@@ -57,6 +64,121 @@ export default {
   methods:{
     changeShow(){
       this.show = !this.show
+    },
+    success(msg) {
+      this.$message({
+        showClose: true,
+        message: msg,
+        type: "success"
+      });
+    },
+    defeated(msg) {
+      this.$message({
+        showClose: true,
+        message: msg,
+        type: "error"
+      });
+    },
+    judgeName(msg) {
+      var reg = /^[a-zA-Z]{5,15}$/;
+      if (reg.test(msg)) {
+        return (this.usernameFormat = true);
+      }
+      this.usernameFormat = false;
+      this.defeated("用户名格式不正确");
+    },
+    judgePhone(msg) {
+      var reg = /^1[3456789]\d{9}$/;
+      if (reg.test(msg)) {
+        return (this.phoneFormat = true);
+      }
+      this.phoneFormat = false;
+      this.defeated("手机格式不正确");
+    },
+    judgeCode(msg) {
+      var reg = /^\d{6}$/;
+      if (reg.test(msg)) {
+        return (this.codeFormat = true);
+      }
+      this.codeFormat = false;
+      this.defeated("验证码格式不正确");
+    },
+    judgePassword(msg) {
+      var reg = /^(\w){5,15}$/;
+      if (reg.test(msg)) {
+        return (this.userpassFormat = true);
+      }
+      this.userpassFormat = false;
+      this.defeated("密码格式不正确");
+    },
+    getCode(adminName,adminPhone) {
+      if(this.usernameFormat==true&&this.phoneFormat==true) {
+        this.axios
+        .get("/admin/sendCode?adminName=" + adminName + "&adminPhone=" + adminPhone)
+        .then((res) => {
+          if(res.data.code==200) {
+            this.success("验证码发送成功")
+            console.log(res.data);
+            this.userid = res.data.id;
+          }else if(res.data.code==4001 || res.data.code==4011){
+            this.defeated("此用户名或者手机号不存在");
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+      }else {
+        this.defeated("用户名或者手机格式不正确");
+      }
+    },
+    sendCode() {
+      if(this.codeFormat==true&&this.phoneFormat==true){
+        console.log(this.phone,this.verificationCode);
+        this.axios({
+          url: "/admin/judgeCode",
+          method: "post",
+          data: `adminPhone=${this.phone}&code=${this.verificationCode}`,
+          header: {
+            "Content-Type": "application/X-WWW-form-urlencoded"
+          }
+        })
+          .then((res) => {
+            console.log(res.data);
+            if(res.data.code==200) {
+              this.success("验证成功");
+              this.changeShow();
+            }else if(res.data.code==4015) {
+              this.defeated("验证码错误");
+            }
+          })
+          .catch(err => {
+            console.log(err);
+          });
+      }
+    },
+    changePassword() {
+      if(this.userpass == this.userpass2) {
+        this.axios({
+          url: "/admin/updatePassword",
+          method: "post",
+          data: `adminId=${this.userid}&adminPassword =${this.userpass}`,
+          header: {
+            "Content-Type": "application/X-WWW-form-urlencoded"
+          }
+        })
+          .then((res) => {
+            console.log(res.data);
+            if(res.data.code==200) {
+              this.success("修改成功");
+              this.$router.replace('/login');
+            }
+          })
+          .catch(err => {
+            console.log(err);
+          });
+      }else {
+        this.defeated("两次密码输入不一致");
+      }
     }
   }
 }

@@ -22,9 +22,7 @@
             <el-menu-item-group>
               <el-menu-item index="/home/addUsers">管理员</el-menu-item>
               <el-menu-item index="/home/users">用户</el-menu-item>
-              <el-menu-item index="/home/delUsers">
-                已删除用户
-              </el-menu-item>
+              <el-menu-item index="/home/delUsers">已删除用户</el-menu-item>
             </el-menu-item-group>
           </el-submenu>
           <el-menu-item index="/home/managePicture">
@@ -62,35 +60,42 @@
     </div>
 
     <div class="top">
-      <img class="head-picture" src="../assets/images/001.jpg" alt="头像">
-      <el-dropdown class="head">
-        
-        <span class="el-dropdown-link">
-          用户某某某
-          <i class="el-icon-arrow-down el-icon--right"></i>
-        </span>
-        <el-dropdown-menu slot="dropdown">
-          <el-dropdown-item>退出</el-dropdown-item>
-        </el-dropdown-menu>
-      </el-dropdown>
-    </div>
-
-    <div class="right">
       <div class="right-head">
         <ShowTime></ShowTime>
       </div>
+      <div class="top-right">
+        <img class="head-picture" :src="userPicture" alt="头像" />
+        <el-dropdown class="head" @command="quit">
+          <span class="el-dropdown-link">
+            {{userName}}
+            <i class="el-icon-arrow-down el-icon--right"></i>
+          </span>
+          <el-dropdown-menu slot="dropdown">
+            <el-dropdown-item command>退出</el-dropdown-item>
+          </el-dropdown-menu>
+        </el-dropdown>
+      </div>
+    </div>
+
+    <div class="right">
       <router-view></router-view>
     </div>
   </div>
 </template>
 
 <script>
-import ShowTime from "@/components/ShowTime.vue"
+import ShowTime from "@/components/ShowTime.vue";
 
 export default {
   name: "home",
   components: {
     ShowTime
+  },
+  data() {
+    return {
+      userName: '',
+      userPicture: ''
+    }
   },
   methods: {
     handleOpen(key, keyPath) {
@@ -98,7 +103,27 @@ export default {
     },
     handleClose(key, keyPath) {
       console.log(key, keyPath);
+    },
+    quit() {
+      sessionStorage.removeItem("token");
+      this.$router.replace("/login");
     }
+  },
+  mounted() {
+    const userId = sessionStorage.getItem("userId")
+    this.axios
+      .get(
+        "/admin/findMyselfMessage?adminId="+userId)
+      .then(res => {
+        console.log(res.data)
+        if(res.data.code==200) {
+          this.userName = res.data.data.adminNickName;
+          this.userPicture = "http://172.16.6.48:8081/" + res.data.data.adminImgUrl;
+        }
+      })
+      .catch(error => {
+        console.log(error);
+      });
   }
 };
 </script>
@@ -119,7 +144,7 @@ a {
   height: 100%;
   background: rgb(84, 92, 100);
   float: left;
-  
+
   h5 {
     height: 50px;
     line-height: 50px;
@@ -129,10 +154,15 @@ a {
   height: 50px;
   line-height: 50px;
   margin-left: 200px;
-  text-align: right;
   border-bottom: 1px solid rgb(194, 194, 194);
   background: white;
 
+  .right-head {
+    display: inline-block;
+  }
+  .top-right {
+    float: right;
+  }
   .head {
     margin-right: 20px;
   }
@@ -146,9 +176,9 @@ a {
 }
 .right {
   height: 658px;
-  background: rgb(242,242,242);
+  background: rgb(242, 242, 242);
   margin-left: 200px;
-  
+
   .right-head {
     height: 50px;
     border-bottom: 1px solid rgb(194, 194, 194);

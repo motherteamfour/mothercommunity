@@ -10,7 +10,7 @@
           </div>
         </div>
         <div class="right">
-          <div class="photo">图片</div>
+          <div class="photo"></div>
         </div>
       </div>
       <div class="nameandcommend">
@@ -55,7 +55,7 @@ export default {
         padding: 10px;
         box-sizing: border-box;
         p {
-          font-size: 36px;
+          font-size: 30px;
           font-weight: 500;
         }
       }
@@ -93,7 +93,7 @@ export default {
     display: flex;
     justify-content: space-between;
     span {
-      font-size: 32px;
+      font-size: 26px;
       margin-left: 30px;
       margin-right: 30px;
     }

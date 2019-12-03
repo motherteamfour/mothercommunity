@@ -13,6 +13,7 @@
       </div>
       <div class="login-input">
         <el-input
+          type="password"
           placeholder="密码"
           prefix-icon="el-icon-lock"
           v-model="userpass"
@@ -34,7 +35,7 @@
         </div>
       </div>
       <div class="login-about-password">
-        <el-checkbox label="记住密码" name="type"></el-checkbox>
+        <el-checkbox label="记住密码" name="type" v-model="isSelect"></el-checkbox>
         <router-link class="login-forgetPassword" to="/forgetPassword">忘记密码?</router-link>
       </div>
       <el-button class="login-btn" @click="getLogin">登入</el-button>
@@ -51,19 +52,30 @@ export default {
       username: "",
       userpass: "",
       input3: "",
+      isSelect: false,
       identifyCodes: "1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZ", // 验证码字符的集合
       identifyCode: "",
       userpassFormat: false,
       usernameFormat: false,
-      codeFormat: false
+      codeFormat: false,
+      saveDays: 5  // cookie保存天数
     };
   },
   components: {
     SIdentify
   },
+  watch: {
+    isSelect() {
+      if(this.isSelect){
+        this.userpassFormat = true;
+        this.usernameFormat = true;
+      }
+    }
+  },
   mounted() {
     this.identifyCode = "";
     this.makeCode(this.identifyCodes, 4);
+    this.getCookie();
   },
   methods: {
     success(msg) {
@@ -114,6 +126,36 @@ export default {
         return (this.codeFormat = true);
       }
     },
+    //设置cookie
+    setCookie(c_name, c_pwd, exdays) {
+      var exdate = new Date(); //获取时间
+      exdate.setTime(exdate.getTime() + 24 * 60 * 60 * 1000 * exdays); //保存的天数
+      //字符串拼接cookie
+      window.document.cookie =
+        "userName" + "=" + c_name + ";path=/;expires=" + exdate.toGMTString();
+      window.document.cookie =
+        "userPwd" + "=" + c_pwd + ";path=/;expires=" + exdate.toGMTString();
+    },
+    //读取cookie
+    getCookie() {
+      if (document.cookie.length > 0) {
+        var arr = document.cookie.split("; "); //这里显示的格式需要切割一下自己可输出看下
+        for (var i = 0; i < arr.length; i++) {
+          var arr2 = arr[i].split("="); //再次切割
+          //判断查找相对应的值
+          if (arr2[0] == "userName") {
+            this.username = arr2[1]; //保存到保存数据的地方
+          } else if (arr2[0] == "userPwd") {
+            this.userpass = arr2[1];
+            this.isSelect = true;
+          }
+        }
+      }
+    },
+    //清除cookie
+    clearCookie() {
+      this.setCookie("", "", -1); //修改2值都为空，天数为负1天就好了
+    },
     getLogin() {
       if (this.userpassFormat && this.usernameFormat) {
         if (this.codeFormat) {
@@ -125,9 +167,23 @@ export default {
             .then(res => {
               console.log(res.data);
               if (res.data.code == "200") {
+                if (this.isSelect) {
+                  //传入账号名，密码，和保存天数3个参数
+                  this.setCookie(
+                    this.username,
+                    this.userpass,
+                    this.saveDays
+                  );
+                } else {
+                  //清空Cookie
+                  this.clearCookie();
+                }
+                this.success("登录成功");
                 // var token = "njaksxbxkjasbkjcxasbjk" // 模拟后台返回的token
                 var token = res.data.data;
                 sessionStorage.setItem("token", token);
+
+                sessionStorage.setItem("userId", res.data.id);
 
                 // 获取参数（未登录时想访问的路由）
                 var url = this.$route.query.redirect;
@@ -135,6 +191,8 @@ export default {
                 url = url ? url : "/home";
                 // 切换路由
                 this.$router.replace(url);
+              } else if (res.data.code == "4002" || res.data.code == "4001") {
+                this.defeated("用户名或密码错误");
               } else {
                 console.log("登陆失败");
               }
@@ -142,7 +200,7 @@ export default {
             .catch(err => {
               console.log(err);
             });
-        }else {
+        } else {
           this.defeated("验证码不正确");
         }
       } else {

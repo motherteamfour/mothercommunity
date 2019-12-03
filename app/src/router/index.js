@@ -3,31 +3,47 @@ import VueRouter from 'vue-router'
 import Home from '../views/Home.vue'
 import Forum from '../views/Forum.vue'
 import My from '../views/My.vue'
-import { Search } from 'vant'
+import Entrance from '../views/Entrance.vue'
+// import { Search } from 'vant'
 /* import NewPost from '../views/NewPost.vue' */
+import Searchs from '../views/Search.vue'
+import InfoComment from '../views/InfoComment.vue'
 
 Vue.use(VueRouter)
-Vue.use(Search);
 
 const routes = [
   {
+    // 登陆--曾晶
     path: '/login',
-    name: 'Entrance',
-    component: () => import('../views/Entrance.vue')
+    component: Entrance,
+    children: [
+      {
+        path: '',
+        name: 'Entrance',//登陆-(密码登陆/验证码登陆)
+        component: () => import('../views/Entrance.vue'),
+      },
+      {
+        path: '/findpassword',//找回密码
+        name: 'FindPassword',
+        component: () => import('../views/FindPassword.vue'),
+
+      }
+    ]
   },
   {
     path: '/',
     component: Home,
     children: [
+      //社区--赵蕊
       {
         path: '',
-        name: 'Community',//社区
+        name: 'Community',
         component: () => import('../views/Community.vue'),
-
       },
+      //圈子--颜志鹏
       {
         path: 'forum',
-        component: Forum,//圈子
+        component: Forum,
         children: [
           {
             path: '',
@@ -43,34 +59,61 @@ const routes = [
         ]
 
       },
+      //问答-曾晶
       {
         path: 'qanda',
-        name: 'QandA',//问答
+        name: 'QandA',
         component: () => import('../views/QandA.vue'),
         children: [ // 子路由
           {
             path: "",
-            name: "HotQuestion",
+            name: "HotQuestion",//热门问题
             component: () => import('../views/HotQuestion.vue'),
 
           },
           {
-            path: 'unsolved',
+            path: 'unsolved',//未解决的问题
             name: 'Unsolved',
-            // 路由懒加载：访问时才加载
             component: () => import('../views/Unsolved.vue'),
-            meta: {
-              auth: true
-            }
-          }
+          },
+
         ]
       },
+      {
+        path: 'ask',
+        name: 'Ask',
+        component: () => import('../views/Ask.vue'),
+        meta: {
+          auth: true
+        }
+      },
+      {
+
+        path: 'searchquestion',//搜索问题
+        name: 'SearchQuestion',
+        component: () => import('../views/SearchQuestion.vue'),
+        meta: {
+          auth: true
+        }
+      },
+      {
+        path: 'questiondetail/:questionId',// 问题详情页
+        name: 'QuestionDetail',
+        component: () => import('../views/QuestionDetail.vue'),
+      },
+      {
+        path: 'suresearch',// 确定搜索
+        name: 'SureSearch',
+        component: () => import('../views/SureSearch.vue'),
+      },
+      // 百科
       {
         path: 'encyclopedia',
         name: 'Encyclopedia',//百科
         component: () => import('../views/Encyclopedia.vue'),
 
       },
+      // 我的-赵蕊
       {
         path: 'my',//我的
         component: My,
@@ -109,12 +152,75 @@ const routes = [
         component: () => import('../views/Group.vue')
       },
       {
-        path: 'post/:id',
-        name: 'Post',
-        component: () => import('../views/Post.vue')
-      }
+        path: 'searchs', // 搜索
 
+        component: Searchs,
+        children: [
+          {
+            path: '',
+            name: 'SearchPost',
+            component: () => import('../views/SearchPost.vue')
+          },
+          {
+            path: 'userpage',
+            name: 'Userpage',
+            component: () => import('../views/Userpage.vue'),
+          }
+        ]
+      },
+      {
+        path: 'infomation', // 消息
+        name: "Infomation",
+        component: () => import('../views/Infomation.vue')
+      },
+      {
+        path: 'trigger',
+        name: "Trigger",
+        component: () => import('../views/Trigger.vue')
+      },
+      {
+        path: 'infocomment', // 消息中的评论
+        component: InfoComment,
+        children: [
+          {
+            path: '',
+            name: 'Received',
+            component: () => import('../views/Received.vue')
+          },
+          {
+            path: 'sented',
+            name: 'Sented',
+            component: () => import('../views/Sented.vue'),
+          }
+        ]
+
+      },
+      {
+        path: 'infolike', // 消息中的点赞
+        name: 'InfoLike',
+        component: () => import('../views/InfoLike.vue')
+      },
+      {
+        path: 'inform', //消息中通知
+        name: 'Inform',
+        component: () => import('../views/Inform.vue')
+      },
+      {
+        path: 'altername', //消息中通知
+        name: 'Altername',
+        component: () => import('../views/AlterName.vue')
+      }
     ]
+  },
+  {
+    path: '/post/:id',//发布帖子
+    name: 'Post',
+    component: () => import('../views/Post.vue')
+  },
+  {
+    path: '/circlegourp', //所有圈子
+    name: 'circlegourp',
+    component: () => import('../views/CircleGourp.vue')
   }
 ]
 
@@ -127,21 +233,21 @@ const router = new VueRouter({
 
 // 注册全局守卫
 // 在访问路由之前进行拦截
-router.beforeEach((to, from, next) => {
-  // 获取 token，登录的标识
-  var token = sessionStorage.getItem("token")
+// router.beforeEach((to, from, next) => {
+//   // 获取 token，登录的标识
+//   var token = sessionStorage.getItem("token")
 
-  if (to.meta.auth) { // 判断是否需要权限
-    if (token) { // 再次判断是否已经有权限了
-      next()
-    } else {
-      next({ // 没有权限，导向登录页
-        path: "/login",
-        query: { redirect: to.fullPath } // 记录原本想访问的路由
-      })
-    }
-  } else {
-    next() // 想去哪就去哪
-  }
-})
+//   if (to.meta.auth) { // 判断是否需要权限
+//     if (token) { // 再次判断是否已经有权限了
+//       next()
+//     } else {
+//       next({ // 没有权限，导向登录页
+//         path: "/login",
+//         query: { redirect: to.fullPath } // 记录原本想访问的路由
+//       })
+//     }
+//   } else {
+//     next() // 想去哪就去哪
+//   }
+// })
 export default router

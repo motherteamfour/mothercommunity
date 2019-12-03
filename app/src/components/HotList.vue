@@ -121,6 +121,7 @@ export default {
       font-weight: 600;
       text-align: center;
       border-radius: 20px;
+      box-shadow: 0 0 15px #ffe469;
     }
     .followed {
       width: 100px;
@@ -134,6 +135,7 @@ export default {
       padding: 3px;
       background: @themeColor;
       border-radius: 20px;
+      box-shadow: 0 0 15px #ffe469;
     }
   }
 
