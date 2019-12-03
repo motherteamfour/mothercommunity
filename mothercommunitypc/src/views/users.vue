@@ -18,17 +18,17 @@
           </th>
           <th>ID</th>
           <th>用户名</th>
-          <th>年龄</th>
+          <th>电话号码</th>
           <th>备孕状态</th>
           <th class="caozuo">操作</th>
         </tr>
-        <tr v-for="(item,index) in comsts" :key="index.id">
+        <tr v-for="(item,index) in tableData" :key="index.id">
           <td>
             <input type="checkbox" v-model="item.isSel" />
           </td>
+          <td></td>
           <td>{{item.userName}}</td>
-          <td>{{item.username}}</td>
-          <td>{{item.age}}</td>
+          <td>{{item.userPhone}}</td>
           <td>{{item.state.message}}</td>
           <td>
             <button type="button" class="check-btn">查看</button>
@@ -40,17 +40,17 @@
         ref="multipleTable"
         :data="tableData"
         tooltip-effect="dark"
-        style="width: 80%; margin:0 auto;"
-        @selection-change="handleSelectionChange"
+        style="width: 98%; margin:0 auto;"
       >
         <el-table-column type="selection" width="120"></el-table-column>
-        <el-table-column prop="number" label="序号" width="120"></el-table-column>
+        <el-table-column prop label="序号" width="120"></el-table-column>
         <el-table-column prop="userName" label="用户名" width="120"></el-table-column>
-        <el-table-column prop="userPhone" label="电话号码"  width="120"></el-table-column>
+        <el-table-column prop="userPhone" label="电话号码" width="120"></el-table-column>
         <el-table-column prop="state.stateMessage" label="备孕状态" width="120"></el-table-column>
         <el-table-column label="操作" show-overflow-tooltip>
-          <template>
-            <el-button>查看</el-button>
+          <template slot-scope="scope">
+            <el-button class="btn">查看</el-button>
+            <el-button class="btn"  @click="delbtn(scope.row.userId)">删除</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -59,39 +59,25 @@
 </template> 
 
 <script>
-const comsts = [
-  {
-    id: 1,
-    username: "lilei",
-    age: 25,
-    type: "已怀孕",
-    isSel: false
-  },
-  {
-    id: 2,
-    username: "haiqiong",
-    age: 22,
-    type: "备孕中",
-    isSel: false
-  },
-  {
-    id: 3,
-    username: "lilei",
-    age: 26,
-    type: "已出生",
-    isSel: true
-  }
-];
 export default {
   name: "users",
   data() {
     return {
       tableData: [],
-      comsts: []
     };
   },
   created() {
-    this.comsts = comsts;
+    this.axios
+      .get("/admin/userList?size=1&sizePage=6")
+      .then(res => {
+        console.log(res.data.data);
+        if (res.data.code == 200) {
+          this.tableData = res.data.data.list;
+        }
+      })
+      .catch(error => {
+        console.log(error);
+      });
   },
   computed: {
     isSelectAll: function() {
@@ -100,30 +86,65 @@ export default {
       });
     }
   },
-  mounted() {
-    this.axios
-      .get("/api/admin/userList?size=1&sizePage=6")
+  mounted() { 
+  },
+  methods: {
+    //分页按钮
+    load(){
+      this.axios
+      .get("/admin/userList?size=1&sizePage=6")
       .then(res => {
-        console.log(res.data);
-        
+        console.log(res.data.data);
+        if (res.data.code == 200) {
+          this.tableData = res.data.data.list;
+        }
       })
       .catch(error => {
         console.log(error);
       });
-  },
-  methods: {
-    selectAll: function(e) {
-      if (e.target.checked) {
-        this.comsts = this.comsts.map(function(item) {
-          item.isSel = true;
-          return item;
-        });
-      } else {
-        this.comsts = this.comsts.map(function(item) {
-          item.isSel = false;
-          return item;
-        });
-      }
+    },
+    //用户数据假删
+    delbtn(userId) {
+      // var userIds = this.userIds.join
+      console.log(userId);
+      // const params = new URLSearchParams()
+      // params.append('userId',userId)
+      this.axios({
+        url:"/admin/delUser",
+        method:"post",
+        data: `userId=${userId}`,
+        headers:{
+          "Content-Type":"application/x-www-form-urlencoded"
+        },
+      // data:params
+        
+      })
+      .then(res=>{
+        console.log(res.data)
+
+          this.axios
+          .get("/admin/userList?size=1&sizePage=6")
+          .then(res => {
+            console.log(res.data.data);
+              this.tableData = res.data.data.list;
+          })
+        
+        
+      })
+      .catch(error=>{
+        console.log(error)
+      })
+      // this.axios.post("/admin/delUser", 
+      //   {
+      //     userId: userId
+      //   })
+      //   .then(res => {
+      //     console.log(res.data,"1111");
+      //   })
+      //   .catch(err => {
+      //     console.log(err);
+      //   })
+      
     }
   }
 };
@@ -161,6 +182,15 @@ button {
   outline: none;
   border: none;
   border-radius: 2px;
+}
+.btn {
+  width: @btn-w;
+  height: @btn-h;
+  color: white;
+  outline: none;
+  border: none;
+  border-radius: 2px;
+  background: @bg-btn;
 }
 .seek-btn,
 .del-btn {

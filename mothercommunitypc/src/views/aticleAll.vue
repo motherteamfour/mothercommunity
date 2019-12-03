@@ -13,16 +13,18 @@
         <option>备孕</option>
         <option>出生</option>
       </select>
-      <input type="text" class="username" placeholder="请输入需要搜索的用户名">
-      <input type="text" class="title" placeholder="请输入需要搜索的标题">
-      <button type="button" class="seek-btn">搜索</button>
+      <input type="text" class="username" placeholder="请输入需要搜索的用户名" />
+      <input type="text" class="title" placeholder="请输入需要搜索的标题" />
+      <button type="button" class="seek-btn" @click="sousuo">搜索</button>
       <button type="button" class="del-btn">删除</button>
       <button type="button" class="unRecommend">推荐</button>
     </div>
     <div class="table">
       <table>
         <tr>
-          <th><input type="checkbox" @click="selectAll"></th>
+          <th>
+            <input type="checkbox" @click="selectAll" />
+          </th>
           <th>ID</th>
           <th>用户名</th>
           <th>标题</th>
@@ -33,7 +35,9 @@
           <th class="caozuo">操作</th>
         </tr>
         <tr v-for="(item,index) in comsts" :key="index.id">
-          <td><input type="checkbox" v-model="item.isSel"></td>
+          <td>
+            <input type="checkbox" v-model="item.isSel" />
+          </td>
           <td>{{item.id}}</td>
           <td>{{item.username}}</td>
           <td>{{item.title}}</td>
@@ -53,42 +57,42 @@
 </template>
 
 <script>
-
 const comsts = [
   {
-    id:1,
-    username:"lilei",
-    title:"朝花夕拾",
-    time:"2017.1.5",
-    type:"怀孕",
-    collect:20,
-    praise:30
+    id: 1,
+    username: "lilei",
+    title: "朝花夕拾",
+    time: "2017.1.5",
+    type: "怀孕",
+    collect: 20,
+    praise: 30
   },
   {
-    id:2,
-    username:"haiqiong",
-    title:"朝花夕拾",
-    time:"2017.1.5",
-     type:"怀孕",
-    collect:20,
-    praise:30
+    id: 2,
+    username: "haiqiong",
+    title: "朝花夕拾",
+    time: "2017.1.5",
+    type: "怀孕",
+    collect: 20,
+    praise: 30
   },
   {
-    id:3,
-    username:"lilei",
-    title:"朝花夕拾",
-    time:"2017.1.5",
-     type:"怀孕",
-    collect:20,
-    praise:30
+    id: 3,
+    username: "lilei",
+    title: "朝花夕拾",
+    time: "2017.1.5",
+    type: "怀孕",
+    collect: 20,
+    praise: 30
   }
-]
+];
 export default {
-  name:"users",
+  name: "users",
   data() {
     return {
-      comsts:[]
-    }
+      comsts: [],
+      list: ["1","2","3","四",4]
+    };
   },
   created() {
     this.comsts = comsts;
@@ -98,114 +102,137 @@ export default {
     //   return this.comsts.every(function(val) {
     //     return val.isSel
     //   })
-      
     // }
   },
   methods: {
-    selectAll:function(e){
-      if(e.target.checked){
-        this.comsts = this.comsts.map(function(item){
+    selectAll: function(e) {
+      if (e.target.checked) {
+        this.comsts = this.comsts.map(function(item) {
           item.isSel = true;
-          return item
+          return item;
         });
       } else {
-        this.comsts = this.comsts.map(function(item){
+        this.comsts = this.comsts.map(function(item) {
           item.isSel = false;
-          return item
+          return item;
         });
       }
     },
     del(i) {
-      this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        type: 'warning'
-      }).then(() => {
-        this.comsts.splice(i, 1);
-        this.$message({
-          type: 'success',
-          message: '删除成功!'
+      this.$confirm("此操作将永久删除该文件, 是否继续?", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning"
+      })
+        .then(() => {
+          this.comsts.splice(i, 1);
+          this.$message({
+            type: "success",
+            message: "删除成功!"
+          });
+        })
+        .catch(() => {
+          this.$message({
+            type: "info",
+            message: "已取消删除"
+          });
         });
-      }).catch(() => {
-        this.$message({
-          type: 'info',
-          message: '已取消删除'
-        });          
-      });
-       
+    },
+    sousuo() {
+    
+      console.log(typeof(this.list.join(",")))
+      var liset = this.list.join(",")
+      this.axios({
+        method: "put",
+        url:
+          "/posterior/postmanagement/removePostByIds",
+        data: {
+          postIds:liset
+        }
+      })
+        .then(function(response) {
+          console.log(response,"chenggong ")
+          
+        })
+        .catch(function(response) {
+          console.log(response,"shibai ")
+        });
     }
-  }
-
-}
+  },
+  
+};
 </script>
 
 <style lang="less" scoped>
-@import '../assets/style/resize.less';
-.top{
+@import "../assets/style/resize.less";
+.top {
   padding: 20px;
-  input,button{
-    margin: 20px;
-  };
-  select{
+  input,
+  button {
     margin: 20px;
   }
-  
+  select {
+    margin: 20px;
+  }
 }
 
-.userId,.username,.title{
+.userId,
+.username,
+.title {
   width: 182px;
   height: 38px;
   background: #fff;
-  padding:0 0 0 10px;
+  padding: 0 0 0 10px;
 }
-select{
+select {
   height: 42px;
-  margin-top: 2px
+  margin-top: 2px;
 }
-button{
+button {
   width: @btn-w;
   height: @btn-h;
   color: white;
   outline: none;
   border: none;
-  border-radius: 2px
+  border-radius: 2px;
 }
-.seek-btn,.del-btn{
-  background:@bg-btn;
+.seek-btn,
+.del-btn {
+  background: @bg-btn;
 }
 button:hover {
-  background: #009687d0
+  background: #009687d0;
 }
-.check-btn{
+.check-btn {
   background: @bg-check-btn;
-  margin-right: 10px
+  margin-right: 10px;
 }
-.check-btn:hover{
-  background: #2a8fddfa
+.check-btn:hover {
+  background: #2a8fddfa;
 }
-.table{
+.table {
   width: 100%;
-  
 }
-table{
+table {
   width: 98%;
-  border-collapse:collapse;
-  margin: 0 auto  
-
+  border-collapse: collapse;
+  margin: 0 auto;
 }
-tr,th,td{
+tr,
+th,
+td {
   border: @tab-border;
   height: 28px;
 }
 
-.unRecommend{
+.unRecommend {
   background: #ebe71d;
-  margin-left: 10px
+  margin-left: 10px;
 }
 .unRecommend:hover {
-  background: #ebe81dc4
+  background: #ebe81dc4;
 }
-.caozuo{
-  width:@three;
+.caozuo {
+  width: @three;
 }
 </style>

@@ -20,7 +20,7 @@
         </tr>
         <tr>
           <td colspan="2">
-            <el-button type="button" class="add" :disabled="disadd1 && disadd2 && disadd3">添加</el-button>
+            <el-button type="button" class="add" :disabled="disadd1 && disadd2 && disadd3" @click="addAdmin">添加</el-button>
             <el-button type="button" class="exit" @click="exit">清空</el-button>
           </td>
         </tr>
@@ -35,7 +35,7 @@
           <button type="button" class="del-btn">删除</button>
         </div>
       </div>
-      <table>
+      <!-- <table>
         <tr>
           <th><input type="checkbox"></th>
           <th>id</th>
@@ -55,7 +55,25 @@
             <button type="button" class="del" @click="del(index)">删除</button>
           </td>
         </tr>
-      </table>
+      </table> -->
+      <el-table
+        ref="multipleTable"
+        :data="tableData"
+        tooltip-effect="dark"
+        style="width: 98%; margin:0 auto;"
+      >
+        <el-table-column type="selection" width="120"></el-table-column>
+        <el-table-column prop label="序号" width="120"></el-table-column>
+        <el-table-column prop="userName" label="用户名" width="120"></el-table-column>
+        <el-table-column prop="userPhone" label="姓名" width="120"></el-table-column>
+        <el-table-column prop="state.stateMessage" label="联系方式" width="120"></el-table-column>
+        <el-table-column label="操作" show-overflow-tooltip>
+          <template slot-scope="scope">
+            <el-button class="btn"  @click="delBtn(scope.row.userId)">删除</el-button>
+            <el-button class="btn" @click="resumeBtn(scope.row.userId)">恢复</el-button>
+          </template>
+        </el-table-column>
+      </el-table>
     </div>
   </div>
   
@@ -63,26 +81,6 @@
 </template>
 
 <script>
-const trs = [
-  {
-    id:1,
-    user:"lime",
-    username:"licky",
-    tel:"12345679820"
-  },
-  {
-    id:2,
-    user:"silence",
-    username:"lisat",
-    tel:"12344329820"
-  },
-  {
-    id:3,
-    user:"lucky",
-    username:"seas",
-    tel:"14325679820"
-  }
-]
 export default {
   name:"addUsers",
   data(){
@@ -96,10 +94,21 @@ export default {
       disadd1 : false,
       disadd2 : false,
       disadd3 : false,
+      tableData:[],
     }
   },
   created() {
-    this.trs = trs
+    this.axios
+      .get("admin/findAdminByConditions?size=1&sizePage=6")
+      .then(res => {
+        console.log(res.data.data);
+        if (res.data.code == 200) {
+          this.tableData = res.data.data.list;
+        }
+      })
+      .catch(error => {
+        console.log(error);
+      });
   },
   methods:{
     //清空效果
@@ -107,8 +116,11 @@ export default {
       this.inputUsername = "",
       this.inputPassword = "",
       this.inputName = "",
-      this.inputTel = ""
-      
+      this.inputTel = ""  
+    },
+    //添加管理员
+    addAdmin(){
+
     },
     del(i) {
       this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
@@ -167,13 +179,7 @@ export default {
     },
    
   },
-  // computed:{
-  //   disadd(){
-  //     if(this.inputUsername=="" || this.inputPassword=="" || this.inputTel==""){
-  //       return this.disadd = true
-  //     }
-  //   }
-  // }
+
 }
 </script>
 
