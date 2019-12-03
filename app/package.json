@@ -16,6 +16,7 @@
     "vue": "^2.6.10",
     "vue-axios": "^2.1.5",
     "vue-router": "^3.0.7",
+    "vuescroll": "^4.14.4",
     "vuex": "^3.0.1"
   },
   "devDependencies": {
@@ -26,6 +27,7 @@
     "@vue/cli-plugin-vuex": "^4.0.0",
     "@vue/cli-service": "^4.0.0",
     "babel-eslint": "^10.0.3",
+    "babel-plugin-import": "^1.13.0",
     "eslint": "^5.16.0",
     "eslint-plugin-vue": "^5.0.0",
     "less": "^3.0.4",

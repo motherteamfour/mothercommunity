@@ -6,7 +6,7 @@ import router from '../router/'
 const http = axios.create({
   baseURL: '/api',
   //请求超时
-  timeout: 6000
+  timeout: 60000
 })
 
 //请求拦截request

@@ -7,3 +7,6 @@ export default {
   name: "Unsolved"
 };
 </script>
+<style lang="less" scoped>
+
+</style>
