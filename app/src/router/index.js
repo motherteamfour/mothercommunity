@@ -12,8 +12,8 @@ import InfoComment from '../views/InfoComment.vue'
 Vue.use(VueRouter)
 
 const routes = [
+  // 登陆注册
   {
-    // 登陆--曾晶
     path: '/login',
     component: Entrance,
     children: [
@@ -23,13 +23,25 @@ const routes = [
         component: () => import('../views/Entrance.vue'),
       },
       {
-        path: '/findpassword',//找回密码
+        path: 'findpassword',//找回密码
         name: 'FindPassword',
         component: () => import('../views/FindPassword.vue'),
 
-      }
+      },
+
     ]
   },
+  {
+    path: '/register',//注册
+    name: 'Register',
+    component: () => import('../views/Register.vue'),
+  },
+  {
+    path: '/registerPass',//注册
+    name: 'RegisterPass',
+    component: () => import('../views/RegisterPass.vue'),
+  },
+  // app
   {
     path: '/',
     component: Home,
@@ -83,9 +95,7 @@ const routes = [
         path: 'ask',
         name: 'Ask',
         component: () => import('../views/Ask.vue'),
-        meta: {
-          auth: true
-        }
+
       },
       {
 

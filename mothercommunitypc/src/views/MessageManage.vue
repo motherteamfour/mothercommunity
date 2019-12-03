@@ -11,7 +11,7 @@
           ></el-option>
         </el-select>
         <el-input class="messageManage-search-input" v-model="input" placeholder="请输入用户名字"></el-input>
-        <el-button class="messageManage-search-btn" icon="el-icon-search" @click="getAllUsers">搜索</el-button>
+        <el-button class="messageManage-search-btn" icon="el-icon-search" @click="search">搜索</el-button>
       </div>
 
       <div class="messageManage-content">
@@ -45,12 +45,17 @@
           <el-button class="messageManage-content-btn" @click="toggleSelection()">取消选择</el-button>
           <el-button
             class="messageManage-content-btn messageManage-content-btn-edit"
-            @click="changeShow"
+            @click="getReceiveIds"
           >编辑通知消息</el-button>
         </div>
       </div>
     </div>
-    <EditSendMessage v-show="!showEdit" @showEditFn="changeShow"></EditSendMessage>
+    <EditSendMessage
+      v-show="!showEdit"
+      @showEditFn="changeShow"
+      :receiveIds="receiveIds"
+      @emptyUserIds="emptyIds"
+    ></EditSendMessage>
   </div>
 </template>
 
@@ -62,15 +67,19 @@ export default {
     return {
       options: [
         {
-          value: "选项1",
+          value: 1,
+          label: "所有用户"
+        },
+        {
+          value: 2,
           label: "备孕中"
         },
         {
-          value: "选项2",
+          value: 3,
           label: "已怀孕"
         },
         {
-          value: "选项3",
+          value: 4,
           label: "已生子"
         }
       ],
@@ -79,13 +88,29 @@ export default {
       tableData: [],
       showEdit: true,
       userTotal: 0,
-      sizePage: 6
+      sizePage: 6,
+      multipleSelection: [],
+      receiveIds: []
     };
   },
   components: {
     EditSendMessage
   },
   methods: {
+    success(msg) {
+      this.$message({
+        showClose: true,
+        message: msg,
+        type: "success"
+      });
+    },
+    defeated(msg) {
+      this.$message({
+        showClose: true,
+        message: msg,
+        type: "error"
+      });
+    },
     toggleSelection(rows) {
       if (rows) {
         rows.forEach(row => {
@@ -97,6 +122,7 @@ export default {
     },
     handleSelectionChange(val) {
       this.multipleSelection = val;
+      console.log(this.multipleSelection);
     },
     handleSizeChange(val) {
       console.log(`每页 ${val} 条`);
@@ -104,35 +130,95 @@ export default {
     handleCurrentChange(val) {
       console.log(`当前页: ${val}`);
       console.log(this.sizePage);
-      this.getAllUsers(val,this.sizePage)
+      if(this.value==''&&this.input=='') {
+        this.getAllUsers(val, this.sizePage);
+      }else {
+        this.searchPage(val, this.sizePage);
+      }
     },
     changeShow() {
       this.showEdit = !this.showEdit;
     },
-    getAllUsers(size,sizePage) {
+    getAllUsers(size, sizePage) {
       this.axios
         .get("/admin/userList?size=" + size + "&sizePage=" + sizePage)
-        .then((res) => {
-            if (res.data.code == 200) {
+        .then(res => {
+          if (res.data.code == 200) {
             this.tableData = res.data.data.list;
           }
         })
-        .catch(function(error) {
+        .catch(error => {
           console.log(error);
+        });
+    },
+    getReceiveIds() {
+      if (this.multipleSelection.length > 0) {
+        this.multipleSelection.forEach(item => {
+          this.receiveIds.push(item.userId);
+        });
+        console.log(this.receiveIds);
+        this.changeShow();
+      }else {
+        this.defeated('请选择要发送的用户')
+      }
+    },
+    emptyIds() {
+      this.receiveIds = [];
+      this.toggleSelection();
+    },
+    search() {
+      this.axios({
+          url: "/admin/findUserByConditions",
+          method: "post",
+          data: `size=1&sizePage=6&userName=${this.input}&userState=${this.value}`,
+          header: {
+            "Content-Type": "application/X-WWW-form-urlencoded"
+          }
+        })
+        .then((res) => {
+          console.log(res.data);
+          if(res.data.code==200) {
+            this.tableData = res.data.data.list;
+            this.userTotal = res.data.data.total;
+          }else {
+            this.tableData = [];
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    },
+    searchPage(size, sizePage) {
+      this.axios({
+          url: "/admin/findUserByConditions",
+          method: "post",
+          data: `size=${size}&sizePage=${sizePage}&userName=${this.input}&userState=${this.value}`,
+          header: {
+            "Content-Type": "application/X-WWW-form-urlencoded"
+          }
+        })
+        .then((res) => {
+          console.log(res.data);
+          if(res.data.code==200) {
+            this.tableData = res.data.data.list;
+          }
+        })
+        .catch((err) => {
+          console.log(err);
         });
     }
   },
   mounted() {
     this.axios
       .get("/admin/userList?size=1&sizePage=6")
-      .then((res) => {
+      .then(res => {
         console.log(res.data);
         if (res.data.code == 200) {
           this.userTotal = res.data.data.total;
           this.tableData = res.data.data.list;
         }
       })
-      .catch(function(error) {
+      .catch(error => {
         console.log(error);
       });
   }

@@ -4,7 +4,7 @@
       <input type="text" class="username" placeholder="请输入需要搜索的用户名">
       <input type="text" class="title" placeholder="请输入需要搜索的标题">
       <button type="button" class="seek-btn">搜索</button>
-      <button type="button" class="del-btn" @click="delAll">删除</button>
+      <button type="button" class="del-btn">删除</button>
       <button type="button" class="unRecommend">取消推荐</button>
     </div>
     <div class="table">
@@ -14,7 +14,7 @@
           <th>ID</th>
           <th>用户名</th>
           <th>标题</th>
-          <th>推荐时间</th>
+          <th>发布时间</th>
           <th>收藏数量</th>
           <th>点赞数量</th>
           <th class="caozuo">操作</th>
@@ -98,11 +98,24 @@ export default {
         });
       }
     },
-    del:function(i) {
-      this.comsts.splice(i,1)
-    },
-    delAll: function(){
-
+    del(i) {
+      this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        this.comsts.splice(i, 1);
+        this.$message({
+          type: 'success',
+          message: '删除成功!'
+        });
+      }).catch(() => {
+        this.$message({
+          type: 'info',
+          message: '已取消删除'
+        });          
+      });
+       
     }
   }
 
