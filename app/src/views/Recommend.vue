@@ -33,9 +33,15 @@
         v-for="(item, index) in hotList"
         :key="index"
         :list="item"
+        :fLoading="fLoading"
+        :lLoading="lLoading"
+        :cLoading="cLoading"
         @followFn="follow"
+        @cancleFollowFn="cancleFollow"
         @praiseFn="praise"
+        @canclePraiseFn="canclePraise"
         @collectFn="collect"
+        @cancleCollectFn="cancleCollect"
       ></HotList>
     </section>
   </div>
@@ -55,47 +61,110 @@ export default {
         require("@/assets/img/circleswipetest/swipe2.jpg")
       ],
       circle: [],
-      hotList: []
+      hotList: [],
+      fLoading: -1,
+      lLoading: -1,
+      cLoading: -1
     };
   },
   components: {
     HotList
   },
   methods: {
-    follow(i) {
-      console.log("关注");
+    follow(i, userId) {
+      this.fLoading = i;
       let param = new URLSearchParams();
-      param.append("followUserId", i);
-      param.append("userId", "1002");
+      param.append("followUserId", userId);
+      param.append("userId", "1001");
+      this.axios.post("/user/fol", param).then(res => {
+        console.log(res.data);
+        if (res.data.code == 200) {
+          this.fLoading = -1;
+          this.getHotList();
+        }
+      });
+    },
+    cancleFollow(i, userId) {
+      this.fLoading = i;
       this.axios
-        .post("/user/fol", param)
+        .delete(`/user/notFol?followUserId=${userId}&userId=1001`)
         .then(res => {
           console.log(res.data);
-          this.hotList[i].isFollow = !this.contact[i].isFollow;
+          if (res.data.code == 200) {
+            console.log(res.data);
+            this.fLoading = -1;
+            this.getHotList();
+          }
         });
     },
-    praise(i) {
-      this.hotList[i].isLike = !this.contact[i].isLike;
+    praise(i, postId) {
+      this.lLoading = i;
+      let param2 = new URLSearchParams();
+      param2.append("postId", postId);
+      param2.append("userId", "1001");
+      this.axios.post("/post/like", param2).then(res => {
+        console.log(res.data);
+        if (res.data.code == 200) {
+          this.lLoading = -1;
+          this.hotList[i].isLike = !this.hotList[i].isLike;
+          this.hotList[i].countFabulous += 1;
+        }
+      });
     },
-    collect(i) {
-      this.hotList[i].isCollect = !this.contact[i].isCollect;
-    },
-    cancleFollow(i) {
+    canclePraise(i, postId) {
+      this.lLoading = i;
       this.axios
-        .delete("/user/fol", {
-          followUserId: i,
-          userId: 1001
-        })
+        .delete(`/post/notLike?postId=${postId}&userId=1001`)
         .then(res => {
           console.log(res.data);
-          this.hotList[i].isFollow = !this.contact[i].isFollow;
+          if (res.data.code == 200) {
+            console.log(res.data);
+            this.lLoading = -1;
+            this.hotList[i].isLike = !this.hotList[i].isLike;
+            this.hotList[i].countFabulous -= 1;
+          }
         });
+      console.log(postId);
     },
-    canclePraise(i) {
-      this.hotList[i].isLike = !this.contact[i].isLike;
+    collect(i, postId) {
+      this.cLoading = i;
+      let param3 = new URLSearchParams();
+      param3.append("postId", postId);
+      param3.append("userId", "1001");
+      this.axios.post("/post/col", param3).then(res => {
+        console.log(res.data);
+        if (res.data.code == 200) {
+          this.cLoading = -1;
+          this.hotList[i].isCollect = !this.hotList[i].isCollect;
+          this.hotList[i].countCollection += 1;
+        }
+      });
+      console.log(postId);
     },
-    cancleCollect(i) {
-      this.hotList[i].isCollect = !this.contact[i].isCollect;
+    cancleCollect(i, postId) {
+      this.axios
+        .delete(`/post/notCol?postId=${postId}&userId=1001`)
+        .then(res => {
+          console.log(res.data);
+          if (res.data.code == 200) {
+            console.log(res.data);
+            this.cLoading = -1;
+            this.hotList[i].isCollect = !this.hotList[i].isCollect;
+            this.hotList[i].countCollection -= 1;
+          }
+        });
+      console.log(postId);
+    },
+    getHotList() {
+      this.axios.get("/post/list?userId=1001").then(res => {
+        //请求热门文章
+        this.hotList = res.data.data;
+        console.log(res.data);
+        this.hotList.forEach((item, index) => {
+          item.idn = index;
+        });
+        console.log(this.hotList);
+      });
     }
   },
   mounted() {
@@ -122,10 +191,7 @@ export default {
       //请求推荐圈子数据
       this.circle = res.data.data.splice(0, 7);
     });
-    this.axios.get("/post/list?userId=1001").then(res => {
-      this.hotList = res.data.data;
-      console.log(res.data);
-    });
+    this.getHotList();
   }
 };
 </script>

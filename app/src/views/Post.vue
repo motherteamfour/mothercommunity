@@ -120,30 +120,17 @@ export default {
       this.axios.post("/file/insert", fd).then(res => {
         console.log(res.data);
         if (res.data.code == 200) {
-/*           let param = new URLSearchParams();
-          param.append("circleId", this.groupid);
-          param.append("postContent", this.content);
-          param.append("postImgs", res.data);
-          param.append("postTitle", this.postTitle);
-          param.append("userId", 1001);
-          console.log(param.get("circleId")); */
-          console.log({
-              circleId: this.groupid,
-              postContent: this.content,
-              postImgs: res.data.data,
-              postTitle: this.postTitle,
-              userId: 1001
-            });
           this.axios
             .post("/post/addPost", {
               circleId: this.groupid,
               postContent: this.content,
               postImgs: res.data.data,
               postTitle: this.title,
-              userId: 1001
+              userId: 1004
             })
             .then(res => {
               console.log(res.data);
+              this.$router.replace('/article/' + res.data.data);
             });
         }
       });

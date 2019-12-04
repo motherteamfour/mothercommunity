@@ -10,26 +10,33 @@
       <div class="article-top">
         <div class="user-info">
           <div class="avatar"></div>
-          <span>用户名</span>
+          <span v-if="article.user!=undefined">{{article.user.userName}}</span>
         </div>
-        <button class="follow">关注</button>
+        <button class="follow" v-if="!article.isFollow" @click="follow(article.userId)">关注</button>
+        <div class="followed" v-else @click="cancleFollow(article.userId)">
+          <i class="fa fa-check"></i>
+          已关注
+        </div>
       </div>
       <div class="title">
-        <p>宝宝出生拉！！</p>
+        <p>{{article.postTitle}}</p>
       </div>
       <div class="body-text">
-        <p>阿斯顿发额啊我额封建时代佛从vnzkld啊手动阀实打实的发啊啊额哇额福娃额俄方啊饿啊我额</p>
+        <p>{{article.postContent}}</p>
       </div>
       <div class="content-pic">
-        <img src="@/assets/img/circleswipetest/swipe1.jpg" alt />
-        <img src="@/assets/img/login/denglu.png" alt />
-        <img src="@/assets/img/circleswipetest/swipe2.jpg" alt />
+        <img
+          v-for="(img, index) in article.postImgs"
+          :key="index"
+          :src="'http://172.16.6.45:8989/' + img.postUrl"
+          alt
+        />
       </div>
       <div class="article-info"></div>
-      <a class="circle" href>
-        #产后圈
+      <router-link :to="'/group/' + article.circleId" class="circle" href>
+        #{{article.circleName}}
         <i class="fa fa-angle-right"></i>
-      </a>
+      </router-link>
     </div>
     <div class="reply-content">
       <div class="reply-top">
@@ -37,34 +44,30 @@
         全部评论
       </div>
       <ul>
-        <li class="reply-item">
+        <li v-for="(item, index) in firstComm" :key="index" class="reply-item">
           <div class="left-avatar">
             <div class="reply-avatar"></div>
           </div>
           <div class="reply-right">
             <div class="right-top">
-              <span class="name">用户123</span>
+              <span class="name">{{item.user.userName}}</span>
               <div class="praise">
                 <i class="fa fa-heart-o"></i>
-                5
+                {{item.countFabulous}}
               </div>
             </div>
-            <p class="reply-text">啊圣诞节佛山额奥迪覅就撒阿道夫撒俄方额佛山额奥迪覅就撒阿道夫撒俄方</p>
+            <p class="reply-text">{{item.commentContent}}</p>
             <ul class="sub-reply">
-              <li>
+              <li v-for="(item, index) in item.comres" :key="index">
                 <p>
-                  <span class="subusername">用户3333</span> 回复:123123
-                </p>
-              </li>
-              <li>
-                <p>
-                  <span class="subusername">用户3333</span> 回复:123123
+                  <span class="subusername">{{item.user.userName}}</span>
+                  回复:{{item.commentContent}}
                 </p>
               </li>
             </ul>
             <div class="right-bottom">
-              <p class="time">2019/11/24 12:11</p>
-              <div class="reply-reply">
+              <p class="time">{{item.commentTime}}</p>
+              <div class="reply-reply" @click="subRp(item.userId)">
                 <i class="fa fa-comment-o"></i>
                 回复
               </div>
@@ -74,7 +77,7 @@
       </ul>
     </div>
     <div class="reply-bottom">
-      <input type="text" placeholder="回复" />
+      <div @click="showRp" class="rp-input">回复</div>
       <div class="options">
         <div>
           <i class="fa fa-heart-o"></i>
@@ -86,22 +89,112 @@
         </div>
       </div>
     </div>
+    <van-popup v-model="show" position="bottom" :style="{ height: '25%' }">
+      <textarea v-model="rpContent" class="frist-rp" ref="getFocus" placeholder="我也来说两句"></textarea>
+      <div class="send-wrap">
+        <button class="reply-btn" @click="reply">发送</button>
+      </div>
+    </van-popup>
   </div>
 </template>
 
 <script>
+import { Popup } from "vant";
 export default {
   data() {
     return {
-      
-    }
+      postId: -1,
+      article: [],
+      firstComm: [],
+      parentId: 0,
+      rpContent: "",
+      rpPostId: 0,
+      show: false
+    };
+  },
+  components: {
+    [Popup.name]: Popup
   },
   created() {
-    this.axios.get("/post/getPost")
+    this.postId = this.$route.params.id; //获取帖子id
+    this.axios
+      .get(`/post/getPost?postId=${this.postId}&userId=1001`) //请求文章详情数据
+      .then(res => {
+        if (res.data.code == 200) {
+          this.article = res.data.data;
+          console.log(this.article);
+        }
+      });
+    this.getFirstRp();
   },
   methods: {
     back() {
       this.$router.go(-1); //返回上一层
+    },
+    getFirstRp() {
+      this.axios
+        .get(`/comm/list?postId=${this.postId}&userId=1001`) //请求文章一级回复
+        .then(res => {
+          if (res.data.code == 200) {
+            console.log(res.data);
+            this.firstComm = res.data.data;
+          }
+        });
+    },
+    follow(i) {
+      let param = new URLSearchParams();
+      param.append("followUserId", i);
+      param.append("userId", "1001");
+      this.axios.post("/user/fol", param).then(res => {
+        console.log(res.data);
+        if (res.data.code == 200) {
+          this.article.isFollow = !this.article.isFollow;
+        }
+      });
+    },
+    cancleFollow(i) {
+      this.axios
+        .delete(`/user/notFol?followUserId=${i}&userId=1001`)
+        .then(res => {
+          console.log(res.data);
+          if (res.data.code == 200) {
+            console.log(res.data);
+            this.article.isFollow = !this.article.isFollow;
+          }
+        });
+    },
+    showRp() {
+      this.parentId = 0;
+      this.rpPostId = this.postId;
+      this.show = !this.show;
+      this.timer = setTimeout(() => {
+        this.$refs.getFocus.focus();
+      }, 100);
+    },
+    subRp(i) {
+      this.parentId = i;
+      this.rpPostId = 0;
+      this.show = !this.show;
+    },
+    reply() {
+      this.show = !this.show;
+      console.log({
+          commentContent: this.rpContent,
+          userId: 1001,
+          parentId: this.parentId,
+          postId: this.rpPostId
+        })
+      this.axios
+        .post("/comm/add", {
+          commentContent: this.rpContent,
+          userId: 1001,
+          parentId: this.parentId,
+          postId: this.rpPostId
+        })
+        .then(res => {
+          console.log(res.data);
+          this.getFirstRp();
+        });
     }
   }
 };
@@ -111,7 +204,7 @@ export default {
 @import "../assets/style/base.less";
 .article-details {
   width: 100%;
-  min-height: 100vh;
+  min-height: calc(100vh - 40px);
   background: rgb(248, 248, 248);
   padding-bottom: 90px;
 }
@@ -175,10 +268,23 @@ header {
       border-radius: 30px;
       border: none;
       outline: none;
-      font-size: 28px;
+      font-size: 24px;
       background: rgb(255, 220, 219);
       color: rgb(235, 75, 71);
       box-shadow: 0 0 10px rgb(255, 220, 219);
+    }
+    .followed {
+      width: 120px;
+      height: 50px;
+      border-radius: 30px;
+      text-align: center;
+      line-height: 50px;
+      border: none;
+      outline: none;
+      font-size: 24px;
+      background: rgb(235, 75, 71);
+      color: #fff;
+      box-shadow: 0 0 10px rgb(235, 75, 71);
     }
   }
   .circle {
@@ -188,6 +294,7 @@ header {
   .title {
     margin-top: 20px;
     font-size: 36px;
+    font-weight: 600;
   }
   .body-text {
     margin-top: 20px;
@@ -221,7 +328,9 @@ header {
       width: 100%;
       padding: 20px 0;
       display: flex;
+      justify-content: space-around;
       .left-avatar {
+        width: 10%;
         margin-right: 20px;
         .reply-avatar {
           width: 80px;
@@ -231,13 +340,13 @@ header {
         }
       }
       .reply-right {
+        width: 80%;
         border-bottom: 1px solid rgb(160, 160, 160);
         padding: 20px 0;
         .right-top {
           display: flex;
           justify-content: space-between;
           font-size: 30px;
-          color: rgb(160, 160, 160);
           font-size: 28px;
           .name {
             color: #000;
@@ -265,7 +374,7 @@ header {
           justify-content: space-between;
           align-items: center;
           font-size: 30px;
-          color: rgb(160, 160, 160);
+          padding-top: 10px;
           font-size: 28px;
           .time {
             font-size: 26px;
@@ -287,10 +396,13 @@ header {
   display: flex;
   align-items: center;
   justify-content: space-around;
-  input {
+  .rp-input {
     width: 55%;
     height: 60%;
-    border: none;
+    display: flex;
+    align-items: center;
+    border: 1px solid #000;
+    background: #fff;
     border-radius: 20px;
     outline: none;
     text-indent: 20px;
@@ -301,6 +413,29 @@ header {
     font-size: 26px;
     display: flex;
     justify-content: space-around;
+  }
+}
+
+.frist-rp {
+  width: calc(100% - 40px);
+  height: 200px;
+  padding: 20px;
+  box-sizing: border-box;
+  margin: 40px 20px 0;
+  border: 1px solid @themeColor;
+  font-size: 26px;
+  border-radius: 20px;
+}
+.send-wrap {
+  text-align: center;
+  .reply-btn {
+    width: 100px;
+    height: 50px;
+    font-size: 30px;
+    border-radius: 20px;
+    border: none;
+    background: rgb(255, 220, 219);
+    color: rgb(235, 75, 71);
   }
 }
 </style>

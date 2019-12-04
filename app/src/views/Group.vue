@@ -14,12 +14,18 @@
     <section class="hot">
       <p class="hot-title">全部帖子</p>
       <HotList
-        v-for="(item, index) in contact"
+        v-for="(item, index) in hotList"
         :key="index"
         :list="item"
+        :fLoading="fLoading"
+        :lLoading="lLoading"
+        :cLoading="cLoading"
         @followFn="follow"
+        @cancleFollowFn="cancleFollow"
         @praiseFn="praise"
+        @canclePraiseFn="canclePraise"
         @collectFn="collect"
+        @cancleCollectFn="cancleCollect"
       ></HotList>
     </section>
   </div>
@@ -32,85 +38,119 @@ export default {
   data() {
     return {
       groupId: "",
-      contact: [
-        {
-          id: 0,
-          imgUrl: "",
-          username: "jack",
-          isFollowed: 0,
-          isPraise: 0,
-          isCollect: 0,
-          title: "标题",
-          content:
-            "大富翁发大水发射点法撒旦发射点分啊违法违法的是妇科检查士大夫哦额罚你发viji",
-          praise: 4,
-          comments: 11,
-          collect: 10
-        },
-        {
-          id: 1,
-          imgUrl: "",
-          username: "张三",
-          isFollowed: 1,
-          isPraise: 0,
-          isCollect: 1,
-          title: "标题2",
-          content:
-            "大富翁发大水发射点法撒旦发射点分啊违法违法的是妇科检查士大夫哦额罚你发viji",
-          praise: 4,
-          comments: 11,
-          collect: 10
-        },
-        {
-          id: 2,
-          imgUrl: "",
-          username: "李四",
-          isFollowed: 1,
-          isPraise: 1,
-          isCollect: 0,
-          title: "朋友",
-          content:
-            "大富翁发大水发射点法撒旦发射点分啊违法违法的是妇科检查士大夫哦额罚你发viji",
-          praise: 4666,
-          comments: 11,
-          collect: 10
-        },
-        {
-          id: 3,
-          imgUrl: "",
-          username: "王五",
-          isFollowed: 1,
-          isPraise: 1,
-          isCollect: 1,
-          title: "同学",
-          content:
-            "大富翁发大水发射点法撒旦发射点分啊违法违法的是妇科检查士大夫哦额罚你发viji",
-          praise: 455,
-          comments: 551,
-          collect: 5
-        }
-      ]
+      fLoading: -1,
+      lLoading: -1,
+      cLoading: -1,
+      hotList: []
     };
   },
   components: {
     HotList
   },
   methods: {
-    follow(i) {
-      this.contact[i].isFollowed = !this.contact[i].isFollowed;
+    follow(i, userId) {
+      this.fLoading = i;
+      let param = new URLSearchParams();
+      param.append("followUserId", userId);
+      param.append("userId", "1001");
+      this.axios.post("/user/fol", param).then(res => {
+        console.log(res.data);
+        if (res.data.code == 200) {
+          this.fLoading = -1;
+          this.hotList[i].isFollow = !this.hotList[i].isFollow;
+        }
+      });
     },
-    praise(i) {
-      this.contact[i].isPraise = !this.contact[i].isPraise;
+    cancleFollow(i, userId) {
+      this.fLoading = i;
+      this.axios
+        .delete(`/user/notFol?followUserId=${userId}&userId=1001`)
+        .then(res => {
+          console.log(res.data);
+          if (res.data.code == 200) {
+            console.log(res.data);
+            this.fLoading = -1;
+            this.hotList[i].isFollow = !this.hotList[i].isFollow;
+          }
+        });
     },
-    collect(i) {
-      this.contact[i].isCollect = !this.contact[i].isCollect;
+    praise(i, postId) {
+      this.lLoading = i;
+      let param2 = new URLSearchParams();
+      param2.append("postId", postId);
+      param2.append("userId", "1001");
+      this.axios.post("/post/like", param2).then(res => {
+        console.log(res.data);
+        if (res.data.code == 200) {
+          this.lLoading = -1;
+          this.hotList[i].isLike = !this.hotList[i].isLike;
+          this.hotList[i].countFabulous += 1;
+        }
+      });
     },
-     back(){
-        this.$router.go(-1);//返回上一层
+    canclePraise(i, postId) {
+      this.lLoading = i;
+      this.axios
+        .delete(`/post/notLike?postId=${postId}&userId=1001`)
+        .then(res => {
+          console.log(res.data);
+          if (res.data.code == 200) {
+            console.log(res.data);
+            this.lLoading = -1;
+            this.hotList[i].isLike = !this.hotList[i].isLike;
+            this.hotList[i].countFabulous -= 1;
+          }
+        });
+      console.log(postId);
+    },
+    collect(i, postId) {
+      this.cLoading = i;
+      let param3 = new URLSearchParams();
+      param3.append("postId", postId);
+      param3.append("userId", "1001");
+      this.axios.post("/post/col", param3).then(res => {
+        console.log(res.data);
+        if (res.data.code == 200) {
+          this.cLoading = -1;
+          this.hotList[i].isCollect = !this.hotList[i].isCollect;
+          this.hotList[i].countCollection += 1;
+        }
+      });
+      console.log(postId);
+    },
+    cancleCollect(i, postId) {
+      this.axios
+        .delete(`/post/notCol?postId=${postId}&userId=1001`)
+        .then(res => {
+          console.log(res.data);
+          if (res.data.code == 200) {
+            console.log(res.data);
+            this.cLoading = -1;
+            this.hotList[i].isCollect = !this.hotList[i].isCollect;
+            this.hotList[i].countCollection -= 1;
+          }
+        });
+      console.log(postId);
+    },
+    back() {
+      this.$router.go(-1); //返回上一层
     }
   },
   created() {
     this.groupId = this.$route.params.id;
+    console.log(this.groupId);
+    this.axios
+      .get(`/post/cir?circleId=${this.groupId}&userId=1001`)
+      .then(res => {
+        console.log(res.data);
+        if (res.data.data !== null) {
+          this.hotList = res.data.data;
+          this.hotList.forEach((item, index) => {
+            item.idn = index;
+          });
+        }
+        console.log(this.hotList);
+      });
   }
 };
 </script>
@@ -119,6 +159,8 @@ export default {
 @import "../assets/style/base.less";
 .group {
   background: rgb(248, 248, 248);
+  min-height: 100vh;
+  padding-bottom: 90px;
 }
 header {
   width: 100%;

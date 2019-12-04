@@ -5,8 +5,8 @@
         <div class="avater"></div>
         <p class="username">{{list.user.userName}}</p>
       </div>
-      <div class="follow" v-if="!list.isFollow" @click="follow(list.userId)">+关注</div>
-      <div class="followed" v-else @click="cancleFollow(list.userId)">
+      <div class="follow" v-if="!list.isFollow" @click="follow(list.idn, list.userId)">+关注</div>
+      <div class="followed" v-else @click="cancleFollow(list.idn, list.userId)">
         <i class="fa fa-check"></i>
         已关注
       </div>
@@ -15,43 +15,50 @@
       <div class="brief clearfix">
         <p class="title">{{list.postTitle}}</p>
         <p class="content">{{list.postContent}}</p>
-        <div class="pic">
-          <img v-for="(img, index) in list.postImgs" :key="index" :src="'http://172.16.6.46:8989/' + img.postUrl">
+        <div class="pic" v-if="list.postImgs.length !== 0">
+          <img :src="'http://172.16.6.45:8989/' + list.postImgs[0].postUrl"/>
         </div>
       </div>
     </router-link>
     <div class="options">
       <div v-if="!list.isLike" class="praise-wrap">
-        <i @click="praise(list.userId)" class="fa fa-heart-o" aria-hidden="true"></i>
-        <span @click="praise(list.userId)">赞({{list.countFabulous}})</span>
+          <van-loading  v-show="lLoading == list.idn" size="14px" color="#1989fa" vertical></van-loading>
+        <div v-show="lLoading !== list.idn">
+          <i @click="praise(list.idn, list.postId)" class="fa fa-heart-o" aria-hidden="true"></i>
+          <span @click="praise(list.idn, list.postId)">赞({{list.countFabulous}})</span>
+        </div>
       </div>
       <div style="color: red" v-else class="praise-wrap">
-        <i @click="canclePraise(list.userId)" class="fa fa-heart" aria-hidden="true"></i>
-        <span @click="canclePraise(list.userId)">已赞({{list.countFabulous}})</span>
+        <i @click="canclePraise(list.idn, list.postId)" class="fa fa-heart" aria-hidden="true"></i>
+        <span @click="canclePraise(list.idn, list.postId)">已赞({{list.countFabulous}})</span>
       </div>
       <div>
         <i class="fa fa-comment-o" aria-hidden="true"></i>
         <span>评论{{list.countComment}}</span>
       </div>
       <div v-if="!list.isCollect" class="collect-wrap">
-        <i @click="collect(list.postId)" class="fa fa-star-o" aria-hidden="true"></i>
-        <span @click="collect(list.postId)">收藏({{list.countCollection}})</span>
+        <i @click="collect(list.idn, list.postId)" class="fa fa-star-o" aria-hidden="true"></i>
+        <span @click="collect(list.idn, list.postId)">收藏({{list.countCollection}})</span>
       </div>
       <div style="color: #f8d742" v-else class="collect-wrap">
-        <i @click="cancleCollect(list.postId)" class="fa fa-star" aria-hidden="true"></i>
-        <span @click="cancleCollect(list.postId)">已收藏({{list.countCollection}})</span>
+        <i @click="cancleCollect(list.idn, list.postId)" class="fa fa-star" aria-hidden="true"></i>
+        <span @click="cancleCollect(list.idn, list.postId)">已收藏({{list.countCollection}})</span>
       </div>
     </div>
   </div>
 </template>
 
 <script>
+import { Loading } from "vant";
 export default {
   name: "HotList",
   data() {
     return {};
   },
-  props: ["list","isAll"],
+  props: ["list", "isAll", "fLoading", "lLoading", "cLoading"],
+  components: {
+    [Loading.name]: Loading
+  },
   methods: {
     followStyle(i) {
       if (i == 1) {
@@ -64,15 +71,23 @@ export default {
         return {};
       }
     },
-    follow(i) {
-      console.log(this.isAcitve);
-      this.$emit("followFn", i);
+    follow(i, userId) {
+      this.$emit("followFn", i, userId);
     },
-    praise(i) {
-      this.$emit("praiseFn", i);
+    cancleFollow(i, userId) {
+      this.$emit("cancleFollowFn", i, userId);
     },
-    collect(i) {
-      this.$emit("collectFn", i);
+    praise(i, postId) {
+      this.$emit("praiseFn", i, postId);
+    },
+    canclePraise(i, postId) {
+      this.$emit("canclePraiseFn", i, postId);
+    },
+    collect(i, postId) {
+      this.$emit("collectFn", i, postId);
+    },
+    cancleCollect(i, postId) {
+      this.$emit("cancleCollectFn", i, postId);
     }
   }
 };
@@ -117,6 +132,7 @@ export default {
     .follow {
       width: 80px;
       height: 40px;
+      line-height: 40px;
       font-size: 24px;
       border: 3px solid #f8d742;
       color: #f8d742;
@@ -146,9 +162,10 @@ export default {
   .brief {
     margin-top: 20px;
     .pic {
-      width: 200px;
-      height: 200px;
-      background: lightgreen;
+      width: 100%;
+      img {
+        max-height: 300px;
+      }
     }
     .title {
       font-size: 30px;
