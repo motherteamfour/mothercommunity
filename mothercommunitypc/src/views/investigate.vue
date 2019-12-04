@@ -9,80 +9,54 @@
       <button type="button" class="unRecommend">推荐</button>
     </div>
     <div class="table">
-      <table>
-        <tr>
-          <th><input type="checkbox" @click="selectAll"></th>
-          <th>ID</th>
-          <th>用户名</th>
-          <th>标题</th>
-          <th>时间</th>
-          <th>内容</th>
-          <th class="caozuo">操作</th>
-        </tr>
-        <tr v-for="(item,index) in comsts" :key="index.id">
-          <td><input type="checkbox" v-model="item.isSel"></td>
-          <td>{{item.id}}</td>
-          <td>{{item.username}}</td>
-          <td>{{item.title}}</td>
-          <td>{{item.time}}</td>
-          <td>{{item.collect}}</td>
-          <td>
-            <button type="button" class="check-btn">推荐</button>
-            <button type="button" class="check-btn">查看</button>
-            <button type="button" class="del-btn">驳回</button>
-            <button type="button" class="unRecommend">通过</button>
-          </td>
-        </tr>
-      </table>
+      <el-table
+        ref="multipleTable"
+        :data="tableData"
+        tooltip-effect="dark"
+        style="width: 98%; margin:0 auto;"
+      >
+        <el-table-column type="selection" width="60" align="center"></el-table-column>
+        <el-table-column prop label="ID" width="60" align="center"></el-table-column>
+        <el-table-column prop="user.userName" label="用户名" width="120" align="center"></el-table-column>
+        <el-table-column prop="postTitle" label="标题" width="120" align="center"></el-table-column>
+        <el-table-column prop="user.userStartTime" label="发布时间" width="120" align="center"></el-table-column>
+        <el-table-column prop="countCollection" label="内容" width="120" align="center"></el-table-column>       
+        <el-table-column label="操作" show-overflow-tooltip align="center">
+           <!-- slot-scope="scope" -->
+          <template slot-scope="scope">
+            <el-button class="check-btn">查看</el-button>
+            <el-button class="check-btn" @click="recom(scope.row.postId)">推荐</el-button>
+            <el-button class="del-btn" @click="deleteAtic(scope.row.postId)">驳回</el-button>
+            <el-button class="del-btn" @click="recover(scope.row.postId)">通过</el-button>
+          </template>
+        </el-table-column>
+      </el-table>
     </div>
   </div>
 </template>
 
 <script>
 
-const comsts = [
-  {
-    id:1,
-    username:"lilei",
-    title:"朝花夕拾",
-    time:"2017.1.5",
-    collect:20,
-    praise:30
-  },
-  {
-    id:2,
-    username:"haiqiong",
-    title:"朝花夕拾",
-    time:"2017.1.5",
-    collect:20,
-    praise:30
-  },
-  {
-    id:3,
-    username:"lilei",
-    title:"朝花夕拾",
-    time:"2017.1.5",
-    collect:20,
-    praise:30
-  }
-]
+
 export default {
-  name:"users",
+  name:"investigate",
   data() {
     return {
-      comsts:[]
+      tableData:[]
     }
   },
   created() {
-    this.comsts = comsts;
+    this.axios.get("/posterior/postmanagement/auditRecommend?page=1&pagesize=6")
+    .then(res=>{
+      console.log(res.data)
+      this.tableData = res.data.data.list;
+    })
+    .catch(error=>{
+      console.log(error)
+    })
   },
   computed: {
-    // isSelectAll:function(){
-    //   return this.comsts.every(function(val) {
-    //     return val.isSel
-    //   })
-      
-    // }
+
   },
   methods: {
     selectAll:function(e){
@@ -97,8 +71,49 @@ export default {
           return item
         });
       }
+    },
+    // 推荐
+    recom(postId){
+      this.axios({
+        url:"/posterior/postmanagement/updatePostRecommendById",
+        method:"post",
+        data:`postId=${postId}`,
+        headers:{
+          "Content-Type":"application/x-www-form-urlencoded"
+        },
+      })
+      .then(res=>{
+        console.log(res.data)
+      })
+      .catch(error=>{
+        console.log(error)
+      })
+    },  
+    //通过
+    recover(postId){
+      this.axios({
+        url:"/posterior/postmanagement/recoveryPostById",
+        method:"post",
+        data:`postId=${postId}`,
+        headers:{
+          "Content-Type":"application/x-www-form-urlencoded"
+        },
+      })
+      .then(res=>{
+        console.log(res.data)
+        this.axios.get("/posterior/postmanagement/recyclePost?page=1&pagesize=6")
+        .then(res=>{
+          console.log(res.data)
+          this.tableData = res.data.data.list;
+        })
+        .catch(error=>{
+          console.log(error)
+        })
+      })
+      .catch(error=>{
+        console.log(error)
+      })  
     }
-    
   }
 
 }
