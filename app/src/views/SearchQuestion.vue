@@ -61,12 +61,11 @@ export default {
       if (!value.length) {
         alert("搜索关键词不能为空");
       } else {
-        
         let param = new URLSearchParams();
-        param.append("questionTitle",value);
-        param.append("userId",userId);
+        param.append("questionTitle", value);
+        param.append("userId", userId);
         this.axios
-          .get( `/question/ordinarySearch`,param)
+          .get(`/question/ordinarySearch`, param)
           // .get( `/question/ordinarySearch?questionTitle=${value}&userId=${userId}`)
           .then(res => {
             console.log(res.data);
@@ -180,6 +179,7 @@ export default {
       input {
         width: 420px;
         height: 80px;
+        font-size: 28px;
         padding: 0 20px;
         background-color: #f2f2f2;
         vertical-align: middle;
