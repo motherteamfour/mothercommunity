@@ -46,34 +46,16 @@ import HotList from "@/components/HotList.vue";
 import "@/assets/style/swiper.min.css";
 import Swiper from "swiper";
 
-var contact = [
-  {
-    id: 0,
-    imgUrl: "",
-    username: "jack",
-    isFollowed: 0,
-    isPraise: 0,
-    isCollect: 0,
-    title: "标题",
-    content:
-      "大富翁发大水发射点法撒旦发射点分啊违法违法的是妇科检查士大夫哦额罚你发viji",
-    praise: 4,
-    comments: 11,
-    collect: 10
-  }
-];
-
 export default {
   name: "Recommend",
   data() {
     return {
-      contact: [],
       swipeImg: [
         require("@/assets/img/circleswipetest/swipe1.jpg"),
         require("@/assets/img/circleswipetest/swipe2.jpg")
       ],
       circle: [],
-      hotList:[]
+      hotList: []
     };
   },
   components: {
@@ -81,13 +63,39 @@ export default {
   },
   methods: {
     follow(i) {
-      this.contact[i].isFollowed = !this.contact[i].isFollowed;
+      console.log("关注");
+      let param = new URLSearchParams();
+      param.append("followUserId", i);
+      param.append("userId", "1002");
+      this.axios
+        .post("/user/fol", param)
+        .then(res => {
+          console.log(res.data);
+          this.hotList[i].isFollow = !this.contact[i].isFollow;
+        });
     },
     praise(i) {
-      this.contact[i].isPraise = !this.contact[i].isPraise;
+      this.hotList[i].isLike = !this.contact[i].isLike;
     },
     collect(i) {
-      this.contact[i].isCollect = !this.contact[i].isCollect;
+      this.hotList[i].isCollect = !this.contact[i].isCollect;
+    },
+    cancleFollow(i) {
+      this.axios
+        .delete("/user/fol", {
+          followUserId: i,
+          userId: 1001
+        })
+        .then(res => {
+          console.log(res.data);
+          this.hotList[i].isFollow = !this.contact[i].isFollow;
+        });
+    },
+    canclePraise(i) {
+      this.hotList[i].isLike = !this.contact[i].isLike;
+    },
+    cancleCollect(i) {
+      this.hotList[i].isCollect = !this.contact[i].isCollect;
     }
   },
   mounted() {
@@ -110,14 +118,14 @@ export default {
     });
   },
   created() {
-    this.contact = contact;
-    this.axios.get("/circle/list").then(res => { //请求推荐圈子数据
+    this.axios.get("/circle/list").then(res => {
+      //请求推荐圈子数据
       this.circle = res.data.data.splice(0, 7);
     });
     this.axios.get("/post/list?userId=1001").then(res => {
       this.hotList = res.data.data;
       console.log(res.data);
-    })
+    });
   }
 };
 </script>

@@ -135,7 +135,7 @@ export default {
       text-align: center;
       color: #fff;
       padding: 3px;
-      background: @themeColor;
+      background: #ffe469;
       border-radius: 20px;
       box-shadow: 0 0 15px #ffe469;
     }
