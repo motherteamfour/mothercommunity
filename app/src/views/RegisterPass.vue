@@ -32,7 +32,7 @@
 </template>
 
 <script>
-import bus from "@/utils/Bus";
+import bus from "../utils/Bus";
 
 import Vue from "vue";
 import { Popup } from "vant";
@@ -88,13 +88,14 @@ export default {
     }
   },
   created() {
-    console.log("嘻嘻");
-
-    bus.$on("edit", msg => {
+    bus.$on("handle", msg => {
+      console.log(msg);
       this.userPhone = msg.registerPhone;
-      console.log("电话号码", msg.registerPhone);
-      console.log("userphone", this.userPhone);
     });
+    console.log("嘻嘻");
+  },
+  destoryed() {
+    bus.$off("handle");
   }
 };
 </script>

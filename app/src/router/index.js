@@ -22,12 +22,6 @@ const routes = [
         name: 'Entrance',//登陆-(密码登陆/验证码登陆)
         component: () => import('../views/Entrance.vue'),
       },
-      {
-        path: 'findpassword',//找回密码
-        name: 'FindPassword',
-        component: () => import('../views/FindPassword.vue'),
-
-      },
 
     ]
   },
@@ -37,10 +31,17 @@ const routes = [
     component: () => import('../views/Register.vue'),
   },
   {
-    path: '/registerPass',//注册
+    path: '/registerPass',//注册设置密码
     name: 'RegisterPass',
     component: () => import('../views/RegisterPass.vue'),
   },
+  {
+    path: '/findpassword',//找回密码
+    name: 'FindPassword',
+    component: () => import('../views/FindPassword.vue'),
+
+  },
+
   // app
   {
     path: '/',

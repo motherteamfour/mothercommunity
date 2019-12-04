@@ -13,7 +13,7 @@
       </div>
       <div class="form-group">
         <span>验证码</span>
-        <input type="password" placeholder="输入验证码" v-model="userpass" @keyup.enter="getRegister" />
+        <input type="password" placeholder="输入验证码" v-model="userpass" />
         <button type="button" class="send-verify" @click="getVerifyCode">验证码</button>
       </div>
       <div class="form-group register-from-group">
@@ -33,7 +33,7 @@
 </template>
 
 <script>
-// import bus from "@/utils/Bus";
+import bus from "../utils/Bus";
 import Vue from "vue";
 import { Popup } from "vant";
 
@@ -55,7 +55,7 @@ export default {
     back() {
       this.$router.go(-1); //返回上一层
     },
-    // 验证码登录
+    // 验证验证码
     getRegister() {
       var name = this.username.trim();
       var pass = this.userpass.trim();
@@ -73,17 +73,24 @@ export default {
           })
           .then(res => {
             console.log(res.data);
-            if (res.data.code == "800") {
+
+            if (res.data.code == "200") {
+              bus.$emit("handle", {
+                registerPhone: this.username
+              });
+
+              console.log("触发传递", this.username);
+
+              // 进入输入密码页面
+              this.$router.replace(`/registerPass`);
+            } else if (res.data.code == "800") {
               this.one = "提示";
               this.two = "验证码错误";
               this.show = true;
-            } else if (res.data.code == "200") {
-              // console.log("触发传递");
-              // bus.$emit("edit", {
-              //   registerPhone: this.username
-              // });
-              // 进入输入密码页面
-              this.$router.replace(`/registerPass?+${this.username}`);
+            } else if (res.data.code == "400") {
+              this.one = "提示";
+              this.two = "该用户已存在";
+              this.show = true;
             }
           })
           .catch(err => {

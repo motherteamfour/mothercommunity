@@ -9,9 +9,9 @@
 
       <input type="password" srcpalaceholder="6-16位" v-model="userpass" @keyup.enter="getLogin" />
 
-      <a src="/findpassword">
+      <router-link :to="'/findpassword'">
         <button type="button" class="forget-password">忘记密码</button>
-      </a>
+      </router-link>
     </div>
     <div class="form-group login-from-group">
       <input type="button" value="登录" @click="getLogin" />
