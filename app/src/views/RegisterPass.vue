@@ -32,8 +32,6 @@
 </template>
 
 <script>
-import bus from "../utils/Bus";
-
 import Vue from "vue";
 import { Popup } from "vant";
 
@@ -65,13 +63,18 @@ export default {
         console.log("电话和密码", this.userPhone, this.password);
         this.axios
           .post("/zp/user/register", {
-            registerPhone: this.userPhone,
-            registerCode: this.password
+            userPhone: this.userPhone,
+            userPassword: this.password
           })
           .then(res => {
             console.log(res.data);
-            // 切换路由
-            this.$router.replace("/registerPass");
+            if (res.data.code == 200) {
+              this.one = "注册成功";
+              this.two = "请登录";
+              this.show = true;
+              // 注册成功、返回登录页
+              this.$router.replace(`/login`);
+            }
           })
           .catch(err => {
             console.log(err);
@@ -88,14 +91,8 @@ export default {
     }
   },
   created() {
-    bus.$on("handle", msg => {
-      console.log(msg);
-      this.userPhone = msg.registerPhone;
-    });
-    console.log("嘻嘻");
-  },
-  destoryed() {
-    bus.$off("handle");
+    console.log("创建", this.$store.state.userPhone);
+    this.userPhone = this.$store.state.userPhone;
   }
 };
 </script>

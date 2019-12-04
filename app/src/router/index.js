@@ -30,6 +30,31 @@ const routes = [
     ]
   },
   {
+<<<<<<< HEAD
+=======
+    path: '/register',//注册
+    name: 'Register',
+    component: () => import('../views/Register.vue'),
+  },
+  {
+    path: '/registerPass',//注册设置密码
+    name: 'RegisterPass',
+    component: () => import('../views/RegisterPass.vue'),
+  },
+  {
+    path: '/findpassword',//找回密码
+    name: 'FindPassword',
+    component: () => import('../views/FindPassword.vue'),
+  },
+  {
+    // SelectState
+    path: '/selectState',//选择状态
+    name: 'SelectState',
+    component: () => import('../views/SelectState.vue'),
+  },
+  // app
+  {
+>>>>>>> c4b90a251d33fe4458d3369a86eb1d0120ebbf53
     path: '/',
     component: Home,
     children: [
