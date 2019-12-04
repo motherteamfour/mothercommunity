@@ -221,6 +221,11 @@ const routes = [
     component: () => import('../views/CircleGourp.vue')
   },
   {
+    path: '/article/:id',
+    name: 'article',
+    component: () => import('../views/Article.vue')
+  },
+  {
     path: '/alterbirthday',// 修改生日
     name: 'alterbirthday',
     component: () => import('../views/AlterBirthday.vue')

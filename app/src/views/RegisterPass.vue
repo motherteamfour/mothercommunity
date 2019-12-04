@@ -1,27 +1,25 @@
 <template>
-  <div class="find-password">
+  <div class="register-pass">
     <div class="header">
       <div class="status-bar"></div>
       <div class="navigation">
-        <i class="fa fa-angle-left" @click="back"></i>找回密码
+        <i class="fa fa-angle-left" @click="back"></i>注册
       </div>
     </div>
-    <form class="find-form">
+    <form class="register-form">
       <div class="form-group">
-        <span>手机号</span>
-        <input type="text" placeholder="输入手机号" v-model="username" />
+        <span>密&nbsp;&nbsp;&nbsp;&nbsp;码</span>
+        <input type="password" placeholder="6-16位" v-model="password" />
       </div>
       <div class="form-group">
-        <span>验证码</span>
-        <input type="password" placeholder="输入验证码" v-model="userpass" @keyup.enter="getFind" />
-        <button type="button" class="send-verify" @click="getVerifyCode">验证码</button>
+        <span>确认密码</span>
+        <input type="password" v-model="confirmPassword" />
       </div>
-      <div class="form-group find-from-group">
-        <input type="button" value="下一步" @click="getFind" />
+      <div class="form-group register-from-group">
+        <input type="button" value="完成" @click="getComplete" />
       </div>
     </form>
     <!-- 模态框 -->
-    p
     <van-popup class="model" v-model="show" round>
       <div class="top">
         <p class="one">{{one}}</p>
@@ -34,19 +32,20 @@
 </template>
 
 <script>
-// import bus from "@/utils/Bus";
+import bus from "../utils/Bus";
+
 import Vue from "vue";
 import { Popup } from "vant";
 
 Vue.use(Popup);
 
 export default {
-  name: "FindPassword",
+  name: "RegisterPass",
   data() {
     return {
-      username: "",
-      userpass: "",
-      info: "",
+      password: "",
+      confirmPassword: "",
+      userPhone: "",
       show: false,
       one: "",
       two: ""
@@ -56,66 +55,47 @@ export default {
     back() {
       this.$router.go(-1); //返回上一层
     },
-    // 验证码登录
-    getFind() {
-      var name = this.username.trim();
-      var pass = this.userpass.trim();
-      console.log("name,pass", name, pass);
-      console.log("name,pass", name.length, pass.length);
-      if (name.length == 0 || pass.length == 0) {
-        this.one = "提示";
-        this.two = "验证码或手机号不能为空";
-        this.show = true;
-      } else {
+    // 完成
+    getComplete() {
+      if (this.password == this.confirmPassword) {
+        // this.axios
+        //   .post(
+        //     `/zp/user/register?phone=${this.password}&code=${this.userpass}`
+        //   )
+        console.log("电话和密码", this.userPhone, this.password);
         this.axios
-          .post("/zp/register/judegRegister", {
-            registerPhone: this.username,
-            registerCode: this.userpass
+          .post("/zp/user/register", {
+            registerPhone: this.userPhone,
+            registerCode: this.password
           })
           .then(res => {
             console.log(res.data);
-            if (res.data.code == "800") {
-              this.one = "提示";
-              this.two = "验证码错误";
-              this.show = true;
-            } else if (res.data.code == "200") {
-              // console.log("触发传递");
-              // bus.$emit("edit", {
-              //   registerPhone: this.username
-              // });
-              // 进入输入密码页面
-              this.$router.replace(`/registerPass?+${this.username}`);
-            }
+            // 切换路由
+            this.$router.replace("/registerPass");
           })
           .catch(err => {
             console.log(err);
           });
-      }
-    },
-    // 获取验证码
-    getVerifyCode() {
-      var name = this.username.trim();
-      console.log("用户名", name);
-      if (!name.length) {
-        this.one = "未填写手机号码";
-        this.two = "请输入手机号";
-        this.show = true;
       } else {
-        this.axios
-          .post(`zp/user/sendcode?phone=${this.username}`)
-          .then(res => {
-            console.log("获取验证码：", res.data);
-            this.info = res.data.data;
-          })
-          .catch(err => {
-            console.log(err);
-          });
+        this.one = "请重新输入";
+        this.two = "密码与确认密码不相同";
+        this.show = true;
       }
     },
     //关闭模态框
     closeModel() {
       this.show = false;
     }
+  },
+  created() {
+    bus.$on("handle", msg => {
+      console.log(msg);
+      this.userPhone = msg.registerPhone;
+    });
+    console.log("嘻嘻");
+  },
+  destoryed() {
+    bus.$off("handle");
   }
 };
 </script>

@@ -7,9 +7,9 @@
     <div class="form-group">
       <span>密码</span>
 
-      <input type="password" placeholder="6-16位" v-model="userpass" @keyup.enter="getLogin" />
+      <input type="password" srcpalaceholder="6-16位" v-model="userpass" @keyup.enter="getLogin" />
 
-      <router-link :to="'/login/findpassword'">
+      <router-link :to="'/findpassword'">
         <button type="button" class="forget-password">忘记密码</button>
       </router-link>
     </div>
@@ -30,6 +30,7 @@ export default {
   },
   methods: {
     getLogin() {
+      console.log("登录");
       this.axios
         .post("/zp/user/loginByPassword", {
           userPhone: this.username,
@@ -38,8 +39,8 @@ export default {
         .then(res => {
           console.log(res.data);
           if (res.data.code == "200") {
-            var token = res.data.data;
-            var userId = res.data.id;
+            var token = res.data.token;
+            var userId = res.data.data;
             // 将token和userId保存
             sessionStorage.setItem("token", token);
             sessionStorage.setItem("userId", userId);

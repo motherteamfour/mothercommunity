@@ -3,26 +3,20 @@
     <p class="title">修改密码</p>
     <form class="changePassword-form">
       <div class="basicInformation-form-item">
-        <label class="basicInformation-form-item-label">当前密码</label>
-        <div class="basicInformation-form-item-input">
-          <el-input v-model="input1"></el-input>
-        </div>
-      </div>
-      <div class="basicInformation-form-item">
         <label class="basicInformation-form-item-label">新密码</label>
         <div class="basicInformation-form-item-input">
-          <el-input v-model="input2"></el-input>
+          <el-input v-model="input2" @blur="judgePassword(input2)"></el-input>
         </div>
         <label class="basicInformation-form-item-label">6到16个字符</label>
       </div>
       <div class="basicInformation-form-item">
         <label class="basicInformation-form-item-label">确认新密码</label>
         <div class="basicInformation-form-item-input">
-          <el-input v-model="input3"></el-input>
+          <el-input v-model="input3" @blur="judgePassword(input3)"></el-input>
         </div>
       </div>
       <div class="basicInformation-form-item">
-          <el-button class="form-affirm" type="button">确认修改</el-button>
+          <el-button class="form-affirm" type="button" @click="changePasswork">确认修改</el-button>
       </div>
     </form>
   </div>
@@ -33,13 +27,56 @@ export default {
   name: 'changePassword',
   data() {
     return {
-      input1: '',
       input2: '',
       input3: ''
     }
   },
   methods: {
-    
+    success(msg) {
+      this.$message({
+        showClose: true,
+        message: msg,
+        type: "success"
+      });
+    },
+    defeated(msg) {
+      this.$message({
+        showClose: true,
+        message: msg,
+        type: "error"
+      });
+    },
+    judgePassword(msg) {
+      var reg = /^(\w){5,15}$/;
+      if (reg.test(msg)) {
+        return (this.userpassFormat = true);
+      }
+      this.userpassFormat = false;
+      this.defeated("密码格式不正确");
+    },
+    changePasswork() {
+      const userId = sessionStorage.getItem("userId")
+      console.log(userId,this.input2)
+      if(this.input2==this.input3) {
+        this.axios({
+          url: "/admin/updatePassword",
+          method: "post",
+          data: `adminId=${userId}&adminPassword=${this.input2}`,
+          header: {
+            "Content-Type": "application/X-WWW-form-urlencoded"
+          }
+        })
+          .then((res) => {
+            console.log(res.data);
+          })
+          .catch(err => {
+            console.log(err);
+          });
+      }else {
+        this.defeated("两次密码输入不一致");
+      }
+      
+    }
   }
 }
 </script>

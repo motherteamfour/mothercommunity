@@ -68,8 +68,8 @@ export default {
           console.log(res.data);
           if (res.data.code == "200") {
             // 切换路由
-            // var url = "/"; //后端应该返回问题id,然后跳转到详情页（保留）
-            // this.$router.replace(url);
+            var url = `/questiondetail/${res.data.data}`; //后端应该返回问题id,然后跳转到详情页（保留）
+            this.$router.replace(url);
           } else {
             console.log("提交失败");
           }

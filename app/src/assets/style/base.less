@@ -1,4 +1,4 @@
-@themeColor: #ffe469;
+@themeColor: #FE8A97;
 // @themeColor: #EF8E9A;
 * {
   margin: 0;
@@ -6,4 +6,14 @@
 }
 ul li {
   list-style: none;
+}
+
+.clearfix::before,
+.clearfix::after {
+  content: '';
+  display: table;
+}
+
+.clearfix::after {
+  clear: both;
 }

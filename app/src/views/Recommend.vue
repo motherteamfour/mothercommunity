@@ -14,7 +14,7 @@
         <li v-for="(item, index) in circle" :key="index">
           <router-link :to="'/group/' + item.circleId">
             <div class="circle-pic">
-              <img :src="item.imgUrl" alt />
+              <img :src="'http://172.16.6.45:8989' + item.circleUrl" alt />
             </div>
             <p class="circle-name">{{item.circleName}}</p>
           </router-link>
@@ -30,7 +30,7 @@
     <section class="hot">
       <p class="hot-title">热门帖子</p>
       <HotList
-        v-for="(item, index) in contact"
+        v-for="(item, index) in hotList"
         :key="index"
         :list="item"
         @followFn="follow"
@@ -46,111 +46,16 @@ import HotList from "@/components/HotList.vue";
 import "@/assets/style/swiper.min.css";
 import Swiper from "swiper";
 
-var contact = [
-  {
-    id: 0,
-    imgUrl: "",
-    username: "jack",
-    isFollowed: 0,
-    isPraise: 0,
-    isCollect: 0,
-    title: "标题",
-    content:
-      "大富翁发大水发射点法撒旦发射点分啊违法违法的是妇科检查士大夫哦额罚你发viji",
-    praise: 4,
-    comments: 11,
-    collect: 10
-  },
-  {
-    id: 1,
-    imgUrl: "",
-    username: "张三",
-    isFollowed: 1,
-    isPraise: 0,
-    isCollect: 1,
-    title: "标题2",
-    content:
-      "大富翁发大水发射点法撒旦发射点分啊违法违法的是妇科检查士大夫哦额罚你发viji",
-    praise: 4,
-    comments: 11,
-    collect: 10
-  },
-  {
-    id: 2,
-    imgUrl: "",
-    username: "李四",
-    isFollowed: 1,
-    isPraise: 1,
-    isCollect: 0,
-    title: "朋友",
-    content:
-      "大富翁发大水发射点法撒旦发射点分啊违法违法的是妇科检查士大夫哦额罚你发viji",
-    praise: 4666,
-    comments: 11,
-    collect: 10
-  },
-  {
-    id: 3,
-    imgUrl: "",
-    username: "王五",
-    isFollowed: 1,
-    isPraise: 1,
-    isCollect: 1,
-    title: "同学",
-    content:
-      "大富翁发大水发射点法撒旦发射点分啊违法违法的是妇科检查士大夫哦额罚你发viji",
-    praise: 455,
-    comments: 551,
-    collect: 5
-  }
-];
-
 export default {
   name: "Recommend",
   data() {
     return {
-      contact: [],
       swipeImg: [
         require("@/assets/img/circleswipetest/swipe1.jpg"),
         require("@/assets/img/circleswipetest/swipe2.jpg")
       ],
-      circle: [
-        {
-          circleId: 1,
-          imgUrl: "",
-          circleName: "备孕交流"
-        },
-        {
-          circleId: 2,
-          imgUrl: "",
-          circleName: "怀孕"
-        },
-        {
-          circleId: 3,
-          imgUrl: "",
-          circleName: "产后"
-        },
-        {
-          circleId: 4,
-          imgUrl: "",
-          circleName: "备孕交流"
-        },
-        {
-          circleId: 5,
-          imgUrl: "",
-          circleName: "备孕交流"
-        },
-        {
-          circleId: 6,
-          imgUrl: "",
-          circleName: "备孕交流"
-        },
-        {
-          circleId: 7,
-          imgUrl: "",
-          circleName: "备孕交流"
-        }
-      ]
+      circle: [],
+      hotList: []
     };
   },
   components: {
@@ -158,13 +63,39 @@ export default {
   },
   methods: {
     follow(i) {
-      this.contact[i].isFollowed = !this.contact[i].isFollowed;
+      console.log("关注");
+      let param = new URLSearchParams();
+      param.append("followUserId", i);
+      param.append("userId", "1002");
+      this.axios
+        .post("/user/fol", param)
+        .then(res => {
+          console.log(res.data);
+          this.hotList[i].isFollow = !this.contact[i].isFollow;
+        });
     },
     praise(i) {
-      this.contact[i].isPraise = !this.contact[i].isPraise;
+      this.hotList[i].isLike = !this.contact[i].isLike;
     },
     collect(i) {
-      this.contact[i].isCollect = !this.contact[i].isCollect;
+      this.hotList[i].isCollect = !this.contact[i].isCollect;
+    },
+    cancleFollow(i) {
+      this.axios
+        .delete("/user/fol", {
+          followUserId: i,
+          userId: 1001
+        })
+        .then(res => {
+          console.log(res.data);
+          this.hotList[i].isFollow = !this.contact[i].isFollow;
+        });
+    },
+    canclePraise(i) {
+      this.hotList[i].isLike = !this.contact[i].isLike;
+    },
+    cancleCollect(i) {
+      this.hotList[i].isCollect = !this.contact[i].isCollect;
     }
   },
   mounted() {
@@ -187,7 +118,14 @@ export default {
     });
   },
   created() {
-    this.contact = contact;
+    this.axios.get("/circle/list").then(res => {
+      //请求推荐圈子数据
+      this.circle = res.data.data.splice(0, 7);
+    });
+    this.axios.get("/post/list?userId=1001").then(res => {
+      this.hotList = res.data.data;
+      console.log(res.data);
+    });
   }
 };
 </script>
@@ -227,9 +165,16 @@ export default {
       .circle-pic {
         width: 100px;
         height: 100px;
-        background: lightgreen;
         border-radius: 50%;
         margin: 0 auto;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        overflow: hidden;
+        background: rgb(255, 220, 219);
+        img {
+          width: 60%;
+        }
       }
       .circle-name {
         font-size: 24px;

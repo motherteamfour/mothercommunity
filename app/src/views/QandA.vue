@@ -8,7 +8,7 @@
           <div>
             <p class="one-text">我要提问</p>
             <p class="two-text">
-              <span>X</span>人正在提问
+              <span>{{totalNum}}</span>人正在提问
             </p>
           </div>
         </router-link>
@@ -37,10 +37,20 @@
 export default {
   name: "QandA",
   data() {
-    return {};
+    return {
+      totalNum: ""
+    };
   },
   created() {
     console.log("组件创建");
+    this.axios
+      .get(`/question/numberOfQuestion`)
+      .then(res => {
+        console.log("正在提问的人数：", res.data);
+      })
+      .catch(err => {
+        console.log(err);
+      });
   },
   destroyed() {
     console.log("组件销毁");
