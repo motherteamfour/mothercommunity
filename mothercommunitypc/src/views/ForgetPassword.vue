@@ -120,7 +120,7 @@ export default {
             this.success("验证码发送成功")
             console.log(res.data);
             this.userid = res.data.id;
-          }else if(res.data.code==4001 || res.data.code==4011){
+          }else if(res.data.code==400){
             this.defeated("此用户名或者手机号不存在");
           }
         })

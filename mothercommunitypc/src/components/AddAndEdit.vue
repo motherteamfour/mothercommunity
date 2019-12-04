@@ -19,9 +19,13 @@
             :on-preview="handlePictureCardPreview"
             :on-remove="handleRemove"
             :http-request="uploadSectionFile"
+            :file-list="fileList"
+            :auto-upload="false"
+            :limit="1"
           >
             <i class="el-icon-plus"></i>
           </el-upload>
+
           <el-dialog :visible.sync="dialogVisible">
             <img width="100%" :src="dialogImageUrl" alt />
           </el-dialog>
@@ -30,19 +34,19 @@
       <div v-show="haveArticle" class="addAndEdit-form-item">
         <label class="addAndEdit-form-item-label">文章链接</label>
         <div class="addAndEdit-form-item-input">
-          <el-select v-model="value" placeholder="请选择">
+          <el-select v-model="value" placeholder="请选择" @focus="getArticle">
             <el-option
               v-for="item in options"
-              :key="item.value"
-              :label="item.label"
-              :value="item.value"
+              :key="item.postId"
+              :label="item.postTitle||item.questionTitle"
+              :value="item.postId||item.questionId"
             ></el-option>
           </el-select>
         </div>
-        <el-button class="form-upload" type="button">查看</el-button>
+        <el-button class="form-upload" type="text" @click="konwMore">查看</el-button>
       </div>
       <div class="addAndEdit-form-item addAndEdit-form-item-btn">
-        <el-button class="form-affirm" type="button" @click="uploadSectionFile">确认</el-button>
+        <el-button class="form-affirm" type="button" @click="submitUpload">确认</el-button>
         <el-button class="form-reset" type="button" @click="getBanner">重置</el-button>
         <el-button class="form-cancel" type="button" @click="turnback">取消</el-button>
       </div>
@@ -55,56 +59,71 @@ export default {
   name: "addAndEdit",
   props: {
     haveArticle: Boolean,
-    clickType: Number
+    clickType: Number,
+    bannerName: String,
+    imgUrl: String,
+    articleTitle: String,
+    isAdd: Boolean,
+    articleId: String,
+    showAdd: Boolean,
+    bannerId: Number
   },
   data() {
     return {
       input: "",
-      input1: "",
-      options: [
-        {
-          value: "选项1",
-          label: "黄金糕"
-        },
-        {
-          value: "选项2",
-          label: "双皮奶"
-        },
-        {
-          value: "选项3",
-          label: "蚵仔煎"
-        },
-        {
-          value: "选项4",
-          label: "龙须面"
-        },
-        {
-          value: "选项5",
-          label: "北京烤鸭"
-        }
-      ],
+      options: [],
       value: "",
-      bannerId: 1,
-      bannerType: 2,
       dialogImageUrl: "",
       dialogVisible: false,
       fileList: []
     };
   },
+  watch: {
+    showAdd() {
+      if (!this.showAdd) {
+        this.input = this.bannerName;
+        this.value = this.articleTitle;
+        if (this.imgUrl) {
+          console.log("图片变了");
+          const pictrueUrl = {
+            url: this.imgUrl
+          };
+          this.fileList.push(pictrueUrl);
+        }
+      }
+    },
+    isAdd() {
+      console.log(this.isAdd);
+    }
+  },
   methods: {
     turnback() {
+      this.input = "";
+      this.value = "";
+      this.fileList = [];
+      this.$emit("sonRefresh");
       this.$emit("showAddFn");
+    },
+    submitUpload() {
+      this.$refs.upload.submit();
+      this.input = "";
+      this.value = "";
+      this.fileList = [];
     },
     getBanner() {
       this.axios
         .get(
-          `/banner/list/findByBannerId?bannerId=${this.bannerId}&bannerType=${this.bannerType}`
+          `/banner/list/findByBannerId?bannerId=${this.bannerId}&bannerType=${this.clickType}`
         )
         .then(res => {
           console.log(res.data);
           if (res.data.code == 200) {
             this.input = res.data.data.bannerName;
-            this.input1 = res.data.data.imgUrl;
+            if (res.data.data.imgUrl) {
+              console.log("图片变了");
+              
+              this.fileList[0].url="http://172.16.6.56:8081/" +res.data.data.imgUrl;
+            }
           }
         })
         .catch(error => {
@@ -120,6 +139,90 @@ export default {
     },
     handleSuccess(response, file) {
       console.log(response, file);
+    },
+    addCircleBanner(form) {
+      this.axios
+        .post("/banner/addCircleBanner", form, {
+          header: {
+            "Content-Type": "multipart/form-data"
+          }
+        })
+        .then(res => {
+          console.log(res.data);
+        })
+        .catch(err => {
+          console.log(err);
+        });
+    },
+    addUserBanner(form) {
+      this.axios
+        .post("/banner/addUserBanner", form, {
+          header: {
+            "Content-Type": "multipart/form-data"
+          }
+        })
+        .then(res => {
+          console.log(res.data);
+        })
+        .catch(err => {
+          console.log(err);
+        });
+    },
+    addQuestionBanner(form) {
+      this.axios
+        .post("/banner/addQuestionBanner", form, {
+          header: {
+            "Content-Type": "multipart/form-data"
+          }
+        })
+        .then(res => {
+          console.log(res.data);
+        })
+        .catch(err => {
+          console.log(err);
+        });
+    },
+    updateCircleBanner(form) {
+      this.axios
+        .post("/banner/updateCircleBanner", form, {
+          header: {
+            "Content-Type": "multipart/form-data"
+          }
+        })
+        .then(res => {
+          console.log(res.data);
+        })
+        .catch(err => {
+          console.log(err);
+        });
+    },
+    updateUserBanner(form) {
+      this.axios
+        .post("/banner/updateUserBanner", form, {
+          header: {
+            "Content-Type": "multipart/form-data"
+          }
+        })
+        .then(res => {
+          console.log(res.data);
+        })
+        .catch(err => {
+          console.log(err);
+        });
+    },
+    updateQuestionBanner(form) {
+      this.axios
+        .post("/banner/updateQuestionBanner", form, {
+          header: {
+            "Content-Type": "multipart/form-data"
+          }
+        })
+        .then(res => {
+          console.log(res.data);
+        })
+        .catch(err => {
+          console.log(err);
+        });
     },
     uploadSectionFile(params) {
       const file = params.file,
@@ -141,51 +244,96 @@ export default {
       // 文件对象
       form.append("file", file);
       // 本例子主要要在请求时添加特定属性，所以要用自己方法覆盖默认的action
-      form.append("bannerName", "圈子banner2");
+      form.append("bannerName", this.input);
 
-      form.append("bannerType", 0);
-
-      form.append("postId", 1);
       // 请求方法
-      if (this.clickType == 0) {
+      if (this.isAdd) {
+        form.append("bannerType", this.clickType);
+        console.log("这是添加");
+        if (this.clickType == 0) {
+          console.log("这是圈子");
+          this.addCircleBanner(form);
+        } else if (this.clickType == 1) {
+          console.log("这是主页");
+          form.append("postId", this.value);
+          this.addUserBanner(form);
+        } else {
+          console.log("这是问答");
+          form.append("questionId", this.value);
+          this.addQuestionBanner(form);
+        }
+      } else {
+        console.log("这是编辑");
+        form.append("bannerId", this.bannerId);
+        if (this.clickType == 0) {
+          this.updateCircleBanner(form);
+        } else if (this.clickType == 1) {
+          form.append("postId", this.articleId);
+          this.updateUserBanner(form);
+        } else if (this.clickType == 2) {
+          console.log(this.articleId);
+          form.append("questionId", this.articleId);
+          this.updateQuestionBanner(form);
+        }
+      }
+    },
+    getArticle() {
+      if (this.clickType == 1) {
+        console.log("这是主页");
         this.axios
-          .post("/banner/addUserBanner", form, {
-            header: {
-              "Content-Type": "multipart/form-data"
-            }
-          })
+          .get("/posterior/postmanagement/recommend?page=1&pagesize=100")
           .then(res => {
             console.log(res.data);
+            if (res.data.code == 200) {
+              this.options = res.data.data.list;
+            }
           })
           .catch(err => {
             console.log(err);
           });
-      }else if(this.clickType == 1) {
-        this.axios
-          .post("/banner/addUserBanner", form, {
-            header: {
-              "Content-Type": "multipart/form-data"
-            }
-          })
-          .then(res => {
-            console.log(res.data);
-          })
-          .catch(err => {
-            console.log(err);
-          });
-      }else if(this.clickType == 2) {
-        this.axios
-        .post("/banner/addUserBanner", form, {
+      } else if (this.clickType == 2) {
+        console.log("这是问答");
+        this.axios({
+          url: "/question/hotQuestion",
+          method: "post",
+          data: `userId=4`,
           header: {
-            "Content-Type": "multipart/form-data"
+            "Content-Type": "application/X-WWW-form-urlencoded"
           }
         })
-        .then(res => {
-          console.log(res.data);
-        })
-        .catch(err => {
-          console.log(err);
-        });
+          .then(res => {
+            console.log(res.data);
+            if (res.data.code == 200) {
+              this.options = res.data.data;
+            }
+          })
+          .catch(err => {
+            console.log(err);
+          });
+      }
+    },
+    konwMore() {
+      if (this.clickType == 1) {
+        console.log(this.value);
+        this.axios
+          .get("/post/getPost?postId=1&userId=1000")
+          .then(res => {
+            console.log(res.data);
+          })
+          .catch(err => {
+            console.log(err);
+          });
+      } else if (this.clickType == 2) {
+        this.axios
+          .get(
+            "/question/questionDetail?questionId=" + this.value + "&userId=1000"
+          )
+          .then(res => {
+            console.log(res.data);
+          })
+          .catch(err => {
+            console.log(err);
+          });
       }
     }
   }
@@ -230,6 +378,9 @@ export default {
       }
       .form-upload {
         margin-left: 10px;
+        padding: 12px 20px;
+        color: #606266;
+        border: 1px solid #dcdfe6;
       }
       .form-upload:hover,
       .form-reset:hover,
