@@ -33,7 +33,8 @@
 </template>
 
 <script>
-import bus from "../utils/Bus";
+import { mapMutations } from "vuex";
+
 import Vue from "vue";
 import { Popup } from "vant";
 
@@ -52,6 +53,7 @@ export default {
     };
   },
   methods: {
+    ...mapMutations(["setPhone"]),
     back() {
       this.$router.go(-1); //返回上一层
     },
@@ -67,7 +69,7 @@ export default {
         this.show = true;
       } else {
         this.axios
-          .post("/zp/register/judegRegister", {
+          .post("/zp/register/judegRegisterforuser", {
             registerPhone: this.username,
             registerCode: this.userpass
           })
@@ -75,11 +77,8 @@ export default {
             console.log(res.data);
 
             if (res.data.code == "200") {
-              bus.$emit("handle", {
-                registerPhone: this.username
-              });
-
-              console.log("触发传递", this.username);
+              this.setPhone(this.username);
+              // registerPhone: this.username
 
               // 进入输入密码页面
               this.$router.replace(`/registerPass`);

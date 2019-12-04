@@ -9,19 +9,15 @@
     <form class="find-form">
       <div class="form-group">
         <span>手机号</span>
-        <input type="text" placeholder="输入手机号" v-model="username" />
+        <input type="text" v-model="username" />
       </div>
-      <div class="form-group">
-        <span>验证码</span>
-        <input type="password" placeholder="输入验证码" v-model="userpass" @keyup.enter="getFind" />
-        <button type="button" class="send-verify" @click="getVerifyCode">验证码</button>
-      </div>
+
       <div class="form-group find-from-group">
-        <input type="button" value="下一步" @click="getFind" />
+        <input type="button" value="获取验证码" @click="getFind" />
       </div>
     </form>
     <!-- 模态框 -->
-    p
+
     <van-popup class="model" v-model="show" round>
       <div class="top">
         <p class="one">{{one}}</p>
@@ -148,7 +144,7 @@ export default {
     }
   }
 }
-.register-form {
+.find-form {
   padding: 0 20px;
   margin-top: 120px;
   display: flex;
@@ -171,53 +167,39 @@ export default {
       color: @themeColor;
       vertical-align: top;
     }
-    .send-verify {
-      width: 120px;
-      height: 50px;
-      line-height: 50px;
-      font-size: 24px;
-      color: white;
-      border-radius: 25px;
-      border: none;
-      outline: none;
-      background-color: @themeColor;
-      &:active {
-        color: @zitiColor;
-      }
-    }
-
-    input[type="text"],
-    input[type="password"] {
-      width: 360px;
-      height: 98px;
-      line-height: 98px;
-      border: none;
-      outline: none;
-      font-size: 28px;
-      color: black;
-    }
-
-    input[type="button"] {
-      width: 500px;
-      height: 90px;
-      line-height: 90px;
-      margin-top: 100px;
-      background: @themeColor;
-      color: #fff;
-      border: none;
-      outline: none;
-      border-radius: 45px;
-
-      &:active {
-        color: @zitiColor;
-      }
-    }
   }
-  .register-from-group {
+
+  input[type="text"] {
+    width: 360px;
+    height: 98px;
+    line-height: 98px;
     border: none;
+    outline: none;
+    font-size: 28px;
+    color: black;
+  }
+
+  input[type="button"] {
     width: 500px;
+    height: 90px;
+    line-height: 90px;
+    margin-top: 100px;
+    background: @themeColor;
+    color: #fff;
+    border: none;
+    outline: none;
+    border-radius: 45px;
+
+    &:active {
+      color: @zitiColor;
+    }
   }
 }
+.find-from-group {
+  border: none;
+  width: 500px;
+}
+
 .model {
   background-color: rgb(255, 255, 255);
   border-radius: 20px;

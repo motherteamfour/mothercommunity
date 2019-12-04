@@ -180,10 +180,10 @@ export default {
                 }
                 this.success("登录成功");
                 // var token = "njaksxbxkjasbkjcxasbjk" // 模拟后台返回的token
-                var token = res.data.data;
+                var token = res.data.token;
                 sessionStorage.setItem("token", token);
 
-                sessionStorage.setItem("userId", res.data.id);
+                sessionStorage.setItem("userId", res.data.data);
 
                 // 获取参数（未登录时想访问的路由）
                 var url = this.$route.query.redirect;
@@ -191,7 +191,7 @@ export default {
                 url = url ? url : "/home";
                 // 切换路由
                 this.$router.replace(url);
-              } else if (res.data.code == "4002" || res.data.code == "4001") {
+              } else if (res.data.code == 400) {
                 this.defeated("用户名或密码错误");
               } else {
                 console.log("登陆失败");

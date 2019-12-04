@@ -2,7 +2,7 @@
   <form class="login-form">
     <div class="form-group">
       <span>手机号</span>
-      <input type="text" placeholder="输入手机号" v-model="username" />
+      <input type="text" placeholder="输入手机号" v-model="username" @change="verifyPhone" />
     </div>
     <div class="form-group">
       <span>密码</span>
@@ -16,48 +16,97 @@
     <div class="form-group login-from-group">
       <input type="button" value="登录" @click="getLogin" />
     </div>
+    <!-- 模态框 -->
+    <van-popup class="model" v-model="show" round>
+      <div class="top">
+        <p class="one">{{one}}</p>
+        <!-- 未填写手机号码 -->
+        <p class="two">{{two}}</p>
+      </div>
+      <div class="bottom" @click="closeModel">好的</div>
+    </van-popup>
   </form>
 </template>
 
 <script>
+import Vue from "vue";
+import { Popup } from "vant";
+
+Vue.use(Popup);
 export default {
   name: "login",
   data() {
     return {
       username: "",
-      userpass: ""
+      userpass: "",
+      show: false,
+      one: "",
+      two: ""
     };
   },
   methods: {
+    // 验证手机号码是否合法
+    verifyPhone() {
+      if (!/^1[3456789]\d{9}$/.test(this.username)) {
+        this.one = "提示";
+        this.two = "手机号不合法";
+        this.show = true;
+      }
+    },
+    // 登录
     getLogin() {
       console.log("登录");
-      this.axios
-        .post("/zp/user/loginByPassword", {
-          userPhone: this.username,
-          userPassword: this.userpass
-        })
-        .then(res => {
-          console.log(res.data);
-          if (res.data.code == "200") {
-            var token = res.data.token;
-            var userId = res.data.data;
-            // 将token和userId保存
-            sessionStorage.setItem("token", token);
-            sessionStorage.setItem("userId", userId);
+      if (this.username.length == 0 || this.userpass.length == 0) {
+        this.one = "提示";
+        this.two = "验证码或手机号不能为空";
+        this.show = true;
+      } else {
+        this.axios
+          .post("/zp/user/loginByPassword", {
+            userPhone: this.username,
+            userPassword: this.userpass
+          })
+          .then(res => {
+            console.log(res.data);
+            if (res.data.code == "200") {
+              // 非第一次登录
+              var token = res.data.token;
+              var userId = res.data.data;
+              // 将token和userId保存
+              sessionStorage.setItem("token", token);
+              sessionStorage.setItem("userId", userId);
 
-            // 获取参数（未登录时想访问的路由）
-            var url = this.$route.query.redirect;
 
-            url = url ? url : "/";
-            // 切换路由
-            this.$router.replace(url);
-          } else {
-            console.log("登陆失败");
-          }
-        })
-        .catch(err => {
-          console.log(err);
-        });
+              // 切换路由
+              this.$router.replace('/');
+            } else if (res.data.code == "201") {
+
+              var url = this.$route.query.redirect;
+              url = url ? url : "/";
+              this.$router.replace(url);
+
+              // 第一次登录进入填写信息的页面
+              // this.$router.replace("/selectState");
+            } else if (res.data.code == "204") {
+              // 该用户不存在，请先注册
+              this.one = "提示";
+              this.two = "该用户不存在，请先注册";
+              this.show = true;
+            } else if (res.data.code == "400") {
+              //账号或密码错误
+              this.one = "提示";
+              this.two = "账号或密码错误";
+              this.show = true;
+            }
+          })
+          .catch(err => {
+            console.log(err);
+          });
+      }
+    },
+    //关闭模态框
+    closeModel() {
+      this.show = false;
     }
   }
 };
@@ -131,6 +180,34 @@ export default {
   .login-from-group {
     border: none;
     width: 500px;
+  }
+}
+.model {
+  background-color: rgb(255, 255, 255);
+  border-radius: 20px;
+  width: 540px;
+  .top {
+    height: 120px;
+    padding: 20px 0;
+    margin: 0 auto;
+    box-sizing: border-box;
+    text-align: center;
+
+    .one {
+      font-weight: bold;
+      font-size: 30px;
+    }
+    .two {
+      font-size: 24px;
+    }
+  }
+  .bottom {
+    border-top: 1px solid #f9f9f9;
+    height: 90px;
+    line-height: 90px;
+    text-align: center;
+    font-size: 30px;
+    color: blue;
   }
 }
 </style>

@@ -39,9 +39,13 @@ const routes = [
     path: '/findpassword',//找回密码
     name: 'FindPassword',
     component: () => import('../views/FindPassword.vue'),
-
   },
-
+  {
+    // SelectState
+    path: '/selectState',//选择状态
+    name: 'SelectState',
+    component: () => import('../views/SelectState.vue'),
+  },
   // app
   {
     path: '/',
