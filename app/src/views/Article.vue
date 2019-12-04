@@ -91,6 +91,14 @@
 
 <script>
 export default {
+  data() {
+    return {
+      
+    }
+  },
+  created() {
+    this.axios.get("/post/getPost")
+  },
   methods: {
     back() {
       this.$router.go(-1); //返回上一层
