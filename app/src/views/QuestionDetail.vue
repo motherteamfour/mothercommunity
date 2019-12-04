@@ -10,11 +10,25 @@
       </div>
     </div>
     <div class="main">
-      <div class="title-wrap">
-        <i class="fa fa-quora" aria-hidden="true"></i>
-        <span class="title">questionTitle</span>
+      <div class="question">
+        <div class="title-wrap">
+          <i class="fa fa-question-circle" aria-hidden="true"></i>
+          <span class="title">宝宝感冒去不去医院啊，他不肯吃饭</span>
+        </div>
+        <div class="content">
+          宝宝感冒了,大冷天的看着心痛死了宝宝感冒了,大冷
+          天的看着心痛死了宝宝感冒了,大冷天的看着心痛死了宝宝感冒了,大冷天的看着心痛
+          死了宝宝感冒了,大冷天的看着心痛死了宝宝感冒了,大冷天的看着心痛死了
+          宝宝感冒了,大冷天的看着心痛死了宝宝感冒了,大冷天的看着心痛死了
+        </div>
       </div>
-      <div class="content">questionContent</div>
+      <div class="all-answers">
+        <div class="all-num">
+          全部回答(
+          <span class="num">30</span>)
+        </div>
+        <div class="one-answer"></div>
+      </div>
     </div>
   </div>
 </template>
@@ -86,11 +100,39 @@ export default {
       float: right;
       height: 80px;
       line-height: 80px;
-      vertical-align:middle;
+      vertical-align: middle;
     }
   }
 }
 .main {
-  background-color: #efefef;
+  // background-color: #efefef;
+  .question {
+    background-color: #efefef;
+    padding: 0 30px;
+    .fa-question-circle {
+      font-size: 40px;
+      padding-right: 20px;
+      color: @themeColor;
+    }
+    .title {
+      font-size: 28px;
+      height: 60px;
+      line-height: 60px;
+      font-weight: bold;
+    }
+    .content {
+      font-size: 24px;
+      color: #8a8a8a;
+    }
+  }
+  .all-answers {
+    // padding: 0 30px;
+    .all-num {
+      height: 100px;
+      line-height: 100px;
+      border-radius: 10px 10px 0 0;
+      border-bottom: 1px solid #efefef;
+    }
+  }
 }
 </style>
