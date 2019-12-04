@@ -1,23 +1,25 @@
 <template>
-  <div class="find-password">
+  <div class="register-pass">
     <div class="header">
       <div class="status-bar"></div>
       <div class="navigation">
-        <i class="fa fa-angle-left" @click="back"></i>找回密码
+        <i class="fa fa-angle-left" @click="back"></i>注册
       </div>
     </div>
-    <form class="find-form">
+    <form class="register-form">
       <div class="form-group">
-        <span>手机号</span>
-        <input type="text" v-model="username" />
+        <span>密&nbsp;&nbsp;&nbsp;&nbsp;码</span>
+        <input type="password" placeholder="6-16位" v-model="password" />
       </div>
-
-      <div class="form-group find-from-group">
-        <input type="button" value="获取验证码" @click="getFind" />
+      <div class="form-group">
+        <span>确认密码</span>
+        <input type="password" v-model="confirmPassword" />
+      </div>
+      <div class="form-group register-from-group">
+        <input type="button" value="完成" @click="getComplete" />
       </div>
     </form>
     <!-- 模态框 -->
-
     <van-popup class="model" v-model="show" round>
       <div class="top">
         <p class="one">{{one}}</p>
@@ -30,19 +32,18 @@
 </template>
 
 <script>
-// import bus from "@/utils/Bus";
 import Vue from "vue";
 import { Popup } from "vant";
 
 Vue.use(Popup);
 
 export default {
-  name: "FindPassword",
+  name: "RegisterPass",
   data() {
     return {
-      username: "",
-      userpass: "",
-      info: "",
+      password: "",
+      confirmPassword: "",
+      userPhone: "",
       show: false,
       one: "",
       two: ""
@@ -52,66 +53,46 @@ export default {
     back() {
       this.$router.go(-1); //返回上一层
     },
-    // 验证码登录
-    getFind() {
-      var name = this.username.trim();
-      var pass = this.userpass.trim();
-      console.log("name,pass", name, pass);
-      console.log("name,pass", name.length, pass.length);
-      if (name.length == 0 || pass.length == 0) {
-        this.one = "提示";
-        this.two = "验证码或手机号不能为空";
-        this.show = true;
-      } else {
+    // 完成
+    getComplete() {
+      if (this.password == this.confirmPassword) {
+        // this.axios
+        //   .post(
+        //     `/zp/user/register?phone=${this.password}&code=${this.userpass}`
+        //   )
+        console.log("电话和密码", this.userPhone, this.password);
         this.axios
-          .post("/zp/register/judegRegister", {
-            registerPhone: this.username,
-            registerCode: this.userpass
+          .post("/zp/user/register", {
+            userPhone: this.userPhone,
+            userPassword: this.password
           })
           .then(res => {
             console.log(res.data);
-            if (res.data.code == "800") {
-              this.one = "提示";
-              this.two = "验证码错误";
+            if (res.data.code == 200) {
+              this.one = "注册成功";
+              this.two = "请登录";
               this.show = true;
-            } else if (res.data.code == "200") {
-              // console.log("触发传递");
-              // bus.$emit("edit", {
-              //   registerPhone: this.username
-              // });
-              // 进入输入密码页面
-              this.$router.replace(`/registerPass?+${this.username}`);
+              // 注册成功、返回登录页
+              this.$router.replace(`/login`);
             }
           })
           .catch(err => {
             console.log(err);
           });
-      }
-    },
-    // 获取验证码
-    getVerifyCode() {
-      var name = this.username.trim();
-      console.log("用户名", name);
-      if (!name.length) {
-        this.one = "未填写手机号码";
-        this.two = "请输入手机号";
-        this.show = true;
       } else {
-        this.axios
-          .post(`zp/user/sendcode?phone=${this.username}`)
-          .then(res => {
-            console.log("获取验证码：", res.data);
-            this.info = res.data.data;
-          })
-          .catch(err => {
-            console.log(err);
-          });
+        this.one = "请重新输入";
+        this.two = "密码与确认密码不相同";
+        this.show = true;
       }
     },
     //关闭模态框
     closeModel() {
       this.show = false;
     }
+  },
+  created() {
+    console.log("创建", this.$store.state.userPhone);
+    this.userPhone = this.$store.state.userPhone;
   }
 };
 </script>
@@ -144,7 +125,7 @@ export default {
     }
   }
 }
-.find-form {
+.register-form {
   padding: 0 20px;
   margin-top: 120px;
   display: flex;
@@ -167,39 +148,53 @@ export default {
       color: @themeColor;
       vertical-align: top;
     }
-  }
+    .send-verify {
+      width: 120px;
+      height: 50px;
+      line-height: 50px;
+      font-size: 24px;
+      color: white;
+      border-radius: 25px;
+      border: none;
+      outline: none;
+      background-color: @themeColor;
+      &:active {
+        color: @zitiColor;
+      }
+    }
 
-  input[type="text"] {
-    width: 360px;
-    height: 98px;
-    line-height: 98px;
-    border: none;
-    outline: none;
-    font-size: 28px;
-    color: black;
-  }
+    input[type="text"],
+    input[type="password"] {
+      width: 360px;
+      height: 98px;
+      line-height: 98px;
+      border: none;
+      outline: none;
+      font-size: 28px;
+      color: black;
+    }
 
-  input[type="button"] {
-    width: 500px;
-    height: 90px;
-    line-height: 90px;
-    margin-top: 100px;
-    background: @themeColor;
-    color: #fff;
-    border: none;
-    outline: none;
-    border-radius: 45px;
+    input[type="button"] {
+      width: 500px;
+      height: 90px;
+      line-height: 90px;
+      margin-top: 100px;
+      background: @themeColor;
+      color: #fff;
+      border: none;
+      outline: none;
+      border-radius: 45px;
 
-    &:active {
-      color: @zitiColor;
+      &:active {
+        color: @zitiColor;
+      }
     }
   }
+  .register-from-group {
+    border: none;
+    width: 500px;
+  }
 }
-.find-from-group {
-  border: none;
-  width: 500px;
-}
-
 .model {
   background-color: rgb(255, 255, 255);
   border-radius: 20px;

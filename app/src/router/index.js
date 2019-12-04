@@ -12,8 +12,8 @@ import InfoComment from '../views/InfoComment.vue'
 Vue.use(VueRouter)
 
 const routes = [
+  // 登陆注册
   {
-    // 登陆--曾晶
     path: '/login',
     component: Entrance,
     children: [
@@ -22,14 +22,31 @@ const routes = [
         name: 'Entrance',//登陆-(密码登陆/验证码登陆)
         component: () => import('../views/Entrance.vue'),
       },
-      {
-        path: '/findpassword',//找回密码
-        name: 'FindPassword',
-        component: () => import('../views/FindPassword.vue'),
 
-      }
     ]
   },
+  {
+    path: '/register',//注册
+    name: 'Register',
+    component: () => import('../views/Register.vue'),
+  },
+  {
+    path: '/registerPass',//注册设置密码
+    name: 'RegisterPass',
+    component: () => import('../views/RegisterPass.vue'),
+  },
+  {
+    path: '/findpassword',//找回密码
+    name: 'FindPassword',
+    component: () => import('../views/FindPassword.vue'),
+  },
+  {
+    // SelectState
+    path: '/selectState',//选择状态
+    name: 'SelectState',
+    component: () => import('../views/SelectState.vue'),
+  },
+  // app
   {
     path: '/',
     component: Home,
@@ -83,9 +100,7 @@ const routes = [
         path: 'ask',
         name: 'Ask',
         component: () => import('../views/Ask.vue'),
-        meta: {
-          auth: true
-        }
+
       },
       {
 
@@ -212,6 +227,7 @@ const routes = [
       }
     ]
   },
+  //home外的单独页面-颜志鹏
   {
     path: '/post/:id',//发布帖子
     name: 'Post',
@@ -221,6 +237,11 @@ const routes = [
     path: '/circlegourp', //所有圈子
     name: 'circlegourp',
     component: () => import('../views/CircleGourp.vue')
+  },
+  {
+    path: '/article/:id',
+    name: 'article',
+    component: () => import('../views/Article.vue')
   }
 ]
 

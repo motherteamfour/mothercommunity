@@ -7,101 +7,156 @@
         <option value="已怀孕">已怀孕</option>
         <option value="已出生">已出生</option>
       </select>
-      <button type="button" class="seek-btn">搜索</button>
-      <button type="button" class="del-btn" @click="delAll">删除</button>
+      <button type="button" class="seek-btn" @click="search">搜索</button>
+      <button type="button" class="del-btn">删除</button>
       <button type="button" class="recover">恢复</button>
     </div>
-    <div class="table">
-      <table>
-        <tr>
-          <th><input type="checkbox" @click="selectAll"></th>
-          <th>ID</th>
-          <th>用户名</th>
-          <th>年龄</th>
-          <th>备孕状态</th>
-          <th class="caozuo">操作</th>
-        </tr>
-        <tr v-for="(item,index) in comsts" :key="index.id">
-          <td><input type="checkbox" v-model="item.isSel"></td>
-          <td>{{item.id}}</td>
-          <td>{{item.username}}</td>
-          <td>{{item.age}}</td>
-          <td>{{item.type}}</td>
-          <td>
-            <button type="button" class="check-btn">查看</button>
-            <button type="button" class="del-btn" @click="del(index)">删除</button>
-            <button type="button" class="recover">恢复</button>
-          </td>
-        </tr>
-      </table>
-    </div>
+    <el-table
+        ref="multipleTable"
+        :data="tableData"
+        tooltip-effect="dark"
+        style="width: 98%; margin:0 auto;"
+      >
+        <el-table-column type="selection" width="120"></el-table-column>
+        <el-table-column prop label="序号" width="120"></el-table-column>
+        <el-table-column prop="userName" label="用户名" width="120"></el-table-column>
+        <el-table-column prop="userPhone" label="电话号码" width="120"></el-table-column>
+        <el-table-column prop="state.stateMessage" label="备孕状态" width="120"></el-table-column>
+        <el-table-column label="操作" show-overflow-tooltip>
+          <template slot-scope="scope">
+            <el-button class="btn"  @click="delBtn(scope.row.userId)">删除</el-button>
+            <el-button class="btn" @click="resumeBtn(scope.row.userId)">恢复</el-button>
+          </template>
+        </el-table-column>
+      </el-table>
   </div>
 </template>
 
 <script>
 
-const comsts = [
-  {
-    id:1,
-    username:"lilei",
-    age:25,
-    type:"已怀孕",
-    isSel:false
-  },
-  {
-    id:2,
-    username:"haiqiong",
-    age:22,
-    type:"备孕中",
-    isSel:false
-  },
-  {
-    id:3,
-    username:"lilei",
-    age:26,
-    type:"已出生",
-    isSel:true
-  }
-]
 export default {
   name:"users",
   data() {
     return {
-      comsts:[]
+     tableData:[]
     }
   },
   created() {
-    this.comsts = comsts;
+    this.axios
+      .get("/admin/delUserList?size=1&sizePage=6")
+      .then(res => {
+        console.log(res.data.data);
+        if (res.data.code == 200) {
+          this.tableData = res.data.data.list;
+        }
+      })
+      .catch(error => {
+        console.log(error);
+      });
   },
   computed: {
-    // isSelectAll:function(){
-    //   return this.comsts.every(function(val) {
-    //     return val.isSel
-    //   })
-      
-    // }
+
+  },
+  mounted() {
+    
   },
   methods: {
-    selectAll:function(e){
-      if(e.target.checked){
-        this.comsts = this.comsts.map(function(item){
-          item.isSel = true;
-          return item
-        });
-      } else {
-        this.comsts = this.comsts.map(function(item){
-          item.isSel = false;
-          return item
-        });
-      }
+    delBtn(userId) {
+      console.log(userId);
+      this.axios
+        .delete("/admin/deleteUser?userId=1000")
+        .then(res=>{
+          console.log(res.data)
+        })
+        .catch(error=>{
+          console.log(error)
+        })
     },
-    del:function(i) {
-      this.comsts.splice(i,1)
+    //恢复
+    resumeBtn(userId){
+       // var userIds = this.userIds.join
+      console.log(userId);
+      // const params = new URLSearchParams()
+      // params.append('userId',userId)
+      this.axios({
+        url:"/admin/resumeUser",
+        method:"post",
+        data: `userId=${userId}`,
+        headers:{
+          "Content-Type":"application/x-www-form-urlencoded"
+        },
+      // data:params
+        
+      })
+      .then(res=>{
+        console.log(res.data)
+          this.axios
+          .get("/admin/delUserList?size=1&sizePage=6")
+          .then(res => {
+            if (res.data.code == 200) {
+              this.tableData = res.data.data.list;
+            }
+          })            
+      })
+      .catch(error=>{
+        console.log(error)
+      })
+      // this.axios.post("/admin/delUser", 
+      //   {
+      //     userId: userId
+      //   })
+      //   .then(res => {
+      //     console.log(res.data,"1111");
+      //   })
+      //   .catch(err => {
+      //     console.log(err);
+      //   })
+      
     },
-    delAll: function(){
-
+    //搜索
+    search(userName){
+        // var userIds = this.userIds.join
+      console.log(userName);
+      // const params = new URLSearchParams()
+      // params.append('userId',userId)
+      this.axios({
+        url:" /admin/findUserByConditions?size=1&sizePage=6",
+        method:"post",
+        data: `Name=${userName}`,
+        headers:{
+          "Content-Type":"application/x-www-form-urlencoded"
+        },
+      // data:params
+        
+      })
+      .then(res=>{
+        console.log(res.data)
+          this.axios
+          .get("/admin/findUserByConditions?size=1&sizePage=6")
+          .then(res => {
+            if (res.data.code == 200) {
+              this.tableData = res.data.data.list;
+            }
+          })            
+      })
+      .catch(error=>{
+        console.log(error)
+      })
+      // this.axios.post("/admin/delUser", 
+      //   {
+      //     userId: userId
+      //   })
+      //   .then(res => {
+      //     console.log(res.data,"1111");
+      //   })
+      //   .catch(err => {
+      //     console.log(err);
+      //   })
+      
+    },
+     
     }
-  }
+  
 
 }
 </script>
@@ -137,11 +192,12 @@ button{
   border: none;
   border-radius: 2px
 }
-.seek-btn,.del-btn{
+.seek-btn,.del-btn,.btn{
   background:@bg-btn;
 }
-button:hover {
-  background: #009687d0
+button,.btn:hover {
+  background: #009687d0;
+  color:white
 }
 .check-btn{
   background: @bg-check-btn;

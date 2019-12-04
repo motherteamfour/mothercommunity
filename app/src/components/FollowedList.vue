@@ -5,8 +5,7 @@
         <div class="avater"></div>
         <p class="username">{{list.user.userName}}</p>
       </div>
-      <div class="follow" v-if="!list.isFollow" @click="follow(list.userId)">+关注</div>
-      <div class="followed" v-else @click="cancleFollow(list.userId)">
+      <div class="followed" @click="follow(list.postId)">
         <i class="fa fa-check"></i>
         已关注
       </div>
@@ -22,12 +21,12 @@
     </router-link>
     <div class="options">
       <div v-if="!list.isLike" class="praise-wrap">
-        <i @click="praise(list.userId)" class="fa fa-heart-o" aria-hidden="true"></i>
-        <span @click="praise(list.userId)">赞({{list.countFabulous}})</span>
+        <i @click="praise(list.id)" class="fa fa-heart-o" aria-hidden="true"></i>
+        <span @click="praise(list.id)">赞({{list.countFabulous}})</span>
       </div>
       <div style="color: red" v-else class="praise-wrap">
-        <i @click="canclePraise(list.userId)" class="fa fa-heart" aria-hidden="true"></i>
-        <span @click="canclePraise(list.userId)">已赞({{list.countFabulous}})</span>
+        <i @click="praise(list.id)" class="fa fa-heart" aria-hidden="true"></i>
+        <span @click="praise(list.id)">已赞({{list.countFabulous}})</span>
       </div>
       <div>
         <i class="fa fa-comment-o" aria-hidden="true"></i>
@@ -38,8 +37,8 @@
         <span @click="collect(list.postId)">收藏({{list.countCollection}})</span>
       </div>
       <div style="color: #f8d742" v-else class="collect-wrap">
-        <i @click="cancleCollect(list.postId)" class="fa fa-star" aria-hidden="true"></i>
-        <span @click="cancleCollect(list.postId)">已收藏({{list.countCollection}})</span>
+        <i class="fa fa-star" aria-hidden="true" @click="collect(list.id)"></i>
+        <span @click="collect(list.postId)">已收藏({{list.countCollection}})</span>
       </div>
     </div>
   </div>
@@ -51,7 +50,7 @@ export default {
   data() {
     return {};
   },
-  props: ["list","isAll"],
+  props: ["list"],
   methods: {
     followStyle(i) {
       if (i == 1) {
@@ -65,7 +64,6 @@ export default {
       }
     },
     follow(i) {
-      console.log(this.isAcitve);
       this.$emit("followFn", i);
     },
     praise(i) {

@@ -29,8 +29,9 @@ export default {
     };
   },
   created() {
+    var userId = sessionStorage.getItem("userId");
     this.axios
-      .post("/question/hotQuestion")
+      .post(`/question/hotQuestion?userId=${userId}`)
       .then(res => {
         console.log("热门问题：", res.data);
         this.lists = res.data.data;

@@ -5,9 +5,12 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
-    
+    userPhone: ""
   },
   mutations: {
+    setPhone(state, n) {
+      state.userPhone = n
+    },
   },
   actions: {
   },

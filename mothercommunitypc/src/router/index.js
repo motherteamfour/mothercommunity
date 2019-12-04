@@ -102,12 +102,19 @@ const routes = [
         meta: {
           auth: true
         }
-      }
-      ,
+      },
       {
         path: 'delUsers',
         name: 'delUsers',
         component: () => import('../views/delUsers.vue'),
+        meta: {
+          auth: true
+        }
+      },
+      {
+        path: 'aticleAll',
+        name: 'aticleAll',
+        component: () => import('../views/aticleAll.vue'),
         meta: {
           auth: true
         }
