@@ -9,15 +9,29 @@
         <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
       </span>
     </div>
-    <FansLists></FansLists>
+    <FansLists v-for="(item, index) in focusnum" :key="index"
+    :username="item.userName"></FansLists>
   </div>
 </template>
 
 <script>
 import FansLists from "../components/FansLists";
 export default {
+  data () {
+    return {
+      focusnum: []
+    }
+  },
   components: {
     FansLists
+  },
+  created () {
+    let param = new URLSearchParams();
+    param.append("userId","1002");
+    this.axios.post("/zp/fant/findattention", param).then(res => {
+      console.log(res.data);
+      this.focusnum = res.data.data;
+    });
   },
   methods: {
     goback() {

@@ -168,6 +168,11 @@ const routes = [
             path: 'userpage',
             name: 'Userpage',
             component: () => import('../views/Userpage.vue'),
+          },
+          {
+            path: 'havingpost',
+            name: 'HavingPost',
+            component: () => import('../views/HavingPost')
           }
         ]
       },

@@ -9,15 +9,29 @@
         <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
       </span>
     </div>
-    <FansLists></FansLists>
+    <FansLists v-for="(item, index) in fanslists" :key="index"
+    :username="item.userName"></FansLists>
   </div>
 </template>
 
 <script>
 import FansLists from "../components/FansLists";
 export default {
+  data () {
+    return {
+      fanslists: []
+    }
+  },
   components: {
     FansLists
+  },
+  created () {
+    let param = new URLSearchParams();
+    param.append("userId","1002");
+    this.axios.post("/zp/fant/findfant", param).then(res => {
+      console.log(res.data);
+      this.fanslists = res.data.data;
+    });
   },
   methods: {
     goback() {

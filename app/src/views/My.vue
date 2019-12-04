@@ -76,12 +76,14 @@ export default {
   },
   created() {
     let param = new URLSearchParams();
-    param.append("id","1001");
-    this.axios.post("/zp/fant/fol", param).then(res => {
+    param.append("id","1002");
+    this.axios.post("/zp/fant/countFants", param).then(res => {
       this.fansnum = res.data.data;
+      console.log('粉丝数',res.data);
     });
-    this.axios.post("/user/countfant", param).then(res => {
+    this.axios.post("/zp/fant/countattention", param).then(res => {
       this.focusnum = res.data.data;
+      console.log('关注数',res.data);
     });
     this.axios.post("/zp/user/findMyself", param).then(res => {
       this.userInfo = res.data.data;
@@ -91,7 +93,8 @@ export default {
       methods: "GET"
     })
     .then(res => {
-      this.getPostnum = res.data.data.length;
+      console.log(res.data);
+      /* this.getPostnum = res.data.data.length; */
     })
    
   },

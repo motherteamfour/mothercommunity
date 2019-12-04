@@ -21,6 +21,7 @@
 
 <script>
 export default {
+  inject: ['reload'],
   data() {
     return {
       userInfo: {}
@@ -41,10 +42,11 @@ export default {
       
       let param = new URLSearchParams();
       param.append("userid", "1001");
-      param.append("username", "nana");
+      param.append("username", "meimei");
       this.axios.post("/zp/user/updateusername", param).then(res => {
         console.log(res.data);
       });
+      this.reload();
     }
   }
 };

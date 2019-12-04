@@ -6,7 +6,7 @@
     </ul>
     <p class="hint">历史记录</p>
     <ul class="history">
-      <li v-for="(item, index) in history" :key="index">
+      <li v-for="(item, index) in history" :key="index" @click="searchpost()">
         <span>
           <i class="fa fa-clock-o" aria-hidden="true"></i>
           <span>{{item}}</span>
@@ -26,6 +26,7 @@
 
 <script>
 export default {
+  inject: ["reload"],
   data() {
     return {
       searchlists: [],
@@ -43,54 +44,44 @@ export default {
     this.axios.get("/search/searchHistory?userId=1001").then(res => {
       this.history = res.data.data;
     });
-    
   },
 
   methods: {
     del() {
-      /*  this.axios({
-        url: '/search/deleteHistoryBySearchMessage?searchMessage="1"&userId=1001',
-        methods: "get"
-      })
-      .then(res => {
-        console.log(res.data);
-      }) */
-      /*  this.history.splice(i, 1);
-      console.log(i); */
       this.axios
-      .get(
-        "/search/deleteHistoryBySearchMessage?userId=1001&searchMessage=宝宝抽烟"
-      )
-      .then(res => {
-        console.log(res.data);
-      });
+        .get(
+          "/search/deleteHistoryBySearchMessage?searchMessage=宝宝喝酒&userId=1001"
+        )
+        .then(res => {
+          if (res.code == 200) {
+            this.axios.get("/search/searchHistory?userId=1001").then(res => {
+              this.history = res.data.data;
+            });
+          }
+          console.log(res.data);
+        });
+      this.reload();
     },
     removeAll() {
       this.axios.get("/search/deleteAllHistory?userId=1001").then(res => {
-        console.log(res.data);
+        if (res.code == 200) {
+          this.axios.get("/search/searchHistory?userId=1001").then(res => {
+            this.history = res.data.data;
+          });
+        }
       });
-    }
+    },
+    /* searchpost() {
+      this.axios.
+    } */
   }
-  /* this.axios({
-      url: "/search/searchHistory",
-      methods: "get", */
-  /*  header: {
-        "Content-Type": "application/x-www-form-urlencoded"
-      } */
-  /* })
-      .then(res => {
-        console.log(res.data);
-      })
-  }, */
-  /*  this.axios.get("/search/searchHistory?userId=1001").then(res => {
-      console.log(res.data);
-      
-    })
-  }, */
 };
 </script>
 
 <style lang="less" scoped>
+.searchpost {
+  width: 750px;
+}
 .hint {
   width: 710px;
   height: 60px;
@@ -120,10 +111,11 @@ export default {
 }
 .history {
   width: 710px;
-  height: 80px;
+  /* height: 80px; */
   font-size: 30px;
   line-height: 80px;
-  margin: 0 auto;
+  margin: 20px auto;
+
   li {
     display: flex;
     justify-content: space-between;

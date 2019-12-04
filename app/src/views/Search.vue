@@ -1,19 +1,17 @@
 <template>
   <div class="search">
     <div class="searchbox">
-<van-search
-  v-model="val"
-  placeholder="请输入搜索关键词"
-  show-action
-  shape="round"
-  
->
-  <div slot="action" @click="search">搜索</div>
-</van-search>
+      <van-search v-model="val" placeholder="请输入搜索关键词" show-action shape="round">
+        <div slot="action" @click="search">搜索</div>
+      </van-search>
     </div>
     <nav>
-      <router-link to="/searchs" ><div>帖子</div></router-link>
-      <router-link to="/searchs/userpage"><div>用户</div></router-link>
+      <router-link to="/searchs">
+        <div>帖子</div>
+      </router-link>
+      <router-link to="/searchs/userpage">
+        <div>用户</div>
+      </router-link>
     </nav>
     <router-view />
   </div>
@@ -21,47 +19,68 @@
 
 <script>
 /* import SearchPost from '' */
-import { Search } from 'vant';
+import { Search } from "vant";
+/* import store from '../vuex/store.js'
+import { mapState } from "vuex" */
+
 export default {
-  data () {
+  
+  data() {
     return {
-      val: ''
-    }
+      val: "",
+      result: null,
+      postnum: []
+    };
   },
+ /*  computed: {
+    ...mapState({
+      postnum: state => state.postnum
+    })
+  }, */
   components: {
-    [Search.name]: Search
+    [Search.name]: Search,
   },
   methods: {
     /* select() { */
-      //导航选择
-      /* if (e.target.innerText == "帖子") {
+    //导航选择
+    /* if (e.target.innerText == "帖子") {
         
       } else if (e.target.innerText == "用户") {
         
       } */
-   /*  }, */
-   
+    /*  }, */
+
     goback() {
-      this.$router.push('/');
+      this.$router.push("/");
     },
     search() {
-      
-     /*  console.log("zz",value);
+      this.result = this.val;
+      console.log(this.result);
+      var value = this.result
       this.axios({
-        url: "`/search/searchPost?userId=1001&searchMessage=${value}`",
+        url: `/search/searchPost?userId=1001&searchMessage=${value}`,
         methods: "GET"
       })
       .then (res => {
         console.log(res.data);
-      }) */
+        if(res.data.code == 200) {
+          this.$router.replace('/searchs/havingpost');
+          this.postnum = res.data.data;
+          console.log(this.postnum);
+          this.$store.commit("/main", this.postnum);
+        }
+      })
     }
-
   }
 };
 </script>
 
 <style lang="less" scoped>
 @import "../assets/style/base.less";
+.search {
+  width: 750px;
+  padding-bottom: 70px;
+}
 .searchbox {
   width: 710px;
   height: 100px;

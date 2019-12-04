@@ -2,14 +2,15 @@
   <div class="fans">
     <div class="fanslist">
       <div class="por"></div>
-      <div class="username">title</div>
+      <div class="username">{{username}}</div>
     </div>
   </div>
 </template>
 
 <script>
 export default {
-  name: "fans"
+  name: "fans",
+  props: ['username']
 };
 </script>
 
