@@ -12,13 +12,13 @@ const http = axios.create({
 //请求拦截request
 http.interceptors.request.use(function (config) {
   // 每次请求先将请求拦截下来，获取 token
-  const token = sessionStorage.getItem('token');
-  if (token) {
-    // config是请求体
-    // 在请求头上带上 token,
-    // Bearer是固定写法
-    config.headers['Authorization'] = 'Bearer ' + token
-  }
+  // const token = sessionStorage.getItem('token');
+  // if (token) {
+  //   // config是请求体
+  //   // 在请求头上带上 token,
+  //   // Bearer是固定写法
+  //   config.headers['Authorization'] = token
+  // }
   return config;
 }, function (error) {
   console.log('请求拦截错误：', error)
@@ -27,9 +27,10 @@ http.interceptors.request.use(function (config) {
 
 // 响应拦截response，处理错误，如token不合法
 http.interceptors.response.use(function (response) {
+ /*  console.log('返回：', response)
   if (response.data.data) {
-    sessionStorage.setItem('token', response.data.data) // 将服务器返回的最新token更新到本地中
-  }
+    sessionStorage.setItem('token', response.data.token) // 将服务器返回的最新token更新到本地中
+  } */
 
   return response;
 }, function (error) {

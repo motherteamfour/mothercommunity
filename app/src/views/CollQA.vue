@@ -1,10 +1,15 @@
 <template>
-  <div class="banner">收藏问答</div>
+  <div class="banner">
+    <CollPostList></CollPostList>
+  </div>
 </template>
 
 <script>
+import CollPostList from '../components/CollPostList';
 export default {
-  
+  components: {
+    CollPostList
+  }
 }
 </script>
 

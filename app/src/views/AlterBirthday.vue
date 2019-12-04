@@ -4,43 +4,43 @@
       <span class="goback" @click="goback()">
         <i class="fa fa-angle-left" aria-hidden="true"></i>
       </span>
-      <h3>通知</h3>
+      <h3>修改生日</h3>
       <span></span>
     </div>
-    <InformLists v-for="(item, index) in informLists" :key="index"
-    :content="item.messageText"
-    :time="item.messageTime"
-    :title="item.messageTitle"></InformLists>
+    <div class="alterbox">
+<van-datetime-picker
+  v-model="currentDate"
+  type="date"
+
+  @confirm="alterbirth"
+  @cancel="goback()"
+/>
+    </div>
   </div>
 </template>
 
 <script>
-import InformLists from '../components/InformLists'
+import { DatetimePicker } from 'vant';
 export default {
-  data () {
+  data() {
     return {
-      informLists: []
-    }
+      currentDate: new Date(),
+    
+    };
   },
   components: {
-    InformLists
-  },
-  created() {
-    this.axios({
-      url: "/user/message/getMessages?userId=1001",
-      methods: "GET"
-    })
-    .then(res => {
-      console.log("消息列表", res.data.data);
-      this.informLists = res.data.data;
-    })
+    [DatetimePicker.name]: DatetimePicker
   },
   methods: {
     goback() {
-      this.$router.push("/infomation");
+      this.$router.push("/resource");
+    },
+    alterbirth() {
+      console.log("xiugai")
+      
     }
   }
-};
+}
 </script>
 
 <style lang="less" scoped>
@@ -60,20 +60,15 @@ export default {
   justify-content: space-around;
   align-items: center;
   h3 {
-    /* width: 80%; */
     width: 70%;
     color: white;
     font-weight: 500;
     font-size: 36px;
-    /*  margin-bottom: 10px; */
     letter-spacing: 2px;
-    /* line-height: 80px; */
   }
   i {
     color: white;
     font-size: 54px;
   }
 }
-
-
 </style>

@@ -16,10 +16,10 @@
         <div class="state">
           <span>孕4天</span>
           <span>
-            时间
+            {{time}}
             <span>
               <i class="fa fa-commenting-o" aria-hidden="true"></i>
-              4
+              {{countco}}
             </span>
           </span>
         </div>
@@ -31,7 +31,7 @@
 <script>
 export default {
   name: "NewPosts",
-  props: ["name", "title"]
+  props: ["name", "title", "time", "countco"]
 };
 </script>
 

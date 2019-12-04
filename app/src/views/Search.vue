@@ -1,7 +1,15 @@
 <template>
   <div class="search">
     <div class="searchbox">
-      <input type="text" placeholder="妈妈优选" /><span @click="goback()">取消</span>
+<van-search
+  v-model="val"
+  placeholder="请输入搜索关键词"
+  show-action
+  shape="round"
+  
+>
+  <div slot="action" @click="search">搜索</div>
+</van-search>
     </div>
     <nav>
       <router-link to="/searchs" ><div>帖子</div></router-link>
@@ -13,16 +21,16 @@
 
 <script>
 /* import SearchPost from '' */
+import { Search } from 'vant';
 export default {
   data () {
     return {
-      
+      val: ''
     }
   },
-  /* components: {
-    SearchPost,
-    UserPage
-  }, */
+  components: {
+    [Search.name]: Search
+  },
   methods: {
     /* select() { */
       //导航选择
@@ -35,7 +43,19 @@ export default {
    
     goback() {
       this.$router.push('/');
+    },
+    search() {
+      
+     /*  console.log("zz",value);
+      this.axios({
+        url: "`/search/searchPost?userId=1001&searchMessage=${value}`",
+        methods: "GET"
+      })
+      .then (res => {
+        console.log(res.data);
+      }) */
     }
+
   }
 };
 </script>

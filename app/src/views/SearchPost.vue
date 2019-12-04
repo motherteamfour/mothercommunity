@@ -2,16 +2,16 @@
   <div class="searchpost">
     <p class="hint">热门搜索</p>
     <ul class="hotsearch">
-      <li v-for="(item, index) in searchlists" :key="index">{{item.keywords}}</li>
+      <li v-for="(item, index) in searchlists" :key="index">{{item}}</li>
     </ul>
     <p class="hint">历史记录</p>
     <ul class="history">
       <li v-for="(item, index) in history" :key="index">
         <span>
           <i class="fa fa-clock-o" aria-hidden="true"></i>
-          <span>着床</span>
+          <span>{{item}}</span>
         </span>
-        <span @click="del(index)">
+        <span @click="del()">
           <i class="fa fa-times" aria-hidden="true"></i>
         </span>
       </li>
@@ -28,58 +28,65 @@
 export default {
   data() {
     return {
-      searchlists: [
-        {
-          keywords: "着床"
-        },
-        {
-          keywords: "着床"
-        },
-        {
-          keywords: "着床"
-        },
-        {
-          keywords: "怀孕"
-        },
-        {
-          keywords: "着床"
-        },
-        {
-          keywords: "怀孕"
-        },
-        {
-          keywords: "着床"
-        },
-        {
-          keywords: "怀孕"
-        }
-      ],
-      history: [
-        {
-          name: "着床"
-        },
-        {
-          name: "着床"
-        },
-        {
-          name: "着床"
-        },
-        {
-          name: "着床"
-        }
-      ]
+      searchlists: [],
+      history: []
     };
   },
+
+  created() {
+    this.axios({
+      url: "/search/searchTop10",
+      method: "GET"
+    }).then(res => {
+      this.searchlists = res.data.data;
+    });
+    this.axios.get("/search/searchHistory?userId=1001").then(res => {
+      this.history = res.data.data;
+    });
+    
+  },
+
   methods: {
-    del(i) {
-      this.history.splice(i, 1);
-      console.log(i);
+    del() {
+      /*  this.axios({
+        url: '/search/deleteHistoryBySearchMessage?searchMessage="1"&userId=1001',
+        methods: "get"
+      })
+      .then(res => {
+        console.log(res.data);
+      }) */
+      /*  this.history.splice(i, 1);
+      console.log(i); */
+      this.axios
+      .get(
+        "/search/deleteHistoryBySearchMessage?userId=1001&searchMessage=宝宝抽烟"
+      )
+      .then(res => {
+        console.log(res.data);
+      });
     },
     removeAll() {
-      this.history.splice(0);
-      console.log(this.lengths);
+      this.axios.get("/search/deleteAllHistory?userId=1001").then(res => {
+        console.log(res.data);
+      });
     }
   }
+  /* this.axios({
+      url: "/search/searchHistory",
+      methods: "get", */
+  /*  header: {
+        "Content-Type": "application/x-www-form-urlencoded"
+      } */
+  /* })
+      .then(res => {
+        console.log(res.data);
+      })
+  }, */
+  /*  this.axios.get("/search/searchHistory?userId=1001").then(res => {
+      console.log(res.data);
+      
+    })
+  }, */
 };
 </script>
 

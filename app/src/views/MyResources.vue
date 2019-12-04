@@ -21,7 +21,7 @@
       <li style="border-bottom: none">
         <span class="title">宝宝状态</span>
         <span class="num">
-          <span>备孕中</span>
+          <span>{{userInfo.state}}</span>
           <i class="fa fa-angle-right" aria-hidden="true"></i>
         </span>
       </li>
@@ -30,28 +30,21 @@
       <li @click="gonicknamepage()">
         <span class="title">昵称</span>
         <span class="num">
-          <span>0</span>
+          <span>{{userInfo.userName}}</span>
           <i class="fa fa-angle-right" aria-hidden="true"></i>
         </span>
       </li>
-      <li>
-        <span class="title">城市</span>
-        <span class="num">
-          <span>0</span>
-          <i class="fa fa-angle-right" aria-hidden="true"></i>
-        </span>
-      </li>
-      <li style="border-bottom: none">
+      <li style="border-bottom: none" @click="gobirthdaypage()">
         <span class="title">宝妈生日</span>
         <span class="num">
-          <span>0</span>
+          <span>{{userInfo.userBirthday}}</span>
           <i class="fa fa-angle-right" aria-hidden="true"></i>
         </span>
       </li>
     </ul>
     <ul class="lists">
       <li style="border-bottom: none">
-        <span class="title">用户ID：</span>
+        <span class="title">用户ID：{{userInfo.userId}}</span>
         
       </li>
     </ul>
@@ -61,12 +54,31 @@
 
 <script>
 export default {
+  data () {
+    return {
+      userInfo: {}
+    }
+  },
+  created() {
+    let param = new URLSearchParams();
+    param.append("id","1001"); 
+    this.axios.post("/zp/user/findMyself", param).then(res => {
+      console.log(res.data);
+      this.userInfo = res.data.data;
+      console.log(this.userInfo);
+      /* this.focusnum = res.data.data;
+      console.log(this.focusnum); */
+    });
+  },
   methods: {
     goback() {
       this.$router.push("./my");
     },
     gonicknamepage() {
       this.$router.push("/altername")
+    },
+    gobirthdaypage() {
+      this.$router.push("alterbirthday")
     }
   }
 };

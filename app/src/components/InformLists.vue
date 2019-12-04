@@ -7,8 +7,9 @@
         </div>
       </div>
       <div class="right">
-        <div class="content">内容菲佛为佛欸佛欸放假呢哦i金佛欸分解分解二姐夫都i恩迪哦呢哦i飞机场我i恩佛i就发动i额二级偶分呢</div>
-        <div class="timee">时间</div>
+        <div class="title">{{title}}</div>
+        <div class="content">{{content}}</div>
+        <div class="timee">{{time}}</div>
       </div>
     </div>
   </div>
@@ -16,7 +17,7 @@
 
 <script>
 export default {
-  
+  props: ["content", "time", "title"]
 }
 </script>
 
@@ -52,12 +53,19 @@ export default {
      
       font-size: 32px;
       padding: 20px;
+      padding-top: 0;
      
     }
     .timee {
   
       text-align: center;
       font-size: 20px;
+    }
+    .title {
+      font-size: 32px;
+      font-weight: 600;
+      padding-left: 20px;
+      padding-top: 20px;
     }
   }
 }

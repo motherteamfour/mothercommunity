@@ -25,6 +25,11 @@ export default {
   components: {
     ReplyLists
   },
+  created () {
+    this.axios({
+      
+    })
+  },
   methods: {
     goback() {
       this.$router.push("./my");

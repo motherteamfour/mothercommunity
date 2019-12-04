@@ -4,8 +4,6 @@ import Home from '../views/Home.vue'
 import Forum from '../views/Forum.vue'
 import My from '../views/My.vue'
 import Entrance from '../views/Entrance.vue'
-// import { Search } from 'vant'
-/* import NewPost from '../views/NewPost.vue' */
 import Searchs from '../views/Search.vue'
 import InfoComment from '../views/InfoComment.vue'
 import Collect from '../views/Collect.vue'
@@ -140,9 +138,9 @@ const routes = [
             component: () => import('../views/CollPost.vue')
           },
           {
-            path: '/collqa',
+            path: 'collqa',
             name: 'CollQA',
-            component: () => import('../views/Userpage.vue')
+            component: () => import('../views/CollQA.vue')
           }
         ]
       },
@@ -157,7 +155,7 @@ const routes = [
         component: () => import('../views/Group.vue')
       },
       {
-        path: 'searchs', // 搜索
+        path: '/searchs', // 搜索
 
         component: Searchs,
         children: [
@@ -221,6 +219,21 @@ const routes = [
     path: '/circlegourp', //所有圈子
     name: 'circlegourp',
     component: () => import('../views/CircleGourp.vue')
+  },
+  {
+    path: '/alterbirthday',// 修改生日
+    name: 'alterbirthday',
+    component: () => import('../views/AlterBirthday.vue')
+  },
+  {
+    path: '/fanspage',// 粉丝页
+    name: 'FansPage',
+    component: () => import('../views/FansPage.vue')
+  },
+  {
+    path: '/focuspage',// 关注页
+    name: 'FocusPage',
+    component: () => import('../views/FocusPage.vue')
   }
 ]
 

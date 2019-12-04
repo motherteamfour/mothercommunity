@@ -10,19 +10,21 @@
 
     <ul>
       <li @click="goInfoComment()">
-        <div class="photo blue"><i class="fa fa-comments" aria-hidden="true"></i> </div>
+        <div class="photo blue">
+          <i class="fa fa-comments" aria-hidden="true"></i>
+        </div>
         <div class="category">
           <div class="right">
             <div class="category">
               <span class="title reply">回复</span>
-              
             </div>
-         
           </div>
         </div>
       </li>
       <li @click="goInfoLike()">
-        <div class="photo orange"><i class="fa fa-thumbs-o-up" aria-hidden="true"></i></div>
+        <div class="photo orange">
+          <i class="fa fa-thumbs-o-up" aria-hidden="true"></i>
+        </div>
         <div class="right">
           <div class="category">
             <span class="title">赞</span>
@@ -32,15 +34,17 @@
         </div>
       </li>
       <li @click="goInform()">
-        <div class="photo pink"><i class="fa fa-volume-up" aria-hidden="true"></i></div>
+        <div class="photo pink">
+          <i class="fa fa-volume-up" aria-hidden="true"></i>
+        </div>
         <div class="category">
           <div class="right">
-          <div class="category">
-            <span class="title">通知</span>
-            <span class="gray">时间</span>
+            <div class="category">
+              <span class="title">通知</span>
+              <span class="gray">{{informLists[0].messageTime}}</span>
+            </div>
+            <div class="gray">{{informLists[0].messageTitle}}</div>
           </div>
-          <div class="gray">帮小友思考思考时时刻刻是给你点了一个赞</div>
-        </div>
         </div>
       </li>
     </ul>
@@ -49,18 +53,33 @@
 
 <script>
 export default {
+  data () {
+    return {
+      informLists: []
+    }
+  },
+  created() {
+    this.axios({
+      url: "/user/message/getMessages?userId=1001",
+      methods: "GET"
+    }).then(res => {
+      console.log("消息列表", res.data.data);
+      this.informLists = res.data.data;
+      console.log(this.informLists[0].messageTime);
+    });
+  },
   methods: {
     goback() {
-      this.$router.push('/');
+      this.$router.push("/");
     },
     goInfoComment() {
-      this.$router.push('/infocomment')
+      this.$router.push("/infocomment");
     },
     goInfoLike() {
-      this.$router.push('/infolike')
+      this.$router.push("/infolike");
     },
     goInform() {
-      this.$router.push('/inform')
+      this.$router.push("/inform");
     }
   }
 };
@@ -104,7 +123,7 @@ ul {
 
     .photo {
       width: 80px;
-      height:80px;
+      height: 80px;
       background: red;
       border-radius: 50%;
       display: flex;
@@ -119,15 +138,14 @@ ul {
       height: 90px;
       border-bottom: 1px solid gainsboro;
       margin-left: 20px;
-  
+
       font-size: 30px;
       .category {
         display: flex;
         justify-content: space-between;
-  
+
         .title {
           font-weight: 600;
-      
         }
       }
     }
@@ -147,9 +165,8 @@ ul {
   font-size: 26px;
 }
 .reply {
-  display: inline-block; 
-    height: 100px;
-    line-height: 100px;
-  
+  display: inline-block;
+  height: 100px;
+  line-height: 100px;
 }
 </style>

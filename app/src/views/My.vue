@@ -5,10 +5,10 @@
       <h3>我的</h3>
       <div class="user">
         <div class="portrait" @click="goMyResourcePage()">
-          <p>头像</p>
-          <!-- <img src="" alt=""> -->
+        <!--   <p>头像</p> -->
+          <img :src="userInfo.userImgUrl" alt="">
         </div>
-        <span class="username">辣妈676879</span>
+        <span class="username">{{userInfo.userName}}</span>
         <br />
         <span class="state">备孕中</span>
         <span class="address">四川 成都</span>
@@ -16,20 +16,20 @@
     </div>
 
     <div class="nav">
-      <div class="attention">
+      <div class="attention" @click="goFocusPage()">
         <p>关注</p>
-        <p class="fansnum">0</p>
+        <p class="fansnum">{{focusnum}}</p>
       </div>
-      <div class="fans">
+      <div class="fans" @click="goFansPage()">
         <p>粉丝</p>
-        <p class="fansnum">0</p>
+        <p class="fansnum">{{fansnum}}</p>
       </div>
     </div>
     <ul class="lists">
       <li>
         <img src="../assets/img/my/fatie.png" alt />
         <span class="title">我的发帖</span>
-        <span class="num">0</span>
+        <span class="num">{{getPostnum}}</span>
         <img src="../assets/img/my/youjiantou.png" alt @click="goNewpostPage()" />
       </li>
       <li>
@@ -49,8 +49,7 @@
       <li>
         <img src="../assets/img/my/shouji.png" alt />
         <span class="title">手机绑定</span>
-        <span class="num telphone">17780837103</span>
-        <img src="../assets/img/my/youjiantou.png" alt />
+        <span class="num telphone">{{userInfo.userPhone}}</span>
       </li>
       <li style="border-bottom: none">
         <img src="../assets/img/my/yidenglu5.png" alt />
@@ -65,27 +64,58 @@
 </template>
 
 <script>
-/* import { mapState, mapMutations } from 'vuex'; */
-
-
 export default {
   name: "My",
-  
+  data () {
+    return {
+      fansnum: "",
+      focusnum: "",
+      userInfo: {},
+      getPostnum: ""
+    }
+  },
+  created() {
+    let param = new URLSearchParams();
+    param.append("id","1001");
+    this.axios.post("/zp/fant/fol", param).then(res => {
+      this.fansnum = res.data.data;
+    });
+    this.axios.post("/user/countfant", param).then(res => {
+      this.focusnum = res.data.data;
+    });
+    this.axios.post("/zp/user/findMyself", param).then(res => {
+      this.userInfo = res.data.data;
+    });
+    this.axios({
+      url: "/user/findCollectByUserId?userId=1001",
+      methods: "GET"
+    })
+    .then(res => {
+      this.getPostnum = res.data.data.length;
+    })
+   
+  },
   methods: {
-    /* ...mapState({
-
-    }), */
     goNewpostPage() {
-      this.$router.push('/newpost');
+      this.$router.push("/newpost");
     },
     goReplyPage() {
-      this.$router.push('/reply');
+      this.$router.push("/reply");
     },
     goCollectPage() {
-      this.$router.push('/collect');
+      this.$router.push("/collect");
     },
     goMyResourcePage() {
-      this.$router.push('/resource');
+      this.$router.push("/resource");
+    },
+    goFansPage() {
+      this.$router.push("/fanspage");
+    },
+    goFocusPage() {
+      this.$router.push("/focuspage");
+    },
+    ResourcePage() {
+      this.axios({});
     }
   }
 };
@@ -97,8 +127,8 @@ export default {
   width: 750px;
   height: 100vh;
   background: rgb(248, 248, 248);
- /*  overflow: hidden; */
- 
+  /*  overflow: hidden; */
+
   .top {
     padding-top: 40px;
     width: 100%;
@@ -235,7 +265,6 @@ export default {
       border-radius: 30px;
       font-size: 30px;
       outline: none;
-    
     }
   }
 }
