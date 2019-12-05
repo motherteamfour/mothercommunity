@@ -96,26 +96,7 @@ const routes = [
 
         ]
       },
-      {
-        path: 'ask',
-        name: 'Ask',
-        component: () => import('../views/Ask.vue'),
 
-      },
-      {
-
-        path: 'searchquestion',//搜索问题
-        name: 'SearchQuestion',
-        component: () => import('../views/SearchQuestion.vue'),
-        meta: {
-          auth: true
-        }
-      },
-      {
-        path: 'questiondetail/:questionId',// 问题详情页
-        name: 'QuestionDetail',
-        component: () => import('../views/QuestionDetail.vue'),
-      },
       {
         path: 'suresearch',// 确定搜索
         name: 'SureSearch',
@@ -242,7 +223,34 @@ const routes = [
     path: '/article/:id',
     name: 'article',
     component: () => import('../views/Article.vue')
-  }
+  },
+  // 问答-曾晶
+  {
+    path: '/ask',
+    name: 'Ask',
+    component: () => import('../views/Ask.vue'),
+
+  },
+  {
+    path: '/iwillanswer',
+    name: 'IWillAnswer',
+    component: () => import('../views/IWillAnswer.vue'),
+
+  },
+  {
+
+    path: '/searchquestion',//搜索问题
+    name: 'SearchQuestion',
+    component: () => import('../views/SearchQuestion.vue'),
+    meta: {
+      auth: true
+    }
+  },
+  {
+    path: '/questiondetail/:questionId',// 问题详情页
+    name: 'QuestionDetail',
+    component: () => import('../views/QuestionDetail.vue'),
+  },
 ]
 
 

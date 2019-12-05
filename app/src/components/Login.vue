@@ -68,19 +68,17 @@ export default {
           })
           .then(res => {
             console.log(res.data);
+            var token = res.data.token;
+            var userId = res.data.data;
+            // 将token和userId保存
+            sessionStorage.setItem("token", token);
+            sessionStorage.setItem("userId", userId);
             if (res.data.code == "200") {
               // 非第一次登录
-              var token = res.data.token;
-              var userId = res.data.data;
-              // 将token和userId保存
-              sessionStorage.setItem("token", token);
-              sessionStorage.setItem("userId", userId);
-
 
               // 切换路由
-              this.$router.replace('/');
+              this.$router.replace("/");
             } else if (res.data.code == "201") {
-
               var url = this.$route.query.redirect;
               url = url ? url : "/";
               this.$router.replace(url);

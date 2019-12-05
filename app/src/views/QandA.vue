@@ -47,6 +47,7 @@ export default {
       .get(`/question/numberOfQuestion`)
       .then(res => {
         console.log("正在提问的人数：", res.data);
+        this.totalNum=res.data.data;
       })
       .catch(err => {
         console.log(err);

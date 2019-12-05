@@ -29,6 +29,9 @@
         </div>
       </div>
     </div>
+    <router-link :to="'/iwillanswer'" class="footer">
+      <p>我要回答</p>
+    </router-link>
   </div>
 </template>
 <script>
@@ -194,5 +197,17 @@ export default {
       }
     }
   }
+}
+.footer {
+  height: 90px;
+  width: 100%;
+  font-size: 32px;
+  border-top: 1px solid #eaeaea;
+  color: @themeColor;
+  line-height: 90px;
+  text-align: center;
+  position: fixed;
+  bottom: 0;
+  left: 0;
 }
 </style>

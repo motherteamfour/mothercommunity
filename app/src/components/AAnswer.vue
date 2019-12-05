@@ -1,7 +1,7 @@
 <template>
   <div class="a-answer">
     <div class="title-wrap">
-      <img :src="information.user.userImgUrl" alt />
+      <img :src="imgUrl+'/'+information.user.userImgUrl" alt />
       <span class="title">{{information.user.userName}}</span>
     </div>
     <div class="content">{{information.answerContent}}</div>
@@ -28,7 +28,8 @@ export default {
   data() {
     return {
       isShow: false,
-      information: this.info
+      information: this.info,
+      imgUrl: ""
     };
   },
   props: ["info"], //这里的info是一个回答 不约束类型，直接以数组形式列出 props
@@ -67,7 +68,9 @@ export default {
       }
     }
   },
-  created() {}
+  created() {
+    this.imgUrl = this.$store.state.imgUrl;
+  }
 };
 </script>
 <style lang="less" scoped>
