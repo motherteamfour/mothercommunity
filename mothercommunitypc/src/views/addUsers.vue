@@ -4,7 +4,7 @@
       <table>
         <tr>
           <td>账号：</td>
-          <td><input type="text" placeholder="输入创建的账号" class="userId mod" v-model="inputUsername" @blur="username(inputUsername)" ></td>
+          <td><input type="text" placeholder="输入创建的账号" class="userId mod" v-model="inputName" @blur="username(inputName)" ></td>
         </tr>
         <tr>
           <td>密码：</td>
@@ -12,7 +12,7 @@
         </tr>
         <tr>
           <td>姓名：</td>
-          <td><input type="text" placeholder="请输入姓名" class="name mod" v-model="inputName"></td>
+          <td><input type="text" placeholder="请输入姓名" class="name mod" v-model="inputUsername"></td>
         </tr>
         <tr>
           <td>联系方式：</td>
@@ -28,7 +28,7 @@
         </tr>
         <tr>
           <td colspan="2">
-            <el-button type="button" class="add" @click="addAdmin">添加</el-button>
+            <el-button type="button" class="add" @click="addAdmin" :disabled="inputUsername==''||inputPassword==''||inputName==''||inputTel==''">添加</el-button>
             <el-button type="button" class="exit" @click="exit">清空</el-button>
           </td>
         </tr>
@@ -40,7 +40,7 @@
           <input type="text" class="user" v-model="userSearch" placeholder="请输入需要搜索的用户名">
           <input type="text" class="username" v-model="usersName" placeholder="请输入需要搜索的姓名">
           <button type="button" class="seek-btn" @click="search">搜索</button>
-          <button type="button" class="del-btn">删除</button>
+          <button type="button" class="seek-btn">添加</button>
         </div>
       </div>
       <el-table
@@ -48,6 +48,7 @@
         :data="tableData"
         tooltip-effect="dark"
         style="width: 98%; margin:0 auto;"
+        @selection-change="handleSelectionChange"
       >
         <el-table-column type="selection" width="120"></el-table-column>
         <el-table-column type="index" :index="indexMethod" label="序号" width="120"></el-table-column>
@@ -112,9 +113,9 @@ export default {
       });
   },
   mounted() {
-    
   },
   methods:{
+
     handleSelectionChange(val) {
       this.selAll = val;
       console.log(this.selAll);
@@ -122,10 +123,13 @@ export default {
     handleSizeChange(val) {
       console.log(`每页 ${val} 条`);
     },
+
     handleCurrentChange(val) {
+      //显示当前页，当前条数
       console.log(`当前页: ${val}`);
       console.log(this.sizePage);
-      if(this.value==''&&this.userSearch=='') {
+      //均为空 文本框
+      if(this.usersName==''&&this.userSearch=='') {
         this.getAllUsers(val, this.sizePage);
       }else {
         this.searchPage(val, this.sizePage);
@@ -136,7 +140,7 @@ export default {
       this.axios({
         url:"/admin/findAdminByConditions",
         method:"post",
-        data: `size=1&sizePage=2&userName=${this.userSearch}&userState=${this.usersName}`,
+        data: `size=1&sizePage=2&adminName=${this.userSearch}&adminNickName=${this.usersName}`,
         headers:{
           "Content-Type":"application/x-www-form-urlencoded"
         },        
@@ -158,7 +162,7 @@ export default {
       this.axios({
           url: "/admin/findAdminByConditions",
           method: "post",
-          data: `size=${size}&sizePage=${sizePage}&userName=${this.userSearch}&userState=${this.usersName}`,
+          data: `size=${size}&sizePage=${sizePage}&adminName=${this.userSearch}&adminNickName=${this.usersName}`,
           header: {
             "Content-Type": "application/X-WWW-form-urlencoded"
           }
@@ -175,10 +179,11 @@ export default {
     },
     getAllUsers(size, sizePage) {
       this.axios
-        .get("/admin/findAdminByConditions=" + size + "&sizePage=" + sizePage)
+        .get("/admin/listAdmin?size=" + size + "&sizePage=" + sizePage)
         .then(res => {
           if (res.data.code == 200) {
             this.tableData = res.data.data.list;
+
           }
         })
         .catch(error => {
