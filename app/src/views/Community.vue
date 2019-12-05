@@ -162,6 +162,7 @@ export default {
     },
     articlePage(index){
      /*  this.$router. */
+     console.log(index);
     },
     goBeforeDay() {
       /* this.userId = sessionStorage.getItem("userId"); */
