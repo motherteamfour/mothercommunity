@@ -67,7 +67,7 @@
             </ul>
             <div class="right-bottom">
               <p class="time">{{item.commentTime}}</p>
-              <div class="reply-reply" @click="subRp(item.userId)">
+              <div class="reply-reply" @click="subRp(item.userId, item.commentId, item.user.userName)">
                 <i class="fa fa-comment-o"></i>
                 回复
               </div>
@@ -90,7 +90,7 @@
       </div>
     </div>
     <van-popup v-model="show" position="bottom" :style="{ height: '25%' }">
-      <textarea v-model="rpContent" class="frist-rp" ref="getFocus" placeholder="我也来说两句"></textarea>
+      <textarea v-model="rpContent" class="frist-rp" ref="getFocus" :placeholder="rpWho"></textarea>
       <div class="send-wrap">
         <button class="reply-btn" @click="reply">发送</button>
       </div>
@@ -109,7 +109,8 @@ export default {
       parentId: 0,
       rpContent: "",
       rpPostId: 0,
-      show: false
+      show: false,
+      rpWho: '我也来说两句'
     };
   },
   components: {
@@ -167,13 +168,15 @@ export default {
       this.parentId = 0;
       this.rpPostId = this.postId;
       this.show = !this.show;
+      this.rpWho = '我也来说两句';
       this.timer = setTimeout(() => {
         this.$refs.getFocus.focus();
       }, 100);
     },
-    subRp(i) {
-      this.parentId = i;
-      this.rpPostId = 0;
+    subRp(i, cId, userName) {
+      this.parentId = cId;
+      this.rpPostId = cId;
+      this.rpWho = "回复：" + userName;
       this.show = !this.show;
     },
     reply() {
@@ -194,6 +197,7 @@ export default {
         .then(res => {
           console.log(res.data);
           this.getFirstRp();
+          this.rpContent = '';
         });
     }
   }
@@ -360,8 +364,9 @@ header {
           font-size: 30px;
         }
         .sub-reply {
-          background: rgb(237, 236, 236);
+          background: rgb(242, 242, 242);
           font-size: 26px;
+          border-radius: 20px;
           li {
             padding: 10px;
             .subusername {
