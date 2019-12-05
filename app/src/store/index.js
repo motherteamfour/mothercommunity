@@ -11,7 +11,8 @@ export default new Vuex.Store({
     userPhone: "",
     searchKeyword: "",
     // 图片服务器地址
-    imgUrl: "http://172.16.6.38:8989/"
+    imgUrl: "http://172.16.6.38:8989/",
+    searchPost: ""
   },
   mutations: {
     setPhone(state, n) {
@@ -20,23 +21,14 @@ export default new Vuex.Store({
     setSearchKeyword(state, n) {
       state.searchKeyword = n
     },
+    searctPost(state, n) {
+      state.searchPost = n
+    }
   },
   actions: {
-    getLists() {
-      this.axios({
-        url: `/search/searchPost?userId=1001&searchMessage='帖子'`,
-        methods: "GET"
-      })
-      .then (res => {
-        console.log(res.data);
-        if(res.data.code == 200) {
-          this.$router.replace('/searchs/havingpost');
-          this.postnum = res.data.data;
-          console.log(this.postnum);
-        
-        }
-      })
-    }
+    /* getLists() {
+      
+    } */
     
   },
   getters: {

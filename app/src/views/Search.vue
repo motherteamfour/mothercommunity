@@ -20,16 +20,16 @@
 <script>
 /* import SearchPost from '' */
 import { Search } from "vant";
-/* import store from '../vuex/store.js'
-import { mapState } from "vuex" */
+import { mapMutations } from "vuex"
 
 export default {
-  
+  name: "Search",
   data() {
     return {
       val: "",
       result: null,
-      postnum: []
+      postnum: [],
+      userId: 1001
     };
   },
  /*  computed: {
@@ -49,15 +49,30 @@ export default {
         
       } */
     /*  }, */
+    ...mapMutations(["searctPost"]),
 
     goback() {
       this.$router.push("/");
     },
      search() {
-/*       this.result = this.val;
+      this.result = this.val;
       console.log(this.result);
-      var value = this.result */
-      this.$store.dispatch('getLists');
+      var value = this.result;
+      this.userId = sessionStorage.getItem("userId");
+      this.axios({
+        url: `/search/searchPost?userId=${this.userId}&searchMessage=${value}`,
+        methods: "GET"
+      })
+      .then (res => {
+        console.log(res.data);
+        if(res.data.code == 200) {
+          this.$router.push('/searchs/havingpost');
+          this.postnum = res.data.data;
+          console.log(this.postnum);
+        
+        }
+      })
+     /*  this.$store.dispatch('getLists'); */
      }
   }
 };

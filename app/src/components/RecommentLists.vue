@@ -34,7 +34,7 @@ export default {
   display: flex;
   flex-direction: column;
   border-radius: 30px;
-  background: pink;
+  background: #ffc0cb3f;
   overflow: hidden;
   margin: 20px auto;
   .zhujian {
@@ -53,10 +53,12 @@ export default {
         height: 120px;
 
         padding: 30px;
+        padding-left: 60px;
         box-sizing: border-box;
         p {
           font-size: 34px;
           font-weight: 500;
+          
         }
       }
       .content {
@@ -65,10 +67,12 @@ export default {
         /*   background: yellow; */
         padding: 10px;
         padding-top: 0;
+        
         box-sizing: border-box;
         p {
           font-size: 26px;
           color: gray;
+          
         }
       }
     }
