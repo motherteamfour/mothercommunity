@@ -8,7 +8,7 @@ export default new Vuex.Store({
     // 用户注册手机号码
     userPhone: "",
     // 图片服务器地址
-    imgUrl: "http://172.16.6.56:8081/"
+    imgUrl: "http://localhost:8080/file/"
   },
   mutations: {
     setPhone(state, n) {

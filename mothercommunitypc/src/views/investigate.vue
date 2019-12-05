@@ -16,7 +16,7 @@
         style="width: 98%; margin:0 auto;"
       >
         <el-table-column type="selection" width="60" align="center"></el-table-column>
-        <el-table-column prop label="ID" width="60" align="center"></el-table-column>
+        <el-table-column type="index" :index="indexMethod" label="ID" width="60" align="center"></el-table-column>
         <el-table-column prop="user.userName" label="用户名" width="120" align="center"></el-table-column>
         <el-table-column prop="postTitle" label="标题" width="120" align="center"></el-table-column>
         <el-table-column prop="user.userStartTime" label="发布时间" width="120" align="center"></el-table-column>
@@ -42,7 +42,10 @@ export default {
   name:"investigate",
   data() {
     return {
-      tableData:[]
+      tableData:[], 
+      userTotal: 0,
+      page:1,
+      sizePage: 6,
     }
   },
   created() {
@@ -113,7 +116,10 @@ export default {
       .catch(error=>{
         console.log(error)
       })  
-    }
+    },
+    indexMethod(index){
+      return (index+ 1) + ( this.page - 1 ) * this.sizePage
+    },
   }
 
 }
