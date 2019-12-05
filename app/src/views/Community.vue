@@ -73,7 +73,7 @@
     </div>
     <div class="recommend">热门推荐</div>
 
-    <RecommentLists v-for="(item, index) in referer.list" :key="index" :countComment="item"></RecommentLists>
+    <RecommentLists v-for="(item, index) in referer.list" :key="index" :countComment="item" @click="articlePage(index)"></RecommentLists>
   </div>
 </template>
 
@@ -106,26 +106,34 @@ export default {
   created() {
     this.userId = sessionStorage.getItem("userId");
     console.log(this.userId);
-    var time = new Date();
+    /* var time = new Date();
     var year = time.getFullYear();
     var month = time.getMonth() + 1;
     var day = time.getDay() + 1;
     var params = [];
-    params.push(year, month, day);
+    params.push(year, month, day); */
     /* console.log("sssssss", params); */
-    var date = params.join("-");
+    /* var date = params.join("-"); */
     /* var dates = this.dayday;
     console.log(dates); */
-    
+    this.valueDate = new Date();
+      this.dayday =
+        this.valueDate.getFullYear() +
+        "-" +
+        (this.valueDate.getMonth() + 1) +
+        "-" +
+        this.valueDate.getDate();
+        console.log("ss",this.dayday);
     this.axios
       .get(`/messagePush/findNowDay`, {
         params: {
           userId: this.userId,
-          date: date
+          date: this.dayday
         }
       })
       .then(res => {
         this.babylong = res.data.data;
+        console.log("首页",res.data);
       });
     this.axios
       .get(`/posterior/postmanagement/recommend`, {
@@ -152,6 +160,9 @@ export default {
     goTrigger() {
       this.$router.push("/trigger");
     },
+    articlePage(index){
+     /*  this.$router. */
+    },
     goBeforeDay() {
       /* this.userId = sessionStorage.getItem("userId"); */
      
@@ -173,6 +184,7 @@ export default {
         })
         .then(res => {
           this.babylong = res.data.data;
+              console.log("首页",res.data);
         });
       this.axios
         .get(`/posterior/postmanagement/recommend`, {
@@ -199,6 +211,7 @@ export default {
         (this.valueDate.getMonth() + 1) +
         "-" +
         this.valueDate.getDate();
+        console.log(this.dayday);
       this.axios
         .get(`/messagePush/findNowDay`, {
           params: {
