@@ -7,15 +7,19 @@
       <span>帖子详情</span>
     </header>
     <div class="article-content">
-      <div class="article-top">
+      <div class="article-top" v-if="article.user!=undefined">
         <div class="user-info">
-          <div class="avatar"></div>
-          <span v-if="article.user!=undefined">{{article.user.userName}}</span>
+          <div class="avatar" v-if="article.user != undefined">
+            <img :src=" imgIp + article.user.userImgUrl" alt />
+          </div>
+          <span>{{article.user.userName}}</span>
         </div>
-        <button class="follow" v-if="!article.isFollow" @click="follow(article.userId)">关注</button>
-        <div class="followed" v-else @click="cancleFollow(article.userId)">
-          <i class="fa fa-check"></i>
-          已关注
+        <div v-if="userId !== article.user.userId">
+          <button class="follow" v-if="!article.isFollow" @click="follow(article.userId)">关注</button>
+          <div class="followed" v-else @click="cancleFollow(article.userId)">
+            <i class="fa fa-check"></i>
+            已关注
+          </div>
         </div>
       </div>
       <div class="title">
@@ -25,12 +29,7 @@
         <p>{{article.postContent}}</p>
       </div>
       <div class="content-pic">
-        <img
-          v-for="(img, index) in article.postImgs"
-          :key="index"
-          :src="'http://172.16.6.45:8989/' + img.postUrl"
-          alt
-        />
+        <img v-for="(img, index) in article.postImgs" :key="index" :src="imgIp + img.postUrl" alt />
       </div>
       <div class="article-info"></div>
       <router-link :to="'/group/' + article.circleId" class="circle" href>
@@ -41,18 +40,24 @@
     <div class="reply-content">
       <div class="reply-top">
         <i class="fa fa-commenting-o" aria-hidden="true"></i>
-        全部评论
+        {{hasComm}}
       </div>
       <ul>
         <li v-for="(item, index) in firstComm" :key="index" class="reply-item">
           <div class="left-avatar">
-            <div class="reply-avatar"></div>
+            <div class="reply-avatar" v-if="item.user != undefined">
+              <img :src=" imgIp + item.user.userImgUrl" alt />
+            </div>
           </div>
-          <div class="reply-right">
+          <div class="reply-right" v-if="item.user != undefined">
             <div class="right-top">
               <span class="name">{{item.user.userName}}</span>
-              <div class="praise">
+              <div class="praise" @click="like(item.commentId)" v-if="!item.isLike">
                 <i class="fa fa-heart-o"></i>
+                {{item.countFabulous}}
+              </div>
+              <div class="praised" @click="unLike(item.commentId)" v-else>
+                <i class="fa fa-heart"></i>
                 {{item.countFabulous}}
               </div>
             </div>
@@ -67,7 +72,10 @@
             </ul>
             <div class="right-bottom">
               <p class="time">{{item.commentTime}}</p>
-              <div class="reply-reply" @click="subRp(item.userId, item.commentId, item.user.userName)">
+              <div
+                class="reply-reply"
+                @click="subRp(item.userId, item.commentId, item.user.userName)"
+              >
                 <i class="fa fa-comment-o"></i>
                 回复
               </div>
@@ -79,13 +87,21 @@
     <div class="reply-bottom">
       <div @click="showRp" class="rp-input">回复</div>
       <div class="options">
-        <div>
+        <div @click="postLike(postId)" v-if="!article.isLike">
           <i class="fa fa-heart-o"></i>
-          <span>赞(10)</span>
+          <span>赞({{article.countFabulous}})</span>
         </div>
-        <div>
+        <div class="praised" @click="postUnLike(postId)" v-else>
+          <i class="fa fa-heart"></i>
+          已赞{{article.countFabulous}}
+        </div>
+        <div class="collect" @click="collect" v-if="!article.isCollect">
           <i class="fa fa-star-o" aria-hidden="true" @click="collect(list.id)"></i>
-          <span @click="collect(list.id)">收藏(10)</span>
+          <span @click="collect(list.id)">收藏({{article.countCollection}})</span>
+        </div>
+        <div class="collected" @click="unCollect" v-else>
+          <i class="fa fa-star" aria-hidden="true" @click="collect(list.id)"></i>
+          <span @click="collect(list.id)">已收藏({{article.countCollection}})</span>
         </div>
       </div>
     </div>
@@ -110,16 +126,21 @@ export default {
       rpContent: "",
       rpPostId: 0,
       show: false,
-      rpWho: '我也来说两句'
+      rpWho: "我也来说两句",
+      hasComm: "暂无评论",
+      userId: 1001,
+      imgIp: ""
     };
   },
   components: {
     [Popup.name]: Popup
   },
   created() {
+    this.imgIp = this.$store.state.imgUrl; //获取图片IP
+    this.userId = sessionStorage.getItem("userId"); //获取userid
     this.postId = this.$route.params.id; //获取帖子id
     this.axios
-      .get(`/post/getPost?postId=${this.postId}&userId=1001`) //请求文章详情数据
+      .get(`/post/getPost?postId=${this.postId}&userId=${this.userId}`) //请求文章详情数据
       .then(res => {
         if (res.data.code == 200) {
           this.article = res.data.data;
@@ -134,18 +155,23 @@ export default {
     },
     getFirstRp() {
       this.axios
-        .get(`/comm/list?postId=${this.postId}&userId=1001`) //请求文章一级回复
+        .get(`/comm/list?postId=${this.postId}&userId=${this.userId}`) //请求文章一级回复
         .then(res => {
           if (res.data.code == 200) {
             console.log(res.data);
             this.firstComm = res.data.data;
+            if (this.firstComm.length == 0) {
+              this.hasComm = "暂无评论";
+            } else {
+              this.hasComm = "全部评论";
+            }
           }
         });
     },
     follow(i) {
       let param = new URLSearchParams();
       param.append("followUserId", i);
-      param.append("userId", "1001");
+      param.append("userId", this.userId);
       this.axios.post("/user/fol", param).then(res => {
         console.log(res.data);
         if (res.data.code == 200) {
@@ -155,7 +181,7 @@ export default {
     },
     cancleFollow(i) {
       this.axios
-        .delete(`/user/notFol?followUserId=${i}&userId=1001`)
+        .delete(`/user/notFol?followUserId=${i}&userId=${this.userId}`)
         .then(res => {
           console.log(res.data);
           if (res.data.code == 200) {
@@ -168,7 +194,7 @@ export default {
       this.parentId = 0;
       this.rpPostId = this.postId;
       this.show = !this.show;
-      this.rpWho = '我也来说两句';
+      this.rpWho = "我也来说两句";
       this.timer = setTimeout(() => {
         this.$refs.getFocus.focus();
       }, 100);
@@ -182,22 +208,89 @@ export default {
     reply() {
       this.show = !this.show;
       console.log({
-          commentContent: this.rpContent,
-          userId: 1001,
-          parentId: this.parentId,
-          postId: this.rpPostId
-        })
+        commentContent: this.rpContent,
+        userId: this.userId,
+        parentId: this.parentId,
+        postId: this.rpPostId
+      });
       this.axios
         .post("/comm/add", {
           commentContent: this.rpContent,
-          userId: 1001,
+          userId: this.userId,
           parentId: this.parentId,
           postId: this.rpPostId
         })
         .then(res => {
           console.log(res.data);
           this.getFirstRp();
-          this.rpContent = '';
+          this.rpContent = "";
+        });
+    },
+    like(commentId) {
+      console.log({
+        commentId: commentId,
+        userId: this.userId
+      });
+      let param3 = new URLSearchParams();
+      param3.append("commentId", commentId);
+      param3.append("userId", this.userId);
+      this.axios.post("/comm/like", param3).then(res => {
+        console.log(res.data);
+        this.getFirstRp();
+      });
+    },
+    unLike(commentId) {
+      this.axios
+        .delete(`/comm/notLike?commentId=${commentId}&userId=${this.userId}`)
+        .then(res => {
+          if (res.data.code == 200) {
+            console.log(res.data);
+            /* this.getFirstRp(); */
+          }
+        });
+    },
+    postLike() {
+      let param = new URLSearchParams();
+      param.append("postId", this.postId);
+      param.append("userId", this.userId);
+      this.axios.post("/post/like", param).then(res => {
+        this.article.isLike = !this.article.isLike;
+        this.article.countFabulous += 1;
+        console.log(res.data);
+      });
+    },
+    postUnLike() {
+      this.axios
+        .delete(`/post/notLike?postId=${this.postId}&userId=${this.userId}`)
+        .then(res => {
+          if (res.data.code == 200) {
+            this.article.isLike = !this.article.isLike;
+            this.article.countFabulous -= 1;
+          }
+        });
+    },
+    collect() {
+      let param2 = new URLSearchParams();
+      param2.append("postId", this.postId);
+      param2.append("userId", this.userId);
+      this.axios.post("/post/col", param2).then(res => {
+        console.log(res.data);
+        if (res.data.code == 200) {
+          this.article.isCollect = !this.article.isCollect;
+          this.article.countCollection += 1;
+        }
+      });
+    },
+    unCollect() {
+      this.axios
+        .delete(`/post/notCol?postId=${this.postId}&userId=${this.userId}`)
+        .then(res => {
+          console.log(res.data);
+          if (res.data.code == 200) {
+            console.log(res.data);
+            this.article.isCollect = !this.article.isCollect;
+            this.article.countCollection -= 1;
+          }
         });
     }
   }
@@ -262,8 +355,14 @@ header {
         width: 90px;
         height: 90px;
         border-radius: 50%;
-        background: red;
         margin-right: 10px;
+        overflow: hidden;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        img {
+          width: 120%;
+        }
       }
     }
     .follow {
@@ -336,11 +435,15 @@ header {
       .left-avatar {
         width: 10%;
         margin-right: 20px;
+
         .reply-avatar {
-          width: 80px;
-          height: 80px;
+          width: 70px;
+          height: 70px;
           border-radius: 50%;
-          background: lightcyan;
+          overflow: hidden;
+          img {
+            width: 100%;
+          }
         }
       }
       .reply-right {
@@ -442,5 +545,12 @@ header {
     background: rgb(255, 220, 219);
     color: rgb(235, 75, 71);
   }
+}
+
+.collected {
+  color: red;
+}
+.praised {
+  color: red;
 }
 </style>

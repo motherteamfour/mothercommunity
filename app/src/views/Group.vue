@@ -7,8 +7,9 @@
         </div>
       </nav>
       <div class="group-info">
-        <p class="group-name">怀孕圈</p>
-        <p class="group-num">帖子数 2658</p>
+        <img :src="'http://172.16.6.45:8989' + circleUrl" alt="">
+        <p class="group-name">{{circleName}}</p>
+        <p class="group-num">帖子数 {{hotList.length}}</p>
       </div>
     </header>
     <section class="hot">
@@ -17,6 +18,7 @@
         v-for="(item, index) in hotList"
         :key="index"
         :list="item"
+        :imgIp="imgIp"
         :fLoading="fLoading"
         :lLoading="lLoading"
         :cLoading="cLoading"
@@ -41,7 +43,10 @@ export default {
       fLoading: -1,
       lLoading: -1,
       cLoading: -1,
-      hotList: []
+      hotList: [],
+      circleName: '',
+      circleUrl: '',
+      imgIp: ''
     };
   },
   components: {
@@ -57,7 +62,7 @@ export default {
         console.log(res.data);
         if (res.data.code == 200) {
           this.fLoading = -1;
-          this.hotList[i].isFollow = !this.hotList[i].isFollow;
+           this.getList();
         }
       });
     },
@@ -70,7 +75,7 @@ export default {
           if (res.data.code == 200) {
             console.log(res.data);
             this.fLoading = -1;
-            this.hotList[i].isFollow = !this.hotList[i].isFollow;
+             this.getList();
           }
         });
     },
@@ -132,25 +137,32 @@ export default {
         });
       console.log(postId);
     },
+    getList() {
+      this.axios
+        .get(`/cir/post?circleId=${this.groupId}&userId=1001`)
+        .then(res => {
+          console.log(res.data);
+          if (res.data.data !== null) {
+            this.circleName = res.data.data.circleName;
+            this.circleUrl = res.data.data.circleUrl;
+            this.hotList = res.data.data.posts;
+            this.hotList.forEach((item, index) => {
+              item.idn = index;
+            });
+          }
+          console.log(this.hotList);
+        });
+    },
     back() {
       this.$router.go(-1); //返回上一层
     }
   },
   created() {
+    this.imgIp = this.$store.state.imgUrl;
+    console.log(this.imgIp);
     this.groupId = this.$route.params.id;
     console.log(this.groupId);
-    this.axios
-      .get(`/post/cir?circleId=${this.groupId}&userId=1001`)
-      .then(res => {
-        console.log(res.data);
-        if (res.data.data !== null) {
-          this.hotList = res.data.data;
-          this.hotList.forEach((item, index) => {
-            item.idn = index;
-          });
-        }
-        console.log(this.hotList);
-      });
+    this.getList();
   }
 };
 </script>
@@ -180,12 +192,12 @@ header {
   .group-info {
     text-align: center;
     color: #000;
+    margin-bottom: 23px;
     .group-name {
       font-size: 36px;
     }
     .group-num {
       font-size: 30px;
-      margin-top: 20px;
     }
   }
 }

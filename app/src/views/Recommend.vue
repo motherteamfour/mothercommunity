@@ -21,7 +21,9 @@
         </li>
         <li>
           <router-link to="/circlegourp">
-            <div class="circle-pic"></div>
+            <div class="circle-pic">
+              <img src="@/assets/img/circle/more.png" alt />
+            </div>
             <p class="circle-name">更多圈子</p>
           </router-link>
         </li>
@@ -33,9 +35,11 @@
         v-for="(item, index) in hotList"
         :key="index"
         :list="item"
+        :imgIp="imgIp"
         :fLoading="fLoading"
         :lLoading="lLoading"
         :cLoading="cLoading"
+        :userId="userId"
         @followFn="follow"
         @cancleFollowFn="cancleFollow"
         @praiseFn="praise"
@@ -64,7 +68,9 @@ export default {
       hotList: [],
       fLoading: -1,
       lLoading: -1,
-      cLoading: -1
+      cLoading: -1,
+      imgIp: "",
+      userId: 1
     };
   },
   components: {
@@ -75,7 +81,7 @@ export default {
       this.fLoading = i;
       let param = new URLSearchParams();
       param.append("followUserId", userId);
-      param.append("userId", "1001");
+      param.append("userId", this.userId);
       this.axios.post("/user/fol", param).then(res => {
         console.log(res.data);
         if (res.data.code == 200) {
@@ -87,9 +93,8 @@ export default {
     cancleFollow(i, userId) {
       this.fLoading = i;
       this.axios
-        .delete(`/user/notFol?followUserId=${userId}&userId=1001`)
+        .delete(`/user/notFol?followUserId=${userId}&userId=${this.userId}`)
         .then(res => {
-          console.log(res.data);
           if (res.data.code == 200) {
             console.log(res.data);
             this.fLoading = -1;
@@ -101,7 +106,7 @@ export default {
       this.lLoading = i;
       let param2 = new URLSearchParams();
       param2.append("postId", postId);
-      param2.append("userId", "1001");
+      param2.append("userId", this.userId);
       this.axios.post("/post/like", param2).then(res => {
         console.log(res.data);
         if (res.data.code == 200) {
@@ -114,7 +119,7 @@ export default {
     canclePraise(i, postId) {
       this.lLoading = i;
       this.axios
-        .delete(`/post/notLike?postId=${postId}&userId=1001`)
+        .delete(`/post/notLike?postId=${postId}&userId=${this.userId}`)
         .then(res => {
           console.log(res.data);
           if (res.data.code == 200) {
@@ -130,7 +135,7 @@ export default {
       this.cLoading = i;
       let param3 = new URLSearchParams();
       param3.append("postId", postId);
-      param3.append("userId", "1001");
+      param3.append("userId", this.userId);
       this.axios.post("/post/col", param3).then(res => {
         console.log(res.data);
         if (res.data.code == 200) {
@@ -143,7 +148,7 @@ export default {
     },
     cancleCollect(i, postId) {
       this.axios
-        .delete(`/post/notCol?postId=${postId}&userId=1001`)
+        .delete(`/post/notCol?postId=${postId}&userId=${this.userId}`)
         .then(res => {
           console.log(res.data);
           if (res.data.code == 200) {
@@ -153,10 +158,9 @@ export default {
             this.hotList[i].countCollection -= 1;
           }
         });
-      console.log(postId);
     },
     getHotList() {
-      this.axios.get("/post/list?userId=1001").then(res => {
+      this.axios.get(`/post/list?userId=${this.userId}`).then(res => {
         //请求热门文章
         this.hotList = res.data.data;
         console.log(res.data);
@@ -187,6 +191,8 @@ export default {
     });
   },
   created() {
+    this.userId = sessionStorage.getItem("userId"); //获取userid
+    this.imgIp = this.$store.state.imgUrl;
     this.axios.get("/circle/list").then(res => {
       //请求推荐圈子数据
       this.circle = res.data.data.splice(0, 7);
@@ -200,14 +206,18 @@ export default {
 .wrap {
   padding-bottom: 80px;
 }
-.swiper-slide {
-  height: auto;
+.swiper-container {
+  width: calc(100% - 40px);
+  margin: 0 auto;
+  .swiper-slide {
+  width: 100%;
   margin-top: 10px;
   img {
     width: 100%;
-    height: 100%;
   }
 }
+}
+
 .circle-recommend {
   border-radius: 10px;
   box-shadow: 0 0 15px #ddd;
@@ -249,6 +259,7 @@ export default {
     }
   }
 }
+
 .hot {
   border-radius: 10px;
   box-shadow: 0 0 15px #ddd;

@@ -4,15 +4,17 @@
       <router-link :to="'/otherUsers/' + list.user.userId">
         <div class="user-left">
           <div class="avater">
-            <img :src="'http://172.16.6.38:8989/' + list.user.userImgUrl" alt />
+            <img :src=" imgIp + list.user.userImgUrl" alt />
           </div>
           <p class="username">{{list.user.userName}}</p>
         </div>
       </router-link>
-      <div class="follow" v-if="!list.isFollow" @click="follow(list.idn, list.userId)">+关注</div>
-      <div class="followed" v-else @click="cancleFollow(list.idn, list.userId)">
-        <i class="fa fa-check"></i>
-        已关注
+      <div v-if="list.userId!==userId && isFollowPage!=1">
+        <div class="follow" v-if="!list.isFollow" @click="follow(list.idn, list.userId)">+关注</div>
+        <div class="followed" v-else @click="cancleFollow(list.idn, list.userId)">
+          <i class="fa fa-check"></i>
+          已关注
+        </div>
       </div>
     </div>
     <router-link :to="'/article/'+ list.postId ">
@@ -20,7 +22,7 @@
         <p class="title">{{list.postTitle}}</p>
         <p class="content">{{list.postContent}}</p>
         <div class="pic" v-if="list.postImgs.length !== 0">
-          <img :src="'http://172.16.6.45:8989/' + list.postImgs[0].postUrl" />
+          <img :src="imgIp + list.postImgs[0].postUrl" />
         </div>
       </div>
     </router-link>
@@ -36,10 +38,12 @@
         <i @click="canclePraise(list.idn, list.postId)" class="fa fa-heart" aria-hidden="true"></i>
         <span @click="canclePraise(list.idn, list.postId)">已赞({{list.countFabulous}})</span>
       </div>
-      <div>
-        <i class="fa fa-comment-o" aria-hidden="true"></i>
-        <span>评论{{list.countComment}}</span>
-      </div>
+      <router-link :to="'/article/'+ list.postId ">
+        <div>
+          <i class="fa fa-comment-o" aria-hidden="true"></i>
+          <span>评论{{list.countComment}}</span>
+        </div>
+      </router-link>
       <div v-if="!list.isCollect" class="collect-wrap">
         <i @click="collect(list.idn, list.postId)" class="fa fa-star-o" aria-hidden="true"></i>
         <span @click="collect(list.idn, list.postId)">收藏({{list.countCollection}})</span>
@@ -59,7 +63,16 @@ export default {
   data() {
     return {};
   },
-  props: ["list", "isAll", "fLoading", "lLoading", "cLoading"],
+  props: [
+    "list",
+    "isAll",
+    "fLoading",
+    "lLoading",
+    "cLoading",
+    "imgIp",
+    "userId",
+    "isFollowPage"
+  ],
   components: {
     [Loading.name]: Loading
   },
@@ -131,6 +144,7 @@ export default {
         overflow: hidden;
         text-align: center;
         line-height: 70px;
+        border: 1px solid #eee;
         img {
           width: 120%;
         }
@@ -175,8 +189,9 @@ export default {
     margin-top: 20px;
     .pic {
       width: 100%;
+      margin-top: 10px;
       img {
-        max-height: 300px;
+        max-height: 250px;
         border-radius: 20px;
       }
     }
@@ -185,8 +200,12 @@ export default {
       font-weight: 600;
     }
     .content {
+      display: -webkit-box;
+      -webkit-box-orient: vertical;
+      -webkit-line-clamp: 2;
+      overflow: hidden;
       font-size: 28px;
-      margin: 10px 0;
+      margin-top: 20px;
     }
   }
   .options {

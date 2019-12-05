@@ -84,7 +84,8 @@ export default {
       category: [],
       subClass: [],
       isLoading: -1,
-      followedCircle: []
+      followedCircle: [],
+      imgIp: ''
     };
   },
   created() {

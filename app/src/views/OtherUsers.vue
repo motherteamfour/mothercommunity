@@ -10,7 +10,7 @@
     </van-sticky>
     <div class="user-wrap">
       <div class="avatar">
-        <img :src="'http://172.16.6.38:8989/' + userInfo.userImgUrl" alt="">
+        <img :src="'http://172.16.6.38:8989/' + userInfo.userImgUrl" alt />
       </div>
       <div class="user-info">
         <ul class="count">
@@ -63,29 +63,23 @@ export default {
     console.log(this.userId);
     let param = new URLSearchParams();
     param.append("userid", this.userId);
-    this.axios
-      .post("/zp/user/findMyself",param)
-      .then(res => {
-        console.log(res.data);
-        this.userInfo = res.data.data;
-      });
-    this.axios
-      .post("/zp/fant/countattention",param)
-      .then(res => {
-        console.log(res.data);
-        this.followed = res.data.data;
-      });
-    this.axios
-      .post("/zp/fant/countFants",param)
-      .then(res => {
-        console.log(res.data);
-        this.fans = res.data.data;
-      });
+    this.axios.post("/zp/user/findMyself", param).then(res => {
+      console.log(res.data);
+      this.userInfo = res.data.data;
+    });
+    this.axios.post("/zp/fant/countattention", param).then(res => {
+      console.log(res.data);
+      this.followed = res.data.data;
+    });
+    this.axios.post("/zp/fant/countFants", param).then(res => {
+      console.log(res.data);
+      this.fans = res.data.data;
+    });
     this.axios
       .get(`/user/findPostAllByUserId?userid=${this.userId}`)
       .then(res => {
         console.log(res.data);
-        this.post = res.data.data
+        this.post = res.data.data;
       });
   },
   methods: {
@@ -194,7 +188,11 @@ header {
     }
     .post-content {
       font-size: 28px;
-      padding: 20px 0;
+      margin: 20px 0;
+      display: -webkit-box;
+      -webkit-box-orient: vertical;
+      -webkit-line-clamp: 1;
+      overflow: hidden;
     }
     .time {
       font-size: 26px;
