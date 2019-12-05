@@ -62,8 +62,10 @@
 </template>
 
 <script>
+
 import { Uploader } from "vant";
 export default {
+  inject: ["reload"],
   data() {
     return {
       userInfo: {}
@@ -104,6 +106,7 @@ export default {
       this.axios.post("/zp/user/updateuserhesd", param).then(res => {
         console.log(res.data);
       });
+      this.reload();
     }
   }
 };

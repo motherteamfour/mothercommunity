@@ -36,7 +36,6 @@ export default {
       this.$router.push("/resource");
     },
     alterbirth() {
-      console.log("xiugai")
       
     }
   }

@@ -49,7 +49,7 @@ export default {
 .fans{
   width: 100%;
   height: 400px;
-  background: ;
+ /*  background: ; */
 }
 .top {
   width: 750px;

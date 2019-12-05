@@ -2,19 +2,42 @@
   <div class="search">
     <div class="searchbox">
       <HavingPostList v-for="(item, index) in postnum" :key="index"
-      :title="item.postTitle"
-      :content="item.postContent"
-      :username="item.user.userName"></HavingPostList>
-    </div>
+     
+   
+      :user="item"></HavingPostList><!--  :title="item.postTitle"
+      :content="item.postContent" -->
+    </div>  <!--  :username="item.user.userName" -->
   </div>
 </template>
 
 <script>
 import HavingPostList from '../components/HavingPostList';
 export default {
-  props:['title','content','username'],
+  /* props:['title','content','username'], */
+  data () {
+    return {
+      keyword: '',
+      postnum: [],
+      userId: 1001
+    }
+  },
   components: {
     HavingPostList
+  },
+  created () {
+    this.userId = sessionStorage.getItem("userId");
+    this.keyword = this.$store.state.searchPost;
+    console.log("ss",this.keyword);
+    this.axios({
+        url: `/search/searchPost?userId=${this.userId}&searchMessage=${this.keyword}`,
+        methods: "GET"
+      }).then(res => {
+        console.log("123",res.data.data);
+        this.postnum = res.data.data;
+          /* this.postnum = res.data.data;
+          console.log(this.postnum); */
+        
+      });
   },
   methods: {
     /* getpostnum({commit},postnum){
@@ -28,13 +51,13 @@ export default {
 @import "../assets/style/base.less";
 .search {
   width: 750px;
- 
-  background: greenyellow;
+  /* height: 1000px; */
+ /*  background: greenyellow; */
 }
 .searchbox {
   width: 710px;
   
-  background: yellow;
+  /* background: yellow; */
   margin: 0 auto;
 
   font-size: 36px;

@@ -20,7 +20,7 @@
 <script>
 /* import SearchPost from '' */
 import { Search } from "vant";
-import { mapMutations } from "vuex"
+import { mapMutations } from "vuex";
 
 export default {
   name: "Search",
@@ -28,17 +28,18 @@ export default {
     return {
       val: "",
       result: null,
-      postnum: [],
-      userId: 1001
+      /*  postnum: [], */
+      userId: 1001,
+      keyword: ""
     };
   },
- /*  computed: {
+  /*  computed: {
     ...mapState({
       postnum: state => state.postnum
     })
   }, */
   components: {
-    [Search.name]: Search,
+    [Search.name]: Search
   },
   methods: {
     /* select() { */
@@ -54,26 +55,26 @@ export default {
     goback() {
       this.$router.push("/");
     },
-     search() {
+    search() {
       this.result = this.val;
       console.log(this.result);
-      var value = this.result;
-      this.userId = sessionStorage.getItem("userId");
+      this.keyword = this.result;
+      /* this.userId = sessionStorage.getItem("userId"); */
+      this.searctPost(this.keyword);
+
       this.axios({
-        url: `/search/searchPost?userId=${this.userId}&searchMessage=${value}`,
+        url: `/search/searchPost?userId=${this.userId}&searchMessage=${this.keyword}`,
         methods: "GET"
-      })
-      .then (res => {
+      }).then(res => {
         console.log(res.data);
-        if(res.data.code == 200) {
-          this.$router.push('/searchs/havingpost');
-          this.postnum = res.data.data;
-          console.log(this.postnum);
-        
+        if (res.data.code == 200) {
+          this.$router.push("/searchs/havingpost");
+          /* this.postnum = res.data.data;
+          console.log(this.postnum); */
         }
-      })
-     /*  this.$store.dispatch('getLists'); */
-     }
+      });
+      /*  this.$store.dispatch('getLists'); */
+    }
   }
 };
 </script>

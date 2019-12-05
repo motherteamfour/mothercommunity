@@ -62,7 +62,7 @@ export default {
 .resource {
   width: 750px;
   height: 100vh;
-  background: rgb(230, 222, 222);
+  background: rgb(248, 248, 248);
 }
 .top {
   width: 750px;
@@ -94,7 +94,7 @@ export default {
   background: white;
   margin: 40px auto;
   border-radius: 20px;
-
+  box-shadow: 0 0 10px pink;
   .names {
     width: 100%;
     height: 100px;
