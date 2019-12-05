@@ -4,12 +4,12 @@
       <li>
         <div class="user">
           
-       <!--    <img :src="'http://172.16.6.38:8989/'+colllist.user.userImgUrl"  class="portrait" alt="">
- -->
+          <img :src="'http://172.16.6.38:8989/'+colllist.user.userImgUrl"  class="portrait" alt="">
+
          
           <div>
             <p class="username">{{colllist.user.userName}}</p>
-            <!-- <p class="state">孕3天</p> -->
+            <p class="state">孕3天</p>
           </div>
         </div>
         <div class="content">
@@ -46,7 +46,7 @@ export default {
     border-radius: 20px;
     background: white;
     margin: 20px auto 0;
-
+    box-shadow: 0 0 8px rgb(236, 173, 173);
     li {
       .user {
         height: 100px;

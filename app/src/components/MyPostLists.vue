@@ -1,5 +1,5 @@
 <template>
-  <div class="newposts">
+  <div class="newpostss">
     <div class="newposts">
       <div class="user">
         <div class="user-por">
@@ -40,6 +40,9 @@ export default {
 
 <style lang="less" scoped>
 .newposts {
+    box-shadow: 0 0 8px rgb(236, 173, 173);
+  padding: 10px;
+  box-sizing: border-box;
   width: 710px;
   margin: 40px auto;
   margin-bottom: 20px;
@@ -50,6 +53,7 @@ export default {
   border-radius: 30px;
   /* padding: 20px 0; */
   .user {
+    
     width: 180px;
     height: 100%;
     /* background: yellow; */

@@ -9,7 +9,7 @@
     </div>
 
     <ul>
-      <li @click="goInfoComment()">
+      <!-- <li @click="goInfoComment()">
         <div class="photo blue">
           <i class="fa fa-comments" aria-hidden="true"></i>
         </div>
@@ -32,7 +32,7 @@
           </div>
           <div class="gray">帮小友思考思考时时刻刻是给你点了一个赞</div>
         </div>
-      </li>
+      </li> -->
       <li @click="goInform()" >
         <div class="photo pink">
           <i class="fa fa-volume-up" aria-hidden="true"></i>
@@ -73,12 +73,12 @@ export default {
     goback() {
       this.$router.push("/");
     },
-    goInfoComment() {
+    /* goInfoComment() {
       this.$router.push("/infocomment");
     },
     goInfoLike() {
       this.$router.push("/infolike");
-    },
+    }, */
     goInform() {
       this.$router.push("/inform");
     }

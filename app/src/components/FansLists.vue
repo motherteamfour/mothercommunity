@@ -25,6 +25,7 @@ export default {
   display: flex;
   align-items: center;
   border-radius: 20px;
+   box-shadow: 0 0 6px rgb(245, 179, 190);
   .por {
     width: 80px;
     height: 80px;

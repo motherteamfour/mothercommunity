@@ -383,7 +383,7 @@ export default {
       p {
         color: rgb(83, 82, 82);
         font-size: 26px;
-        line-height: 20px;
+        line-height: 30px;
         padding: 10px;
         letter-spacing: 3px;
         span {

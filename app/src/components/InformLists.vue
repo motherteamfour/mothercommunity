@@ -29,6 +29,7 @@ export default {
   /* background: gainsboro; */
   display: flex;
   justify-content: flex-start;
+  /* box-shadow: 0 0 8px rgb(236, 173, 173); */
   .photo {
     width: 80px;
     height: 80px;
@@ -40,12 +41,14 @@ export default {
     margin: 10px 10px auto;
     i {
       color: white;
+      
     }
   }
   .right {
     background: white;
     margin-top: 18px;
-    box-shadow: 0 0 2px red;
+   /*  box-shadow: 0 0 2px red; */
+    box-shadow: 0 0 8px rgb(236, 173, 173);
      border-radius: 30px;
      padding-bottom: 10px;
     .content {

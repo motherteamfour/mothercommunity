@@ -39,7 +39,7 @@ export default {
 <style lang="less" scoped>
  ul {
     padding-bottom: 20px;
-    
+    box-shadow: 0 0 8px rgb(236, 173, 173);
     width: 710px;
     border-radius: 20px;
     background: white;

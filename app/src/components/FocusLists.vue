@@ -22,9 +22,10 @@ export default {
 .fanslist {
   width: 710px;
   height: 100px;
-  background: rgb(248, 248, 248);
+  background: rgb(248, 248, 248);/* rgb(248, 248, 248); */
   margin: 10px auto;
   display: flex;
+  box-shadow: 0 0 6px rgb(245, 179, 190);
   align-items: center;
   border-radius: 20px;
   .por {
@@ -36,7 +37,7 @@ export default {
     margin-right: 20px;
   }
   .username {
-    font-size: 50px;
+    font-size: 40px;
   }
 }
 </style>

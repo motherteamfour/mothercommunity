@@ -58,7 +58,7 @@
       </li>
     </ul>
     <div class="btnbox">
-      <button type="button" class="btn">退出登录</button>
+      <button type="button" class="btn" @click="quitBtn">退出登录</button>
     </div>
   </div>
 </template>
@@ -134,6 +134,9 @@ export default {
     },
     ResourcePage() {
       this.axios({});
+    },
+    quitBtn() {
+      this.$router.push("/login");
     }
   }
 };

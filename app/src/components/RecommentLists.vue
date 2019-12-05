@@ -34,7 +34,8 @@ export default {
   display: flex;
   flex-direction: column;
   border-radius: 30px;
-  background: #ffc0cb3f;
+  background: white;
+  box-shadow: 0 0 6px rgb(233, 176, 176);
   overflow: hidden;
   margin: 20px auto;
   .zhujian {

@@ -46,6 +46,11 @@ export default {
 
 <style lang="less" scoped>
 @import "../assets/style/base.less";
+.fans{
+  width: 100%;
+  height: 400px;
+  background: ;
+}
 .top {
   width: 750px;
   height: 80px;
