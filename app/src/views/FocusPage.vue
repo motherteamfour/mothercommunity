@@ -48,7 +48,6 @@ export default {
 @import "../assets/style/base.less";
 .fans{
   width: 100%;
-  height: 400px;
  /*  background: ; */
 }
 .top {

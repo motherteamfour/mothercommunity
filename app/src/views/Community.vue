@@ -158,7 +158,7 @@ export default {
       this.$router.push("/infomation");
     },
     goTrigger() {
-      this.$router.push("/trigger");
+      this.$router.push("/selectState");
     },
     articlePage(index){
      /*  this.$router. */

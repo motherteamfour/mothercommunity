@@ -47,6 +47,6 @@ export default {
 <style lang="less" scoped>
 .un-solved {
   background-color: rgb(248, 248, 248);
-  padding: 30px;
+  padding:30px 30px 80px;
 }
 </style>

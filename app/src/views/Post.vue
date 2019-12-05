@@ -71,6 +71,7 @@ import { Uploader } from "vant";
 import { ImagePreview } from "vant";
 import { ActionSheet } from "vant";
 
+
 export default {
   name: "Post",
   data() {
@@ -82,13 +83,17 @@ export default {
       groupName: "请选择圈子",
       groupid: -1,
       title: "",
-      content: ""
+      content: "",
+      userId: 0
     };
   },
   components: {
     [ActionSheet.name]: ActionSheet,
     [ImagePreview.name]: ImagePreview,
     [Uploader.name]: Uploader
+  },
+  created() {
+    this.userId = sessionStorage.getItem("userId");
   },
   methods: {
     back() {
@@ -101,7 +106,7 @@ export default {
     },
     getCircle() {
       this.circleShow = !this.circleShow;
-      this.axios.get("/userCircle/list?userId=1001").then(res => {
+      this.axios.get(`/userCircle/list?userId=${this.userId}`).then(res => {
         if (res.data.code == 200) {
           this.followedCircle = res.data.data;
         }
@@ -126,12 +131,14 @@ export default {
               postContent: this.content,
               postImgs: res.data.data,
               postTitle: this.title,
-              userId: 1004
+              userId: this.userId
             })
             .then(res => {
               console.log(res.data);
               this.$router.replace('/article/' + res.data.data);
             });
+        } else {
+           this.$router.replace('/post/fromhome');
         }
       });
     }

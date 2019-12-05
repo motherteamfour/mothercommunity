@@ -13,6 +13,7 @@
     :name="item.userName"
     :title="item.postTitle"
     :time="item.postTime"
+    :postId="item.postId"
     :countco="item.isRecommend"
     :imgs="item.user.userImgUrl"></NewPosts>
 

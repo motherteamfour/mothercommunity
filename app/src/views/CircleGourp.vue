@@ -84,7 +84,8 @@ export default {
       category: [],
       subClass: [],
       isLoading: -1,
-      followedCircle: []
+      followedCircle: [],
+      imgIp: ''
     };
   },
   created() {
@@ -264,9 +265,9 @@ header {
         border-radius: 30px;
         outline: none;
         font-size: 24px;
-        border: 3px solid #f8d742;
-        color: #f8d742;
-        box-shadow: 0 0 15px #ffe469;
+        border: 3px solid @themeColor;
+        color: @themeColor;
+        box-shadow: 0 0 15px @themeColor;
         background: rgba(248, 248, 248, 0);
       }
       .circle-followed {
@@ -276,10 +277,10 @@ header {
         border-radius: 30px;
         outline: none;
         font-size: 24px;
-        border: 3px solid #f8d742;
+        border: 3px solid @themeColor;
         color: #fff;
-        box-shadow: 0 0 15px #ffe469;
-        background: #f8d742;
+        box-shadow: 0 0 15px @themeColor;
+        background: @themeColor;
       }
     }
   }
@@ -328,13 +329,13 @@ header {
 .on {
   background: rgb(248, 248, 248);
   font-weight: 600;
-  color: #fddb43 !important;
-  border-left: 6px solid #ffe469;
+  color: @themeColor !important;
+  border-left: 6px solid @themeColor;
 }
 
 .isall {
-  color: #fddb43;
-  border-bottom: 6px solid #ffe469;
+  color: @themeColor;
+  border-bottom: 6px solid @themeColor;
 }
 .all-wrap {
   display: flex;

@@ -32,6 +32,14 @@ export default {
     };
   },
   components: {},
+  created() {
+    console.log();
+    if(this.$route.name == 'Followed') {
+         this.lineLeft = "100%";
+    } else {
+          this.lineLeft = "0px";
+    }
+  },
   methods: {
     select(e) {
       //导航选择
