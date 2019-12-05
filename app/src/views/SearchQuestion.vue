@@ -69,7 +69,7 @@ export default {
       this.setSearchKeyword(this.keyword); //this.keyword存入store
       this.$router.replace("/suresearch");
     },
-    // 确认搜索
+    // 输入关键字搜索
     handleSure() {
       var value = this.keyword.trim();
       console.log(value);

@@ -1,11 +1,16 @@
 <template>
   <div class="search">
     <div class="searchbox">
-      <input type="text" placeholder="妈妈优选" /><span @click="goback()">取消</span>
+      <input type="text" placeholder="妈妈优选" />
+      <span @click="goback()">取消</span>
     </div>
     <nav>
-      <router-link to="/searchs" ><div>帖子</div></router-link>
-      <router-link to="/searchs/userpage"><div>用户</div></router-link>
+      <router-link to="/searchs">
+        <div>帖子</div>
+      </router-link>
+      <router-link to="/searchs/userpage">
+        <div>用户</div>
+      </router-link>
     </nav>
     <router-view />
   </div>
@@ -14,10 +19,8 @@
 <script>
 /* import SearchPost from '' */
 export default {
-  data () {
-    return {
-      
-    }
+  data() {
+    return {};
   },
   /* components: {
     SearchPost,
@@ -25,16 +28,16 @@ export default {
   }, */
   methods: {
     /* select() { */
-      //导航选择
-      /* if (e.target.innerText == "帖子") {
+    //导航选择
+    /* if (e.target.innerText == "帖子") {
         
       } else if (e.target.innerText == "用户") {
         
       } */
-   /*  }, */
-   
+    /*  }, */
+
     goback() {
-      this.$router.push('/');
+      this.$router.push("/");
     }
   }
 };
