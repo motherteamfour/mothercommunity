@@ -1,4 +1,5 @@
 <template>
+ <router-link :to="'/article/' + postId">
   <div class="zhujianwai">
       <div class="zhujian">
         <div class="left">
@@ -22,11 +23,12 @@
         <span>{{countComment.countComment}}-评论</span>
       </div>
     </div>
+ </router-link>
 </template>
 <script>
 export default {
   name: 'RecommtLists',
-  props:["countComment"]
+  props:["countComment","postId"]
 };
 </script>
 

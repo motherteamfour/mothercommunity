@@ -73,7 +73,9 @@
     </div>
     <div class="recommend">热门推荐</div>
 
-    <RecommentLists v-for="(item, index) in referer.list" :key="index" :countComment="item" @click="articlePage(index)"></RecommentLists>
+    <RecommentLists v-for="(item, index) in referer.list" :key="index" 
+    :countComment="item"
+    :postId="item.postId"></RecommentLists>
   </div>
 </template>
 
@@ -160,10 +162,7 @@ export default {
     goTrigger() {
       this.$router.push("/selectState");
     },
-    articlePage(index){
-     /*  this.$router. */
-     console.log(index);
-    },
+    
     goBeforeDay() {
       /* this.userId = sessionStorage.getItem("userId"); */
      
