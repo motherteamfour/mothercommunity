@@ -10,8 +10,11 @@
       </span>
     </div>
     <NewPosts v-for="(item, index) in lists" :key="index"
-    :name="item.name"
-    :title="item.title"></NewPosts>
+    :name="item.userName"
+    :title="item.postTitle"
+    :time="item.postTime"
+    :countco="item.isRecommend"
+    :imgs="item.user.userImgUrl"></NewPosts>
 
   </div>
 </template>
@@ -21,30 +24,33 @@ import NewPosts from '../components/MyPostLists';
 export default {
   data () {
     return {
-      lists:[
-        {
-          name: "nana",
-          title: "你在干什se么",
-        },
-        {
-          name: "kono",
-          title: "你在干什么es",
-        },
-        {
-          name: "eedd",
-          title: "你在干什么ssss",
-        }
-      ]
+      lists: [],
+      userId: 1001
     }
   },
   components: {
     NewPosts,
   },
+  created() {
+    this.userId = sessionStorage.getItem("userId");
+    this.axios({
+      url: `/user/findPostAllByUserId?userid=${this.userId}`,
+      methods: "GET"
+    })
+    .then(res => {
+      this.lists = res.data.data;
+
+      console.log("faxieshu",res.data.data);
+    })
+  },
   methods: {
     goback() {
       this.$router.push('./my');
-    }
-  }
+    }/* ,
+    getMypost() {
+      this.$store.commit('mypost'+this.lists.length);
+    }*/
+  } 
 };
 </script>
 

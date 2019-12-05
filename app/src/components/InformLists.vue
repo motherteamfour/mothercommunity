@@ -7,8 +7,9 @@
         </div>
       </div>
       <div class="right">
-        <div class="content">内容菲佛为佛欸佛欸放假呢哦i金佛欸分解分解二姐夫都i恩迪哦呢哦i飞机场我i恩佛i就发动i额二级偶分呢</div>
-        <div class="timee">时间</div>
+        <div class="title">{{title}}</div>
+        <div class="content">{{content}}</div>
+        <div class="timee">{{time}}</div>
       </div>
     </div>
   </div>
@@ -16,18 +17,19 @@
 
 <script>
 export default {
-  
+  props: ["content", "time", "title"]
 }
 </script>
 
 <style lang="less" scoped>
 .informlist {
-  width: 600px;
+  width: 100%;
  /*  height: 500px; */
  margin-bottom: 20px;
-  background: rgb(223, 219, 219);
+  /* background: gainsboro; */
   display: flex;
   justify-content: flex-start;
+  /* box-shadow: 0 0 8px rgb(236, 173, 173); */
   .photo {
     width: 80px;
     height: 80px;
@@ -39,12 +41,14 @@ export default {
     margin: 10px 10px auto;
     i {
       color: white;
+      
     }
   }
   .right {
     background: white;
     margin-top: 18px;
-    box-shadow: 0 0 3px red;
+   /*  box-shadow: 0 0 2px red; */
+    box-shadow: 0 0 8px rgb(236, 173, 173);
      border-radius: 30px;
      padding-bottom: 10px;
     .content {
@@ -52,12 +56,19 @@ export default {
      
       font-size: 32px;
       padding: 20px;
+      padding-top: 0;
      
     }
     .timee {
   
       text-align: center;
       font-size: 20px;
+    }
+    .title {
+      font-size: 32px;
+      font-weight: 600;
+      padding-left: 20px;
+      padding-top: 20px;
     }
   }
 }

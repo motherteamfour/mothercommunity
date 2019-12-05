@@ -4,16 +4,15 @@ import Home from '../views/Home.vue'
 import Forum from '../views/Forum.vue'
 import My from '../views/My.vue'
 import Entrance from '../views/Entrance.vue'
-// import { Search } from 'vant'
-/* import NewPost from '../views/NewPost.vue' */
 import Searchs from '../views/Search.vue'
 import InfoComment from '../views/InfoComment.vue'
+import Collect from '../views/Collect.vue'
 
 Vue.use(VueRouter)
 
 const routes = [
-  // 登陆注册
   {
+    // 登陆--曾晶
     path: '/login',
     component: Entrance,
     children: [
@@ -22,7 +21,12 @@ const routes = [
         name: 'Entrance',//登陆-(密码登陆/验证码登陆)
         component: () => import('../views/Entrance.vue'),
       },
+      {
+        path: '/findpassword',//找回密码
+        name: 'FindPassword',
+        component: () => import('../views/FindPassword.vue'),
 
+      }
     ]
   },
   {
@@ -96,7 +100,14 @@ const routes = [
 
         ]
       },
-
+      {
+        path: 'ask',
+        name: 'Ask',
+        component: () => import('../views/Ask.vue'),
+        meta: {
+          auth: true
+        }
+      },
       {
         path: 'suresearch',// 确定搜索
         name: 'SureSearch',
@@ -118,13 +129,7 @@ const routes = [
         path: 'newpost', //我的发帖
         name: 'NewPost',
         component: () => import('../views/NewPost.vue'),
-        /* children: [
-          {
-            path: 'newpostlists',
-            name: NewPostLists,
-            component: () => import('../views/NewPostLists.vue')
-          }
-        ] */
+        
       },
       {
         path: 'reply', //我的回帖
@@ -133,9 +138,19 @@ const routes = [
       },
       {
         path: 'collect', //我的收藏
-        name: 'Collect',
-        component: () => import('../views/Collect.vue')
-
+        component: Collect,
+        children: [
+          {
+            path: '',
+            name: 'CollPost',
+            component: () => import('../views/CollPost.vue')
+          },
+          {
+            path: 'collqa',
+            name: 'CollQA',
+            component: () => import('../views/CollQA.vue')
+          }
+        ]
       },
       {
         path: 'resource', //我的资料
@@ -148,7 +163,7 @@ const routes = [
         component: () => import('../views/Group.vue')
       },
       {
-        path: 'searchs', // 搜索
+        path: '/searchs', // 搜索
 
         component: Searchs,
         children: [
@@ -161,6 +176,11 @@ const routes = [
             path: 'userpage',
             name: 'Userpage',
             component: () => import('../views/Userpage.vue'),
+          },
+          {
+            path: 'havingpost',
+            name: 'HavingPost',
+            component: () => import('../views/HavingPost')
           }
         ]
       },
@@ -168,11 +188,6 @@ const routes = [
         path: 'infomation', // 消息
         name: "Infomation",
         component: () => import('../views/Infomation.vue')
-      },
-      {
-        path: 'trigger',
-        name: "Trigger",
-        component: () => import('../views/Trigger.vue')
       },
       {
         path: 'infocomment', // 消息中的评论
@@ -208,7 +223,6 @@ const routes = [
       }
     ]
   },
-  //home外的单独页面-颜志鹏
   {
     path: '/post/:id',//发布帖子
     name: 'Post',
@@ -225,9 +239,19 @@ const routes = [
     component: () => import('../views/Article.vue')
   },
   {
-    path: '/otherUsers/:id', //帖子
-    name: 'otherUsers',
-    component: () => import('../views/OtherUsers.vue')
+    path: '/alterbirthday',// 修改生日
+    name: 'alterbirthday',
+    component: () => import('../views/AlterBirthday.vue')
+  },
+  {
+    path: '/fanspage',// 粉丝页
+    name: 'FansPage',
+    component: () => import('../views/FansPage.vue')
+  },
+  {
+    path: '/focuspage',// 关注页
+    name: 'FocusPage',
+    component: () => import('../views/FocusPage.vue')
   },
   // 问答-曾晶
   {

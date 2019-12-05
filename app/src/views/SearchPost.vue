@@ -2,16 +2,16 @@
   <div class="searchpost">
     <p class="hint">热门搜索</p>
     <ul class="hotsearch">
-      <li v-for="(item, index) in searchlists" :key="index">{{item.keywords}}</li>
+      <li v-for="(item, index) in searchlists" :key="index" @click="searchss(item)">{{item}}</li>
     </ul>
     <p class="hint">历史记录</p>
     <ul class="history">
       <li v-for="(item, index) in history" :key="index">
-        <span>
+        <span @click="searchpost(item)">
           <i class="fa fa-clock-o" aria-hidden="true"></i>
-          <span>着床</span>
+          <span>{{item}}</span>
         </span>
-        <span @click="del(index)">
+        <span @click="del(item)">
           <i class="fa fa-times" aria-hidden="true"></i>
         </span>
       </li>
@@ -26,64 +26,99 @@
 
 <script>
 export default {
+  inject: ["reload"],
   data() {
     return {
-      searchlists: [
-        {
-          keywords: "着床"
-        },
-        {
-          keywords: "着床"
-        },
-        {
-          keywords: "着床"
-        },
-        {
-          keywords: "怀孕"
-        },
-        {
-          keywords: "着床"
-        },
-        {
-          keywords: "怀孕"
-        },
-        {
-          keywords: "着床"
-        },
-        {
-          keywords: "怀孕"
-        }
-      ],
-      history: [
-        {
-          name: "着床"
-        },
-        {
-          name: "着床"
-        },
-        {
-          name: "着床"
-        },
-        {
-          name: "着床"
-        }
-      ]
+      searchlists: [],
+      history: [],
+      postnum: [],
+      userId: 1001
     };
   },
+
+  created() {
+    this.userId = sessionStorage.getItem("userId");
+    this.axios({
+      url: "/search/searchTop10",
+      method: "GET"
+    }).then(res => {
+      this.searchlists = res.data.data;
+      console.log("top10",res.data);
+    });
+    this.axios.get(`/search/searchHistory?userId=${this.userId}`).then(res => {
+      this.history = res.data.data;
+    });
+  },
+
   methods: {
-    del(i) {
-      this.history.splice(i, 1);
-      console.log(i);
+    searchss(index){
+      console.log("数据",index);
+      this.axios({
+        url: `/search/searchPost?userId=${this.userId}&searchMessage=${index}`,
+        methods: "GET"
+      })
+      .then (res => {
+        console.log(res.data);
+        if(res.data.code == 200) {
+          this.$router.push('/searchs/havingpost');
+          this.postnum = res.data.data;
+          console.log(this.postnum);
+          /* this.$store.dispatch('getpostnum', this.postnum); */
+        }
+      })
+    },
+    searchpost(item) {
+      var userId = sessionStorage.getItem("userId");
+      this.axios({
+        url: `/search/searchPost?userId=${userId}&searchMessage=${item}`,
+        methods: "GET"
+      })
+      .then (res => {
+        console.log(res.data);
+        if(res.data.code == 200) {
+          this.$router.push('/searchs/havingpost');
+          this.postnum = res.data.data;
+          console.log(this.postnum);
+          /* this.$store.dispatch('getpostnum', this.postnum); */
+        }
+      })
+    },
+    del(item) {
+      var userId = sessionStorage.getItem("userId");
+      this.axios
+        .get(
+          `/search/deleteHistoryBySearchMessage?searchMessage=${item}&userId=${userId}`
+        )
+        .then(res => {
+          if (res.code == 200) {
+            this.axios.get(`/search/searchHistory?userId=${userId}`).then(res => {
+              this.history = res.data.data;
+            });
+          }
+          console.log(res.data);
+        });
+      this.reload();
     },
     removeAll() {
-      this.history.splice(0);
-      console.log(this.lengths);
-    }
+      this.axios.get(`/search/deleteAllHistory?userId=${this.userId}`).then(res => {
+        if (res.code == 200) {
+          this.axios.get("/search/searchHistory?userId=1001").then(res => {
+            this.history = res.data.data;
+          });
+        }
+      });
+    },
+    /* searchpost() {
+      this.axios.
+    } */
   }
 };
 </script>
 
 <style lang="less" scoped>
+.searchpost {
+  width: 750px;
+}
 .hint {
   width: 710px;
   height: 60px;
@@ -113,10 +148,11 @@ export default {
 }
 .history {
   width: 710px;
-  height: 80px;
+  /* height: 80px; */
   font-size: 30px;
   line-height: 80px;
-  margin: 0 auto;
+  margin: 20px auto;
+
   li {
     display: flex;
     justify-content: space-between;

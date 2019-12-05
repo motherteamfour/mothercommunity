@@ -30,7 +30,7 @@ export default {
 .resource {
   width: 750px;
   height: 100vh;
-  background:gray;
+  background:rgb(248, 248, 248);
 }
 .top {
   width: 750px;

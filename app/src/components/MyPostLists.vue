@@ -1,9 +1,12 @@
 <template>
-  <div class="newposts">
+  <div class="newpostss">
     <div class="newposts">
       <div class="user">
         <div class="user-por">
-          <div class="portrait"></div>
+         <!--  <div class="portrait"> -->
+            <img :src="'http://172.16.6.38:8989/'+imgs" class="portrait" alt="">
+
+          <!-- </div> -->
         </div>
         <div class="user-name">
           <p>{{name}}</p>
@@ -16,10 +19,10 @@
         <div class="state">
           <span>孕4天</span>
           <span>
-            时间
+            {{time}}
             <span>
               <i class="fa fa-commenting-o" aria-hidden="true"></i>
-              4
+              {{countco}}
             </span>
           </span>
         </div>
@@ -31,12 +34,15 @@
 <script>
 export default {
   name: "NewPosts",
-  props: ["name", "title"]
+  props: ["name", "title", "time", "countco","imgs"]
 };
 </script>
 
 <style lang="less" scoped>
 .newposts {
+    box-shadow: 0 0 8px rgb(236, 173, 173);
+  padding: 10px;
+  box-sizing: border-box;
   width: 710px;
   margin: 40px auto;
   margin-bottom: 20px;
@@ -47,6 +53,7 @@ export default {
   border-radius: 30px;
   /* padding: 20px 0; */
   .user {
+    
     width: 180px;
     height: 100%;
     /* background: yellow; */
@@ -58,8 +65,14 @@ export default {
       .portrait {
         width: 100px;
         height: 100px;
-        background: rgb(151, 135, 135);
+        border: 1px solid red;
         border-radius: 50%;
+        img {
+          width: 100%;
+          height: 100%;
+          border-radius: 50%;
+          border: 1px solid red;
+        }
       }
     }
     .user-name {

@@ -5,10 +5,10 @@
       <h3>我的</h3>
       <div class="user">
         <div class="portrait" @click="goMyResourcePage()">
-          <p>头像</p>
-          <!-- <img src="" alt=""> -->
+        <!--   <p>头像</p> -->
+          <img :src="'http://172.16.6.38:8989/'+userInfo.userImgUrl" class="imgs" alt="">
         </div>
-        <span class="username">辣妈676879</span>
+        <span class="username">{{userInfo.userName}}</span>
         <br />
         <span class="state">备孕中</span>
         <span class="address">四川 成都</span>
@@ -16,32 +16,32 @@
     </div>
 
     <div class="nav">
-      <div class="attention">
+      <div class="attention" @click="goFocusPage()">
         <p>关注</p>
-        <p class="fansnum">0</p>
+        <p class="fansnum">{{focusnum}}</p>
       </div>
-      <div class="fans">
+      <div class="fans" @click="goFansPage()">
         <p>粉丝</p>
-        <p class="fansnum">0</p>
+        <p class="fansnum">{{fansnum}}</p>
       </div>
     </div>
     <ul class="lists">
       <li>
         <img src="../assets/img/my/fatie.png" alt />
         <span class="title">我的发帖</span>
-        <span class="num">0</span>
+        <span class="num">{{getPostnum.length}}</span>
         <img src="../assets/img/my/youjiantou.png" alt @click="goNewpostPage()" />
       </li>
       <li>
         <img src="../assets/img/my/jinrutiezihuitie.png" alt />
         <span class="title">我的回帖</span>
-        <span class="num">0</span>
+        <span class="num">{{replynum}}</span>
         <img src="../assets/img/my/youjiantou.png" alt @click="goReplyPage()" />
       </li>
       <li style="border-bottom: none">
         <img src="../assets/img/my/shoucang.png" alt />
         <span class="title">我的收藏</span>
-        <span class="num">0</span>
+        <span class="num">{{collnum}}</span>
         <img src="../assets/img/my/youjiantou.png" alt @click="goCollectPage()" />
       </li>
     </ul>
@@ -49,8 +49,7 @@
       <li>
         <img src="../assets/img/my/shouji.png" alt />
         <span class="title">手机绑定</span>
-        <span class="num telphone">17780837103</span>
-        <img src="../assets/img/my/youjiantou.png" alt />
+        <span class="num telphone">{{userInfo.userPhone}}</span>
       </li>
       <li style="border-bottom: none">
         <img src="../assets/img/my/yidenglu5.png" alt />
@@ -59,29 +58,85 @@
       </li>
     </ul>
     <div class="btnbox">
-      <button type="button" class="btn">退出登录</button>
+      <button type="button" class="btn" @click="quitBtn">退出登录</button>
     </div>
   </div>
 </template>
 
 <script>
-/* import MyLists from "../components/MyLists"; */
-
 export default {
   name: "My",
-  
+  data () {
+    return {
+      fansnum: "",
+      focusnum: "",
+      userInfo: {},
+      getPostnum: "",
+      collnum: "",
+      userId: 1001,
+      replynum: ""
+    }
+  },
+  created() {
+    this.userId = sessionStorage.getItem("userId");
+    let param = new URLSearchParams();
+    param.append("userid",this.userId);
+    this.axios.post("/zp/fant/countFants", param).then(res => {
+      this.fansnum = res.data.data;
+      console.log('粉丝数',res.data);
+    });
+    this.axios.post("/zp/fant/countattention", param).then(res => {
+      this.focusnum = res.data.data;
+      console.log('关注数',res.data);
+    });
+    this.axios.post("/zp/user/findMyself", param).then(res => {
+      console.log("xx",res.data);
+      this.userInfo = res.data.data;
+    });
+    this.axios({
+      url: `/user/findPostAllByUserId?userid=${this.userId}`,
+      methods: "GET"
+    })
+    .then(res => {
+      console.log("发帖数",res.data);
+      this.getPostnum = res.data.data;
+    }),
+    this.axios.post("/zp/user/countconllectpost", param).then(res => {
+      this.collnum = res.data.data;
+      console.log(res.data.data);
+      console.log('收藏数',this.collnum);
+    }),
+    this.axios.post("/zp/user/countreturnpost", param).then(res => {
+      this.replynum = res.data.data;
+     /*  console.log(res.data.data); */
+      console.log('回帖数',res.data);
+    });
+   
+  },
   methods: {
     goNewpostPage() {
-      this.$router.push('/newpost');
+      this.$router.push("/newpost");
     },
     goReplyPage() {
-      this.$router.push('/reply');
+      this.$router.push("/reply");
     },
     goCollectPage() {
-      this.$router.push('/collect');
+      this.$router.push("/collect");
     },
     goMyResourcePage() {
-      this.$router.push('/resource');
+      this.$router.push("/resource");
+    },
+    goFansPage() {
+      this.$router.push("/fanspage");
+    },
+    goFocusPage() {
+      this.$router.push("/focuspage");
+    },
+    ResourcePage() {
+      this.axios({});
+    },
+    quitBtn() {
+      this.$router.push("/login");
     }
   }
 };
@@ -93,8 +148,8 @@ export default {
   width: 750px;
   height: 100vh;
   background: rgb(248, 248, 248);
- /*  overflow: hidden; */
- 
+  /*  overflow: hidden; */
+
   .top {
     padding-top: 40px;
     width: 100%;
@@ -125,9 +180,15 @@ export default {
         /*  position: absolute;
         left: 60px;
         top: 140px; */
-        p {
+      /*   overflow: hidden; */
+        /* p {
           text-align: center;
           line-height: 180px;
+        } */
+        .imgs {
+          width: 100%;
+          height: 100%;
+          border-radius: 50%;
         }
       }
       .username {
@@ -231,7 +292,6 @@ export default {
       border-radius: 30px;
       font-size: 30px;
       outline: none;
-    
     }
   }
 }

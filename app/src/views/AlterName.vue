@@ -9,11 +9,11 @@
     </div>
     <div class="alterbox">
       <div class="names">
-        <span>昵称</span>
-        <input type="text" value="小螺号ObXFp" />
+        <span>昵称</span><!--:ss="userInfo.userName"   -->
+        <input type="text" v-model="msg" :placeholder="userInfo.userName" />
       </div>
       <div class="btnbox">
-        <button type="button" class="btn">想好了，保存</button>
+        <button type="button" class="btn" @click="confirmBtn()">想好了，保存</button>
       </div>
     </div>
   </div>
@@ -21,9 +21,37 @@
 
 <script>
 export default {
+  inject: ['reload'],
+  data() {
+    return {
+      userInfo: {},
+      userId: 1001,
+      msg: "",
+     
+    };
+  },
+  created() {
+    this.userId = sessionStorage.getItem("userId");
+    let param = new URLSearchParams();
+    param.append("userid", this.userId);
+    this.axios.post("/zp/user/findMyself", param).then(res => {
+      console.log(res.data);
+      this.userInfo = res.data.data;
+    });
+  },
   methods: {
     goback() {
       this.$router.push("/resource");
+    },
+    confirmBtn() {
+      
+      let param = new URLSearchParams();
+      param.append("userid", this.userId);
+      param.append("username", this.msg);
+      this.axios.post("/zp/user/updateusername", param).then(res => {
+        console.log(res.data);
+      });
+      this.reload();
     }
   }
 };
@@ -34,7 +62,7 @@ export default {
 .resource {
   width: 750px;
   height: 100vh;
-  background: rgb(230, 222, 222);
+  background: rgb(248, 248, 248);
 }
 .top {
   width: 750px;
@@ -66,7 +94,7 @@ export default {
   background: white;
   margin: 40px auto;
   border-radius: 20px;
-
+  box-shadow: 0 0 10px pink;
   .names {
     width: 100%;
     height: 100px;

@@ -3,10 +3,10 @@
       <div class="zhujian">
         <div class="left">
           <div class="title">
-            <p>免蒸免烤，酸甜可口的蔓越莓牛奶条，只需要拌一</p>
+            <p>{{countComment.postTitle}}</p>
           </div>
           <div class="content">
-            <p>生活里有些东西看似无用爹娘你就斤斤计较急急急二分音符研发费用费用费用</p>
+            <p>{{countComment.postContent}}</p>
           </div>
         </div>
         <div class="right">
@@ -14,32 +14,33 @@
         </div>
       </div>
       <div class="nameandcommend">
-        <span>name</span>
-        <span>0-评论</span>
+        <span>{{countComment.user.userName}}</span>
+        <span>{{countComment.countComment}}-评论</span>
       </div>
     </div>
 </template>
 <script>
 export default {
-  
-}
+  name: 'RecommtLists',
+  props:["countComment"]
+};
 </script>
 
 <style lang="less" scoped>
-
+@import "../assets/style/base.less";
 .zhujianwai {
   width: 716px;
-  height: 300px;
   /* border: 1px solid red; */
   display: flex;
   flex-direction: column;
   border-radius: 30px;
   background: white;
+  box-shadow: 0 0 6px rgb(233, 176, 176);
   overflow: hidden;
   margin: 20px auto;
   .zhujian {
     width: 710px;
-    height: 240px;
+   /*  height: 240px; */
 
     display: flex;
     justify-content: flex-start;
@@ -52,37 +53,43 @@ export default {
         width: 100%;
         height: 120px;
 
-        padding: 10px;
+        padding: 30px;
+        padding-left: 60px;
         box-sizing: border-box;
         p {
-          font-size: 30px;
+          font-size: 34px;
           font-weight: 500;
+          
         }
       }
       .content {
         width: 100%;
-        height: 120px;
+        /* height: 120px; */
         /*   background: yellow; */
         padding: 10px;
         padding-top: 0;
+        
         box-sizing: border-box;
         p {
           font-size: 26px;
           color: gray;
+          
         }
       }
     }
     .right {
-      width: 40%;
-      height: 100%;
+       width: 300px;
+     /* height: 200px; */
+    /*   background: grey; */
 
       display: flex;
       justify-content: center;
       align-items: center;
       .photo {
-        width: 260px;
-        height: 200px;
-        background: pink;
+        /* width: 260px;
+        height: 200px; */
+        padding: 10px;
+       /*  background: pink; */
       }
     }
   }
@@ -96,6 +103,7 @@ export default {
       font-size: 26px;
       margin-left: 30px;
       margin-right: 30px;
+      color: gray;
     }
   }
 }

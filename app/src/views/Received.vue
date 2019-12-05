@@ -14,5 +14,9 @@ export default {
 </script>
 
 <style lang="less" scoped>
-
+  .commpages {
+    width: 100%;
+    height: 100vh;
+    background: rgb(248, 248, 248)
+  }
 </style>

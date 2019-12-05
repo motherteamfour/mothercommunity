@@ -1,28 +1,29 @@
 <template>
-  <div>
-    <ul>
+  <div class="collpostlist" v-if="colllist != undefined">
+     <ul>
       <li>
         <div class="user">
           
-            <img :src="'http://172.16.6.38:8989/'+lists.userImgUrl" class="portrait" alt="">
-        
+          <img :src="'http://172.16.6.38:8989/'+colllist.user.userImgUrl"  class="portrait" alt="">
+
+         
           <div>
-            <p class="username">{{lists.userName}}</p>
+            <p class="username">{{colllist.user.userName}}</p>
             <p class="state">孕3天</p>
           </div>
         </div>
         <div class="content">
-          <p class="title">{{lists.postTitle}}</p>
-          <p class="con">内容</p>
+          <p class="title">{{colllist.questionTitle}}</p>
+          <p class="con">{{colllist.questionContent}}</p>
         </div>
         <div class="foot">
           <span>
             <i class="fa fa-clock-o" aria-hidden="true"></i>
-            {{lists.postTime}}
+            {{colllist.questionTime}}
           </span>
           <span>
             <i class="fa fa-commenting-o" aria-hidden="true"></i>
-            {{lists.count}}
+            {{colllist.questionCollections}}
           </span>
         </div>
       </li>
@@ -32,19 +33,20 @@
 
 <script>
 export default {
-  props: ['lists']
+  name: "CollPostList",
+  props: ["colllist"]
 }
 </script>
 
 <style lang="less" scoped>
- ul {
+  ul {
     padding-bottom: 20px;
-    box-shadow: 0 0 8px rgb(236, 173, 173);
+    
     width: 710px;
     border-radius: 20px;
     background: white;
-    margin: 20px auto 20px;
-
+    margin: 20px auto 0;
+    box-shadow: 0 0 8px rgb(236, 173, 173);
     li {
       .user {
         height: 100px;
@@ -53,7 +55,7 @@ export default {
         .portrait {
           width: 80px;
           height: 80px;
-          border: 1px solid red;
+          border:1px solid red;
           border-radius: 50%;
           margin: 0 20px;
         }

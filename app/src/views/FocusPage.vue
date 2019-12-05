@@ -1,44 +1,44 @@
 <template>
-  <div class="resource">
+  <div class="fans">
     <div class="top">
       <span class="goback" @click="goback()">
         <i class="fa fa-angle-left" aria-hidden="true"></i>
       </span>
-      <h3>通知</h3>
-      <span></span>
+      <h3>我的关注</h3>
+      <span>
+        <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+      </span>
     </div>
-    <InformLists v-for="(item, index) in informLists" :key="index"
-    :content="item.messageText"
-    :time="item.messageTime"
-    :title="item.messageTitle"></InformLists>
+    <FansLists v-for="(item, index) in focusnum" :key="index"
+    :username="item.userName"
+    :userimg="item.userImgUrl"></FansLists>
   </div>
 </template>
 
 <script>
-import InformLists from '../components/InformLists'
+import FansLists from "../components/FocusLists";
 export default {
   data () {
     return {
-      informLists: []
+      focusnum: [],
+      userId: 1001
     }
   },
   components: {
-    InformLists
+    FansLists
   },
-  created() {
-    var userId = sessionStorage.getItem("userId");
-    this.axios({
-      url: `/user/message/getMessages?userId=${userId}`,
-      methods: "GET"
-    })
-    .then(res => {
-      console.log("消息列表", res.data.data);
-      this.informLists = res.data.data;
-    })
+  created () {
+    this.userId = sessionStorage.getItem("userId");
+    let param = new URLSearchParams();
+    param.append("userid",this.userId);
+    this.axios.post("/zp/fant/findattention", param).then(res => {
+      console.log(res.data);
+      this.focusnum = res.data.data;
+    });
   },
   methods: {
     goback() {
-      this.$router.push("/infomation");
+      this.$router.push("./my");
     }
   }
 };
@@ -46,10 +46,10 @@ export default {
 
 <style lang="less" scoped>
 @import "../assets/style/base.less";
-.resource {
-  width: 750px;
-  height: 100vh;
-  background: rgb(248, 248, 248);
+.fans{
+  width: 100%;
+  height: 400px;
+ /*  background: ; */
 }
 .top {
   width: 750px;
@@ -60,6 +60,7 @@ export default {
   display: flex;
   justify-content: space-around;
   align-items: center;
+
   h3 {
     /* width: 80%; */
     width: 70%;
@@ -75,6 +76,4 @@ export default {
     font-size: 54px;
   }
 }
-
-
 </style>

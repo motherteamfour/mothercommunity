@@ -1,11 +1,17 @@
 <template>
   <div class="search">
     <div class="searchbox">
-      <input type="text" placeholder="妈妈优选" /><span @click="goback()">取消</span>
+      <van-search v-model="val" placeholder="请输入搜索关键词" show-action shape="round">
+        <div slot="action" @click="search">搜索</div>
+      </van-search>
     </div>
     <nav>
-      <router-link to="/searchs" ><div>帖子</div></router-link>
-      <router-link to="/searchs/userpage"><div>用户</div></router-link>
+      <router-link to="/searchs">
+        <div>帖子</div>
+      </router-link>
+      <router-link to="/searchs/userpage">
+        <div>用户</div>
+      </router-link>
     </nav>
     <router-view />
   </div>
@@ -13,28 +19,61 @@
 
 <script>
 /* import SearchPost from '' */
+import { Search } from "vant";
+import { mapMutations } from "vuex";
+
 export default {
-  data () {
+  name: "Search",
+  data() {
     return {
-      
-    }
+      val: "",
+      result: null,
+      /*  postnum: [], */
+      userId: 1001,
+      keyword: ""
+    };
   },
-  /* components: {
-    SearchPost,
-    UserPage
+  /*  computed: {
+    ...mapState({
+      postnum: state => state.postnum
+    })
   }, */
+  components: {
+    [Search.name]: Search
+  },
   methods: {
     /* select() { */
-      //导航选择
-      /* if (e.target.innerText == "帖子") {
+    //导航选择
+    /* if (e.target.innerText == "帖子") {
         
       } else if (e.target.innerText == "用户") {
         
       } */
-   /*  }, */
-   
+    /*  }, */
+    ...mapMutations(["searctPost"]),
+
     goback() {
-      this.$router.push('/');
+      this.$router.push("/");
+    },
+    search() {
+      this.result = this.val;
+      console.log(this.result);
+      this.keyword = this.result;
+      /* this.userId = sessionStorage.getItem("userId"); */
+      this.searctPost(this.keyword);
+
+      this.axios({
+        url: `/search/searchPost?userId=${this.userId}&searchMessage=${this.keyword}`,
+        methods: "GET"
+      }).then(res => {
+        console.log(res.data);
+        if (res.data.code == 200) {
+          this.$router.push("/searchs/havingpost");
+          /* this.postnum = res.data.data;
+          console.log(this.postnum); */
+        }
+      });
+      /*  this.$store.dispatch('getLists'); */
     }
   }
 };
@@ -42,6 +81,10 @@ export default {
 
 <style lang="less" scoped>
 @import "../assets/style/base.less";
+.search {
+  width: 750px;
+  padding-bottom: 70px;
+}
 .searchbox {
   width: 710px;
   height: 100px;

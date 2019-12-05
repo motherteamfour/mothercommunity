@@ -8,6 +8,7 @@ import './assets/style/resize.css'
 import './assets/font-awesome/css/font-awesome.min.css'
 
 
+
 import http from './utils/http'
 import vueAxios from 'vue-axios'
 Vue.use(vueAxios, http)
