@@ -146,12 +146,12 @@ export default {
     },
     quitBtn() {
       this.show = !this.show;
-      
-      /* this.$router.push("/login"); */
     },
     select() {
-        this.$router.replace("/login");
-      }
+       sessionStorage.removeItem("token");
+        sessionStorage.removeItem("userId");
+      this.$router.replace("/login");
+    }
   }
 };
 </script>
