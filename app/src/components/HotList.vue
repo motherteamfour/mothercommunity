@@ -1,10 +1,14 @@
 <template>
   <div class="hot-item">
-    <div class="user-info">
-      <div class="user-left">
-        <div class="avater"></div>
-        <p class="username">{{list.user.userName}}</p>
-      </div>
+    <div class="user-info" v-if="list.user != undefined">
+      <router-link :to="'/otherUsers/' + list.user.userId">
+        <div class="user-left">
+          <div class="avater">
+            <img :src="'http://172.16.6.38:8989/' + list.user.userImgUrl" alt />
+          </div>
+          <p class="username">{{list.user.userName}}</p>
+        </div>
+      </router-link>
       <div class="follow" v-if="!list.isFollow" @click="follow(list.idn, list.userId)">+关注</div>
       <div class="followed" v-else @click="cancleFollow(list.idn, list.userId)">
         <i class="fa fa-check"></i>
@@ -16,13 +20,13 @@
         <p class="title">{{list.postTitle}}</p>
         <p class="content">{{list.postContent}}</p>
         <div class="pic" v-if="list.postImgs.length !== 0">
-          <img :src="'http://172.16.6.45:8989/' + list.postImgs[0].postUrl"/>
+          <img :src="'http://172.16.6.45:8989/' + list.postImgs[0].postUrl" />
         </div>
       </div>
     </router-link>
     <div class="options">
       <div v-if="!list.isLike" class="praise-wrap">
-          <van-loading  v-show="lLoading == list.idn" size="14px" color="#1989fa" vertical></van-loading>
+        <van-loading v-show="lLoading == list.idn" size="14px" color="#1989fa" vertical></van-loading>
         <div v-show="lLoading !== list.idn">
           <i @click="praise(list.idn, list.postId)" class="fa fa-heart-o" aria-hidden="true"></i>
           <span @click="praise(list.idn, list.postId)">赞({{list.countFabulous}})</span>
@@ -115,13 +119,21 @@ export default {
     align-items: center;
     padding-top: 20px;
     .user-left {
+      display: flex;
       .avater {
         width: 70px;
         height: 70px;
         border-radius: 50%;
-        background: lightgreen;
-        float: left;
+        display: flex;
+        justify-content: center;
+        align-items: center;
         margin-right: 10px;
+        overflow: hidden;
+        text-align: center;
+        line-height: 70px;
+        img {
+          width: 120%;
+        }
       }
       .username {
         line-height: 70px;
@@ -165,6 +177,7 @@ export default {
       width: 100%;
       img {
         max-height: 300px;
+        border-radius: 20px;
       }
     }
     .title {

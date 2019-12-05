@@ -239,10 +239,15 @@ const routes = [
     component: () => import('../views/CircleGourp.vue')
   },
   {
-    path: '/article/:id',
+    path: '/article/:id', //帖子
     name: 'article',
     component: () => import('../views/Article.vue')
-  }
+  },
+  {
+    path: '/otherUsers/:id', //帖子
+    name: 'otherUsers',
+    component: () => import('../views/OtherUsers.vue')
+  },
 ]
 
 
