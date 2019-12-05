@@ -71,6 +71,7 @@ import { Uploader } from "vant";
 import { ImagePreview } from "vant";
 import { ActionSheet } from "vant";
 
+
 export default {
   name: "Post",
   data() {
@@ -136,6 +137,8 @@ export default {
               console.log(res.data);
               this.$router.replace('/article/' + res.data.data);
             });
+        } else {
+           this.$router.replace('/post/fromhome');
         }
       });
     }

@@ -1,12 +1,19 @@
 <template>
   <div class="wrap">
-    <div class="swiper-container" ref="slider">
+    <!--     <div class="swiper-container" ref="slider">
       <div class="swiper-wrapper">
         <div class="swiper-slide" v-for="(item, index) in swipeImg" :key="index">
-          <img :src="item" alt />
+          <img :src="imgIp + item.imgUrl" alt />
         </div>
       </div>
       <div class="swiper-pagination"></div>
+    </div>-->
+    <div class="van-swiper">
+      <van-swipe :autoplay="3000" indicator-color="white" :height="200">
+        <van-swipe-item v-for="(item, index) in swipeImg" :key="index">
+          <img :src="imgIp + item.imgUrl" alt />
+        </van-swipe-item>
+      </van-swipe>
     </div>
     <section class="circle-recommend">
       <p class="circle-title">圈子推荐</p>
@@ -55,15 +62,13 @@
 import HotList from "@/components/HotList.vue";
 import "@/assets/style/swiper.min.css";
 import Swiper from "swiper";
+import { Swipe, SwipeItem } from "vant";
 
 export default {
   name: "Recommend",
   data() {
     return {
-      swipeImg: [
-        require("@/assets/img/circleswipetest/swipe1.jpg"),
-        require("@/assets/img/circleswipetest/swipe2.jpg")
-      ],
+      swipeImg: [],
       circle: [],
       hotList: [],
       fLoading: -1,
@@ -74,7 +79,9 @@ export default {
     };
   },
   components: {
-    HotList
+    HotList,
+    [Swipe.name]: Swipe,
+    [SwipeItem.name]: SwipeItem
   },
   methods: {
     follow(i, userId) {
@@ -198,6 +205,10 @@ export default {
       this.circle = res.data.data.splice(0, 7);
     });
     this.getHotList();
+    this.axios.get("/banner/BannerContent").then(res => {
+      console.log(res.data);
+      this.swipeImg = res.data.data;
+    });
   }
 };
 </script>
@@ -208,14 +219,13 @@ export default {
 }
 .swiper-container {
   width: calc(100% - 40px);
+  height: 300px;
   margin: 0 auto;
-  .swiper-slide {
-  width: 100%;
   margin-top: 10px;
   img {
-    width: 100%;
+    max-width: 100%;
+    height: auto;
   }
-}
 }
 
 .circle-recommend {
@@ -273,6 +283,15 @@ export default {
     text-align: center;
     padding-bottom: 20px;
     border-bottom: 1px solid #eee;
+  }
+}
+.van-swiper {
+  box-sizing: border-box;
+  padding: 0 10px;
+  margin-top: 10px;
+  img {
+    width: 100%;
+    height: 200px;
   }
 }
 </style>

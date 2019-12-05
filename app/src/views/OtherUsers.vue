@@ -27,15 +27,19 @@
             <span>粉丝</span>
           </li>
         </ul>
-        <button class="follow">关注</button>
+        <div v-if="userId!==userInfo.userId">
+          <button class="follow">关注</button>
+        </div>
       </div>
     </div>
     <div class="posts">
       <ul>
         <li class="post-item" v-for="(item, index) in post" :key="index">
-          <p class="title">{{item.postTitle}}</p>
-          <p class="post-content">{{item.postContent}}</p>
-          <p class="time">{{item.postTime}}</p>
+          <router-link :to="'/article/' + item.postId">
+            <p class="title">{{item.postTitle}}</p>
+            <p class="post-content">{{item.postContent}}</p>
+            <p class="time">{{item.postTime}}</p>
+          </router-link>
         </li>
       </ul>
     </div>
@@ -60,31 +64,43 @@ export default {
   },
   created() {
     this.userId = this.$route.params.id;
-    console.log(this.userId);
     let param = new URLSearchParams();
     param.append("userid", this.userId);
     this.axios.post("/zp/user/findMyself", param).then(res => {
-      console.log(res.data);
       this.userInfo = res.data.data;
+      console.log(this.userInfo);
+      this.axios
+        .get(
+          `/user/isFol?userId=1001&followUserId=1023`
+        )
+        .then(res => {
+          console.log(res.data);
+        });
     });
     this.axios.post("/zp/fant/countattention", param).then(res => {
-      console.log(res.data);
       this.followed = res.data.data;
     });
     this.axios.post("/zp/fant/countFants", param).then(res => {
-      console.log(res.data);
       this.fans = res.data.data;
     });
     this.axios
       .get(`/user/findPostAllByUserId?userid=${this.userId}`)
       .then(res => {
-        console.log(res.data);
         this.post = res.data.data;
       });
   },
   methods: {
     back() {
       this.$router.go(-1); //返回上一层
+    },
+    getFollow() {
+      this.axios
+        .get(
+          `/user/isFol?userId=${this.userId}&followUserId=${this.userInfo.userId}`
+        )
+        .then(res => {
+          console.log(res.data);
+        });
     }
   }
 };

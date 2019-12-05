@@ -105,7 +105,7 @@
         </div>
       </div>
     </div>
-    <van-popup v-model="show" position="bottom" :style="{ height: '25%' }">
+    <van-popup v-model="show" position="bottom" :style="{ height: '30%' }">
       <textarea v-model="rpContent" class="frist-rp" ref="getFocus" :placeholder="rpWho"></textarea>
       <div class="send-wrap">
         <button class="reply-btn" @click="reply">发送</button>
@@ -245,7 +245,7 @@ export default {
         .then(res => {
           if (res.data.code == 200) {
             console.log(res.data);
-            /* this.getFirstRp(); */
+            this.getFirstRp();
           }
         });
     },

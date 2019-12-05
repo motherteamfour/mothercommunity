@@ -160,14 +160,14 @@ export default {
       height: 40px;
       line-height: 40px;
       font-size: 24px;
-      border: 3px solid #f8d742;
-      color: #f8d742;
+      border: 3px solid @themeColor;
+      color: @themeColor;
       border-radius: 5px;
       line-height: 40px;
       font-weight: 600;
       text-align: center;
       border-radius: 20px;
-      box-shadow: 0 0 15px #ffe469;
+      box-shadow: 0 0 15px @themeColor;
     }
     .followed {
       width: 100px;
