@@ -1,6 +1,8 @@
 <template>
   <div class="q-and-a">
-    <div class="top">轮播图</div>
+    <div class="top">
+      <!-- <img src="../img/"/>> -->
+    </div>
     <div class="main">
       <div class="one">
         <router-link :to="'/ask'" class="ask">
