@@ -59,8 +59,9 @@ export default {
     }
   },
   created() {
+    var userId = sessionStorage.getItem("userId");
     this.axios({
-      url: "/user/message/getMessages?userId=1001",
+      url: `/user/message/getMessages?userId=${userId}`,
       methods: "GET"
     }).then(res => {
       console.log("消息列表", res.data.data);

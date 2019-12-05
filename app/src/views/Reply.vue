@@ -9,8 +9,9 @@
         <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
       </span>
     </div>
-    <ReplyLists></ReplyLists>
-    <ReplyLists></ReplyLists>
+    <ReplyLists v-for="(item, index) in lists" :key="index"
+    :lists="item"></ReplyLists>
+    
   </div>
 </template>
 
@@ -19,15 +20,22 @@ import ReplyLists from '../components/ReplyLists'
 export default {
   data () {
     return {
-      
+      userId: 1001,
+      lists: []
     }
   },
   components: {
     ReplyLists
   },
-  created () {
-    this.axios({
-      
+ created() {
+    this.userId = sessionStorage.getItem("userId");
+    let param = new URLSearchParams();
+    param.append("userid",this.userId);
+    this.axios.post(`/zp/user/retuenpost`, param)
+    .then(res => {
+      this.lists = res.data.data;
+
+      console.log("回帖数",res.data.data);
     })
   },
   methods: {
@@ -42,7 +50,8 @@ export default {
 @import "../assets/style/base.less";
 .reply {
   width: 750px;
-  height: 100vh;
+  /* height: 100vh; */
+  padding-bottom: 100px;
   background: rgb(248, 248, 248);
   .top {
     width: 750px;

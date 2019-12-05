@@ -7,7 +7,7 @@
           <i class="fa fa-clock-o" aria-hidden="true"></i>
           <span>{{item}}</span>
         </span>
-        <span @click="del()">
+        <span @click="del(item)">
           <i class="fa fa-times" aria-hidden="true"></i>
         </span>
       </li>
@@ -31,26 +31,28 @@ export default {
   },
 
   created() {
+    var userId = sessionStorage.getItem("userId");
     this.axios({
       url: "/search/searchTop10",
       method: "GET"
     }).then(res => {
       this.searchlists = res.data.data;
     });
-    this.axios.get("/search/searchHistory?userId=1001").then(res => {
+    this.axios.get(`/search/searchHistory?userId=${userId}`).then(res => {
       this.history = res.data.data;
     });
   },
 
   methods: {
-    del() {
+    del(item) {
+      var userId = sessionStorage.getItem("userId");
       this.axios
         .get(
-          "/search/deleteHistoryBySearchMessage?searchMessage=宝宝喝酒&userId=1001"
+          `/search/deleteHistoryBySearchMessage?searchMessage=${item}&userId=${userId}`
         )
         .then(res => {
           if (res.code == 200) {
-            this.axios.get("/search/searchHistory?userId=1001").then(res => {
+            this.axios.get(`/search/searchHistory?userId=${userId}`).then(res => {
               this.history = res.data.data;
             });
           }
@@ -59,9 +61,10 @@ export default {
       this.reload();
     },
     removeAll() {
-      this.axios.get("/search/deleteAllHistory?userId=1001").then(res => {
+      var userId = sessionStorage.getItem("userId");
+      this.axios.get(`/search/deleteAllHistory?userId=${userId}`).then(res => {
         if (res.code == 200) {
-          this.axios.get("/search/searchHistory?userId=1001").then(res => {
+          this.axios.get(`/search/searchHistory?userId=${userId}`).then(res => {
             this.history = res.data.data;
           });
         }

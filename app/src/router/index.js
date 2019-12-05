@@ -239,7 +239,6 @@ const routes = [
     component: () => import('../views/Article.vue')
   },
   {
-<<<<<<< HEAD
     path: '/alterbirthday',// 修改生日
     name: 'alterbirthday',
     component: () => import('../views/AlterBirthday.vue')
@@ -253,11 +252,6 @@ const routes = [
     path: '/focuspage',// 关注页
     name: 'FocusPage',
     component: () => import('../views/FocusPage.vue')
-  }
-=======
-    path: '/otherUsers/:id', //帖子
-    name: 'otherUsers',
-    component: () => import('../views/OtherUsers.vue')
   },
   // 问答-曾晶
   {
@@ -286,7 +280,6 @@ const routes = [
     name: 'QuestionDetail',
     component: () => import('../views/QuestionDetail.vue'),
   },
->>>>>>> 7acdce8bd3d33b7fc33a0a5963708e46f67ce3de
 ]
 
 

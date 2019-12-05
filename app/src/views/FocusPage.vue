@@ -10,24 +10,27 @@
       </span>
     </div>
     <FansLists v-for="(item, index) in focusnum" :key="index"
-    :username="item.userName"></FansLists>
+    :username="item.userName"
+    :userimg="item.userImgUrl"></FansLists>
   </div>
 </template>
 
 <script>
-import FansLists from "../components/FansLists";
+import FansLists from "../components/FocusLists";
 export default {
   data () {
     return {
-      focusnum: []
+      focusnum: [],
+      userId: 1001
     }
   },
   components: {
     FansLists
   },
   created () {
+    this.userId = sessionStorage.getItem("userId");
     let param = new URLSearchParams();
-    param.append("userid","1002");
+    param.append("userid",this.userId);
     this.axios.post("/zp/fant/findattention", param).then(res => {
       console.log(res.data);
       this.focusnum = res.data.data;

@@ -23,10 +23,10 @@ export default {
 
 <style lang="less" scoped>
 .informlist {
-  width: 600px;
+  width: 100%;
  /*  height: 500px; */
  margin-bottom: 20px;
-  background: rgb(223, 219, 219);
+  /* background: gainsboro; */
   display: flex;
   justify-content: flex-start;
   .photo {
@@ -45,7 +45,7 @@ export default {
   .right {
     background: white;
     margin-top: 18px;
-    box-shadow: 0 0 3px red;
+    box-shadow: 0 0 2px red;
      border-radius: 30px;
      padding-bottom: 10px;
     .content {

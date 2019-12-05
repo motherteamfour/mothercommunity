@@ -35,7 +35,7 @@
       <li>
         <img src="../assets/img/my/jinrutiezihuitie.png" alt />
         <span class="title">我的回帖</span>
-        <span class="num">0</span>
+        <span class="num">{{replynum}}</span>
         <img src="../assets/img/my/youjiantou.png" alt @click="goReplyPage()" />
       </li>
       <li style="border-bottom: none">
@@ -73,11 +73,14 @@ export default {
       userInfo: {},
       getPostnum: "",
       collnum: "",
+      userId: 1001,
+      replynum: ""
     }
   },
   created() {
+    this.userId = sessionStorage.getItem("userId");
     let param = new URLSearchParams();
-    param.append("userid","1001");
+    param.append("userid",this.userId);
     this.axios.post("/zp/fant/countFants", param).then(res => {
       this.fansnum = res.data.data;
       console.log('粉丝数',res.data);
@@ -91,7 +94,7 @@ export default {
       this.userInfo = res.data.data;
     });
     this.axios({
-      url: "/user/findPostAllByUserId?userid=1003",
+      url: `/user/findPostAllByUserId?userid=${this.userId}`,
       methods: "GET"
     })
     .then(res => {
@@ -102,6 +105,11 @@ export default {
       this.collnum = res.data.data;
       console.log(res.data.data);
       console.log('收藏数',this.collnum);
+    }),
+    this.axios.post("/zp/user/countreturnpost", param).then(res => {
+      this.replynum = res.data.data;
+     /*  console.log(res.data.data); */
+      console.log('回帖数',res.data);
     });
    
   },

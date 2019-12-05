@@ -3,10 +3,10 @@
     <div class="newposts">
       <div class="user">
         <div class="user-por">
-          <div class="portrait">
-                      <img :src="'http://172.16.6.38:8989/'+imgs" class="imgs" alt="">
+         <!--  <div class="portrait"> -->
+            <img :src="'http://172.16.6.38:8989/'+imgs" class="portrait" alt="">
 
-          </div>
+          <!-- </div> -->
         </div>
         <div class="user-name">
           <p>{{name}}</p>
@@ -61,7 +61,7 @@ export default {
       .portrait {
         width: 100px;
         height: 100px;
-        background: rgb(151, 135, 135);
+        border: 1px solid red;
         border-radius: 50%;
         img {
           width: 100%;

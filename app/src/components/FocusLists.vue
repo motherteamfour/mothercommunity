@@ -1,7 +1,9 @@
 <template>
   <div class="fans">
     <div class="fanslist">
-      <img :src="'http://172.16.6.38:8989/'+userimg" alt=""  class="por">
+      
+        <img :src="'http://172.16.6.38:8989/'+userimg" alt=""  class="por">
+      
       <div class="username">{{username}}</div>
     </div>
   </div>
@@ -10,7 +12,7 @@
 <script>
 export default {
   name: "fans",
-  props: ['username',"userimg"]
+  props: ["username","userimg"]
 };
 </script>
 
@@ -29,7 +31,7 @@ export default {
     width: 80px;
     height: 80px;
     border-radius: 50%;
-    background: red;
+    border: 1px solid red;
     margin-left: 20px;
     margin-right: 20px;
   }

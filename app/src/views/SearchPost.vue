@@ -31,18 +31,21 @@ export default {
     return {
       searchlists: [],
       history: [],
-      postnum: []
+      postnum: [],
+      userId: 1001
     };
   },
 
   created() {
+    this.userId = sessionStorage.getItem("userId");
     this.axios({
       url: "/search/searchTop10",
       method: "GET"
     }).then(res => {
       this.searchlists = res.data.data;
+      console.log("top10",res.data);
     });
-    this.axios.get("/search/searchHistory?userId=1001").then(res => {
+    this.axios.get(`/search/searchHistory?userId=${this.userId}`).then(res => {
       this.history = res.data.data;
     });
   },
@@ -51,7 +54,7 @@ export default {
     searchss(index){
       console.log("数据",index);
       this.axios({
-        url: `/search/searchPost?userId=1001&searchMessage=${index}`,
+        url: `/search/searchPost?userId=${this.userId}&searchMessage=${index}`,
         methods: "GET"
       })
       .then (res => {
@@ -65,8 +68,9 @@ export default {
       })
     },
     searchpost(item) {
+      var userId = sessionStorage.getItem("userId");
       this.axios({
-        url: `/search/searchPost?userId=1001&searchMessage=${item}`,
+        url: `/search/searchPost?userId=${userId}&searchMessage=${item}`,
         methods: "GET"
       })
       .then (res => {
@@ -80,13 +84,14 @@ export default {
       })
     },
     del(item) {
+      var userId = sessionStorage.getItem("userId");
       this.axios
         .get(
-          `/search/deleteHistoryBySearchMessage?searchMessage=${item}&userId=1001`
+          `/search/deleteHistoryBySearchMessage?searchMessage=${item}&userId=${userId}`
         )
         .then(res => {
           if (res.code == 200) {
-            this.axios.get("/search/searchHistory?userId=1001").then(res => {
+            this.axios.get(`/search/searchHistory?userId=${userId}`).then(res => {
               this.history = res.data.data;
             });
           }
@@ -95,7 +100,7 @@ export default {
       this.reload();
     },
     removeAll() {
-      this.axios.get("/search/deleteAllHistory?userId=1001").then(res => {
+      this.axios.get(`/search/deleteAllHistory?userId=${this.userId}`).then(res => {
         if (res.code == 200) {
           this.axios.get("/search/searchHistory?userId=1001").then(res => {
             this.history = res.data.data;

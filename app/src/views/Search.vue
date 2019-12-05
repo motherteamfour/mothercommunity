@@ -53,24 +53,12 @@ export default {
     goback() {
       this.$router.push("/");
     },
-    /* search() {
-      this.result = this.val;
+     search() {
+/*       this.result = this.val;
       console.log(this.result);
-      var value = this.result
-      this.axios({
-        url: `/search/searchPost?userId=1001&searchMessage=${value}`,
-        methods: "GET"
-      })
-      .then (res => {
-        console.log(res.data);
-        if(res.data.code == 200) {
-          this.$router.replace('/searchs/havingpost');
-          this.postnum = res.data.data;
-          console.log(this.postnum);
-          this.$store.dispatch('getpostnum', this.postnum);
-        }
-      })
-    } */
+      var value = this.result */
+      this.$store.dispatch('getLists');
+     }
   }
 };
 </script>

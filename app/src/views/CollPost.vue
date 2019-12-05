@@ -18,8 +18,9 @@ export default {
     CollPostList
   },
   created() {
+    var userId = sessionStorage.getItem("userId");
     let param = new URLSearchParams();
-    param.append("userid", "1001");
+    param.append("userid", userId);
     this.axios.post("/zp/user/findcollectpost", param).then(res => {
       console.log(res.data.data);
 

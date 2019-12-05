@@ -73,12 +73,13 @@ export default {
     [Uploader.name]: Uploader
   },
   created() {
+    var userId = sessionStorage.getItem("userId");
     let param = new URLSearchParams();
-    param.append("userid", "1001");
+    param.append("userid", userId);
     this.axios.post("/zp/user/findMyself", param).then(res => {
       console.log(res.data);
       this.userInfo = res.data.data;
-      console.log(this.userInfo);
+      console.log(this.userInfo.userBirthday);
       /* this.focusnum = res.data.data;
       console.log(this.focusnum); */
     });
@@ -95,9 +96,10 @@ export default {
     },
     afterRead(file) {
       console.log(file);
+      var userId = sessionStorage.getItem("userId");
       let param = new FormData();
       param.append("url", file.file);
-      param.append("userid", 1001);
+      param.append("userid", userId);
       console.log(param.url);
       this.axios.post("/zp/user/updateuserhesd", param).then(res => {
         console.log(res.data);

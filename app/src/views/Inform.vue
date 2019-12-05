@@ -26,8 +26,9 @@ export default {
     InformLists
   },
   created() {
+    var userId = sessionStorage.getItem("userId");
     this.axios({
-      url: "/user/message/getMessages?userId=1001",
+      url: `/user/message/getMessages?userId=${userId}`,
       methods: "GET"
     })
     .then(res => {
@@ -48,7 +49,7 @@ export default {
 .resource {
   width: 750px;
   height: 100vh;
-  background: rgb(230, 222, 222);
+  background: rgb(248, 248, 248);
 }
 .top {
   width: 750px;

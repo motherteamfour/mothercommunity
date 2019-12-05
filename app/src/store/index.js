@@ -1,8 +1,9 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-import axios from 'axios'
+import http from '../utils/http'
+import vueAxios from 'vue-axios'
 
-Vue.use(Vuex)
+Vue.use(Vuex,vueAxios, http)
 
 export default new Vuex.Store({
   state: {
@@ -19,9 +20,9 @@ export default new Vuex.Store({
     
   },
   actions: {
-    getLists(context) {
+    getLists() {
       this.axios({
-        url: `/search/searchPost?userId=1001&searchMessage=${context}`,
+        url: `/search/searchPost?userId=1001&searchMessage='帖子'`,
         methods: "GET"
       })
       .then (res => {

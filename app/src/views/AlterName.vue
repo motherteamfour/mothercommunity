@@ -9,8 +9,8 @@
     </div>
     <div class="alterbox">
       <div class="names">
-        <span>昵称</span>
-        <input type="text" :value="userInfo.userName" />
+        <span>昵称</span><!--:ss="userInfo.userName"   -->
+        <input type="text" v-model="msg" :placeholder="userInfo.userName" />
       </div>
       <div class="btnbox">
         <button type="button" class="btn" @click="confirmBtn()">想好了，保存</button>
@@ -24,13 +24,18 @@ export default {
   inject: ['reload'],
   data() {
     return {
-      userInfo: {}
+      userInfo: {},
+      userId: 1001,
+      msg: "",
+     
     };
   },
   created() {
+    this.userId = sessionStorage.getItem("userId");
     let param = new URLSearchParams();
-    param.append("id", "1001");
+    param.append("userid", this.userId);
     this.axios.post("/zp/user/findMyself", param).then(res => {
+      console.log(res.data);
       this.userInfo = res.data.data;
     });
   },
@@ -41,8 +46,8 @@ export default {
     confirmBtn() {
       
       let param = new URLSearchParams();
-      param.append("userid", "1001");
-      param.append("username", "meimei");
+      param.append("userid", this.userId);
+      param.append("username", this.msg);
       this.axios.post("/zp/user/updateusername", param).then(res => {
         console.log(res.data);
       });

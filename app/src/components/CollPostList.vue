@@ -4,26 +4,26 @@
       <li>
         <div class="user">
           
-          <img :src="'http://172.16.6.38:8989/'+colllist.user.userImgUrl"  class="portrait" alt="">
+          <img :src="'http://172.16.6.38:8989/'+colllist.userImgUrl"  class="portrait" alt="">
 
          
           <div>
-            <p class="username">{{colllist.user.userName}}</p>
+            <p class="username">{{colllist.userName}}</p>
             <!-- <p class="state">孕3天</p> -->
           </div>
         </div>
         <div class="content">
-          <p class="title">{{colllist.questionTitle}}</p>
-          <p class="con">{{colllist.questionContent}}</p>
+          <p class="title">{{colllist.postTitle}}</p>
+          <p class="con">{{colllist.postContent}}</p>
         </div>
         <div class="foot">
           <span>
             <i class="fa fa-clock-o" aria-hidden="true"></i>
-            {{colllist.questionTime}}
+            {{colllist.postTime}}
           </span>
           <span>
             <i class="fa fa-commenting-o" aria-hidden="true"></i>
-            {{colllist.questionCollections}}
+            {{colllist.count}}
           </span>
         </div>
       </li>

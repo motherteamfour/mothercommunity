@@ -10,7 +10,7 @@
       </span>
     </div>
     <NewPosts v-for="(item, index) in lists" :key="index"
-    :name="item.user.userName"
+    :name="item.userName"
     :title="item.postTitle"
     :time="item.postTime"
     :countco="item.isRecommend"
@@ -24,15 +24,17 @@ import NewPosts from '../components/MyPostLists';
 export default {
   data () {
     return {
-      lists: []
+      lists: [],
+      userId: 1001
     }
   },
   components: {
     NewPosts,
   },
   created() {
+    this.userId = sessionStorage.getItem("userId");
     this.axios({
-      url: "/user/findPostAllByUserId?userid=1001",
+      url: `/user/findPostAllByUserId?userid=${this.userId}`,
       methods: "GET"
     })
     .then(res => {

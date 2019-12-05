@@ -27,14 +27,14 @@ export default {
 </script>
 
 <style lang="less" scoped>
-
+@import "../assets/style/base.less";
 .zhujianwai {
   width: 716px;
   /* border: 1px solid red; */
   display: flex;
   flex-direction: column;
   border-radius: 30px;
-  background: white;
+  background: pink;
   overflow: hidden;
   margin: 20px auto;
   .zhujian {
@@ -52,10 +52,10 @@ export default {
         width: 100%;
         height: 120px;
 
-        padding: 10px;
+        padding: 30px;
         box-sizing: border-box;
         p {
-          font-size: 30px;
+          font-size: 34px;
           font-weight: 500;
         }
       }
@@ -98,6 +98,7 @@ export default {
       font-size: 26px;
       margin-left: 30px;
       margin-right: 30px;
+      color: gray;
     }
   }
 }

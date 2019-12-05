@@ -6,9 +6,18 @@
           <i class="fa fa-lastfm" aria-hidden="true"></i>
           <span>切换</span>
         </div>
-       <!--  <van-search placeholder="请输入搜索关键词" v-model="value" /> -->
-        <van-search placeholder="请输入搜索关键词" shape="round" class="inputbox" @click="goSearchPages()" />
-
+        <input type="text" placeholder="妈妈优选"  class="inputbox" @click="goSearchPages()">
+        <!--  <van-search placeholder="请输入搜索关键词" v-model="value" /> -->
+        <!-- <van-search placeholder="请输入搜索关键词" shape="round" class="inputbox" @click="goSearchPages()" /> -->
+<!-- <van-search
+  v-model="value"
+  placeholder="请输入搜索关键词"
+  show-action
+  shape="round"
+  @search="onSearch"
+> -->
+<!--   <div slot="action" @click="onSearch">搜索</div>
+</van-search> -->
         <div @click="goInfo()">
           <i class="fa fa-envelope-o" aria-hidden="true"></i>
           <span>消息</span>
@@ -50,21 +59,21 @@
       <div class="babymamistate">
         <div class="baby">
           <p>
-            <span>宝宝发育：</span> {{babylong.badyMessage}}
+            <!-- <span></span> -->
+            {{babylong.badyMessage}}
           </p>
         </div>
         <div class="mami">
           <p>
-            <span>宝宝发育：</span>{{babylong.motherMessage}}
+            <!-- <span></span> -->
+            {{babylong.motherMessage}}
           </p>
         </div>
       </div>
     </div>
     <div class="recommend">热门推荐</div>
 
-    <RecommentLists v-for="(item, index) in referer.list" :key="index"
-    :countComment="item"></RecommentLists>
-    
+    <RecommentLists v-for="(item, index) in referer.list" :key="index" :countComment="item"></RecommentLists>
   </div>
 </template>
 
@@ -75,7 +84,7 @@ import Swiper from "swiper";
 import { Search } from "vant";
 export default {
   name: "Community",
-  
+
   data() {
     return {
       contact: [],
@@ -85,9 +94,9 @@ export default {
       ],
       babylong: {},
       referer: {},
-      valueDate: '',
-      dayday: ''
-
+      valueDate: "",
+      dayday: "",
+      userId: 1001
     };
   },
   components: {
@@ -95,27 +104,30 @@ export default {
     [Search.name]: Search
   },
   created() {
+    this.userId = sessionStorage.getItem("userId");
+    console.log(this.userId);
     var time = new Date();
     var year = time.getFullYear();
     var month = time.getMonth() + 1;
     var day = time.getDay() + 1;
     var params = [];
-    params.push(year,month,day);
-    console.log('sssssss',params);
+    params.push(year, month, day);
+    /* console.log("sssssss", params); */
     var date = params.join("-");
-    var dates = this.dayday;
-    console.log(dates);
+    /* var dates = this.dayday;
+    console.log(dates); */
+    
     this.axios
       .get(`/messagePush/findNowDay`, {
         params: {
-          userId: "1001",
+          userId: this.userId,
           date: date
         }
       })
       .then(res => {
         this.babylong = res.data.data;
       });
-      this.axios
+    this.axios
       .get(`/posterior/postmanagement/recommend`, {
         params: {
           page: "",
@@ -124,13 +136,12 @@ export default {
       })
       .then(res => {
         this.referer = res.data.data;
-        console.log("ssssssss",this.referer);
+        console.log("ssssssss", this.referer);
       });
-   
-     
-      this.valueDate = new Date();
+
+    this.valueDate = new Date();
   },
-  
+
   methods: {
     goSearchPages() {
       this.$router.push("/searchs");
@@ -142,57 +153,73 @@ export default {
       this.$router.push("/trigger");
     },
     goBeforeDay() {
+      /* this.userId = sessionStorage.getItem("userId"); */
      
-    this.valueDate = new Date(this.valueDate.setDate(this.valueDate.getDate() -1 ))
-       this.dayday = this.valueDate.getFullYear() + '-' + (this.valueDate.getMonth()+1) + '-' + this.valueDate.getDate();
-       this.axios
-      .get(`/messagePush/findNowDay`, {
-        params: {
-          userId: "1001",
-          date: this.dayday
-        }
-      })
-      .then(res => {
-        this.babylong = res.data.data;
-      });
+      this.valueDate = new Date(
+        this.valueDate.setDate(this.valueDate.getDate() - 1)
+      );
+      this.dayday =
+        this.valueDate.getFullYear() +
+        "-" +
+        (this.valueDate.getMonth() + 1) +
+        "-" +
+        this.valueDate.getDate();
       this.axios
-      .get(`/posterior/postmanagement/recommend`, {
-        params: {
-          page: "",
-          pagesize: ""
-        }
-      })
-      .then(res => {
-        this.referer = res.data.data;
-        console.log("ssssssss",this.referer);
-      });
-     
+        .get(`/messagePush/findNowDay?`, {
+          params: {
+            userId: this.userId,
+            date: this.dayday
+          }
+        })
+        .then(res => {
+          this.babylong = res.data.data;
+        });
+      this.axios
+        .get(`/posterior/postmanagement/recommend`, {
+          params: {
+            page: "",
+            pagesize: ""
+          }
+        })
+        .then(res => {
+          this.referer = res.data.data;
+          console.log("ssssssss", this.referer);
+        });
+
       console.log(this.dayday);
     },
     goAfterDay() {
-      this.valueDate = new Date(this.valueDate.setDate(this.valueDate.getDate() +1 ));
-      this.dayday = this.valueDate.getFullYear() + '-' + (this.valueDate.getMonth()+1) + '-' + this.valueDate.getDate();
-this.axios
-      .get(`/messagePush/findNowDay`, {
-        params: {
-          userId: "1001",
-          date: this.dayday
-        }
-      })
-      .then(res => {
-        this.babylong = res.data.data;
-      });
+      /* this.userId = sessionStorage.getItem("userId"); */
+      this.valueDate = new Date(
+        this.valueDate.setDate(this.valueDate.getDate() + 1)
+      );
+      this.dayday =
+        this.valueDate.getFullYear() +
+        "-" +
+        (this.valueDate.getMonth() + 1) +
+        "-" +
+        this.valueDate.getDate();
       this.axios
-      .get(`/posterior/postmanagement/recommend`, {
-        params: {
-          page: "",
-          pagesize: ""
-        }
-      })
-      .then(res => {
-        this.referer = res.data.data;
-        console.log("ssssssss",this.referer);
-      });
+        .get(`/messagePush/findNowDay`, {
+          params: {
+            userId: this.userId,
+            date: this.dayday
+          }
+        })
+        .then(res => {
+          this.babylong = res.data.data;
+        });
+      this.axios
+        .get(`/posterior/postmanagement/recommend`, {
+          params: {
+            page: "",
+            pagesize: ""
+          }
+        })
+        .then(res => {
+          this.referer = res.data.data;
+          console.log("ssssssss", this.referer);
+        });
       console.log(this.dayday);
     }
   },
@@ -223,11 +250,11 @@ this.axios
 .community {
   width: 750px;
   /*   height: 100vh; */
-  /*  height: auto */
+  /*    height: auto; */
   background: rgb(248, 248, 248);
   padding-bottom: 100px;
 }
-/deep/.top {
+.top {
   padding-top: 40px;
   width: 750px;
   height: 280px;
@@ -247,6 +274,8 @@ this.axios
       height: 60px;
       border: none;
       border-radius: 30px;
+      font-size: 30px;
+      padding-left: 30px;
     }
     div {
       width: 80px;
@@ -286,20 +315,21 @@ this.axios
 }
 .wrapper1 {
   width: 710px;
-  height: 370px;
+  /* height: 370px; */
+  padding-bottom: 20px;
   background: white;
   margin: 0 auto;
   margin-top: 30px;
   border-radius: 30px;
   .cycle {
     width: 100%;
-    height: 180px;
+    /* height: 180px; */
     display: flex;
     justify-content: space-between;
     align-items: center;
     .content {
       width: 590px;
-      height: 100%;
+     /*  height: 100%; */
       .days {
         width: 100%;
         height: 100px;
@@ -311,9 +341,10 @@ this.axios
       }
       .handw {
         width: 100%;
-        height: 80px;
+        /* height: 80px; */
         /*   background: greenyellow; */
         padding-left: 20px;
+       
         box-sizing: border-box;
         .width,
         .weight {
@@ -326,6 +357,8 @@ this.axios
             font-size: 28px;
             color: rgb(190, 190, 190);
             padding-left: 10px;
+             margin-bottom: 10px;
+             
           }
         }
       }
@@ -341,16 +374,16 @@ this.axios
   }
   .babymamistate {
     width: 100%;
-    height: 190px;
-
+    /* height: 190px;
+ */
     div {
       /* height: 50px;
       width: 100%; */
-      /*     background: yellow; */
+          
       p {
         color: rgb(83, 82, 82);
         font-size: 26px;
-        line-height: 40px;
+        line-height: 20px;
         padding: 10px;
         letter-spacing: 3px;
         span {

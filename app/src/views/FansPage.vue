@@ -26,10 +26,11 @@ export default {
     FansLists
   },
   created () {
+    var userId = sessionStorage.getItem("userId");
     let param = new URLSearchParams();
-    param.append("userId","1002");
+    param.append("userid",userId);
     this.axios.post("/zp/fant/findfant", param).then(res => {
-      console.log(res.data);
+      console.log("fans",res.data);
       this.fanslists = res.data.data;
     });
   },
