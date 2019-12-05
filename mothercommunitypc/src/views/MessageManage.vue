@@ -28,7 +28,7 @@
           <el-table-column prop="userPhone" label="电话号码" show-overflow-tooltip></el-table-column>
           <el-table-column label="头像" width="240">
             <template slot-scope="scope">
-              <img class="user-picture" :src="scope.row.userImgUrl" alt="头像" />
+              <img class="user-picture" :src="imgUrlBase+scope.row.userImgUrl" alt="头像" />
             </template>
           </el-table-column>
         </el-table>
@@ -61,6 +61,7 @@
 
 <script>
 import EditSendMessage from "@/components/EditSendMessage.vue";
+import { mapState } from 'vuex';
 
 export default {
   data() {
@@ -93,6 +94,11 @@ export default {
       receiveIds: []
     };
   },
+  computed: mapState({
+    // 箭头函数可使代码更简练
+    imgUrlBase: state => state.imgUrl
+    
+  }),
   components: {
     EditSendMessage
   },

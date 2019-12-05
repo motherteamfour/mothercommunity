@@ -31,7 +31,9 @@
             :on-preview="handlePictureCardPreview"
             :on-remove="handleRemove"
             :http-request="uploadSectionFile"
+            :file-list="fileList"
             :auto-upload="false"
+            :limit="1"
           >
             <i class="el-icon-plus"></i>
           </el-upload>
@@ -55,17 +57,25 @@
 </template>
 
 <script>
+import { mapState } from 'vuex';
+
 export default {
    data() {
     return {
-      input: '管理员',
-      input1: 'xinxin',
-      input2: '西西',
-      input4: '15888899988',
+      input: '',
+      input1: '',
+      input2: '',
+      input4: '',
       dialogImageUrl: "",
       dialogVisible: false,
+      fileList: []
     }
   },
+  computed: mapState({
+    // 箭头函数可使代码更简练
+    imgUrlBase: state => state.imgUrl
+    
+  }),
   methods:{
     submitUpload() {
         this.$refs.upload.submit();
@@ -161,6 +171,12 @@ export default {
           this.input2 = res.data.data.adminNickName;
           /* this.dialogImageUrl = "http://172.16.6.45:8989/" + res.data.data.adminImgUrl; */
           this.input4 = res.data.data.adminPhone;
+          if(res.data.data.adminImgUrl) {
+            const pictrueUrl = {
+              url: this.imgUrlBase+res.data.data.adminImgUrl
+            };
+            this.fileList.push(pictrueUrl);
+          }
         }
       })
       .catch(error => {

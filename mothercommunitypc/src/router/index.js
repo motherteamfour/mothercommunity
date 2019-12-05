@@ -24,6 +24,14 @@ const routes = [
     },
     children: [
       {
+        path: 'homePage',
+        name: 'HomePage',
+        component: () => import('../views/HomePage.vue'),
+        meta: {
+          auth: true
+        }
+      },
+      {
         path: 'managePicture',
         name: 'ManagePicture',
         component: () => import('../views/ManagePicture.vue'),

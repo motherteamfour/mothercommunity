@@ -14,6 +14,11 @@
           unique-opened
           router
         >
+          <el-menu-item index="/home/homePage">
+            <i class="el-icon-menu"></i>
+            <span slot="title">主页</span>
+          </el-menu-item>
+
           <el-submenu index="1">
             <template slot="title">
               <i class="el-icon-location"></i>
@@ -85,6 +90,7 @@
 
 <script>
 import ShowTime from "@/components/ShowTime.vue";
+import { mapState } from 'vuex';
 
 export default {
   name: "home",
@@ -97,6 +103,11 @@ export default {
       userPicture: ''
     }
   },
+  computed: mapState({
+    // 箭头函数可使代码更简练
+    imgUrlBase: state => state.imgUrl
+    
+  }),
   methods: {
     handleOpen(key, keyPath) {
       console.log(key, keyPath);
@@ -118,7 +129,7 @@ export default {
         console.log(res.data)
         if(res.data.code==200) {
           this.userName = res.data.data.adminNickName;
-          this.userPicture = "http://172.16.6.48:8081/" + res.data.data.adminImgUrl;
+          this.userPicture = this.imgUrlBase + res.data.data.adminImgUrl;
         }
       })
       .catch(error => {
@@ -175,7 +186,7 @@ a {
   }
 }
 .right {
-  height: 658px;
+  height: 708px;
   background: rgb(242, 242, 242);
   margin-left: 200px;
 

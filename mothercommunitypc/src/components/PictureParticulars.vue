@@ -39,6 +39,7 @@
 
 <script>
 import AddAndEdit from "@/components/AddAndEdit.vue";
+import { mapState } from 'vuex';
 
 export default {
   name: "pictureParticulars",
@@ -54,10 +55,15 @@ export default {
       bannerName: "",
       imgUrl: "",
       articleTitle: "",
-      articleId: '',
+      articleId: 0,
       bannerId: 0
     };
   },
+  computed: mapState({
+    // 箭头函数可使代码更简练
+    imgUrlBase: state => state.imgUrl
+    
+  }),
   components: {
     AddAndEdit
   },
@@ -73,7 +79,7 @@ export default {
           if (res.data.code == 200) {
             this.bannerId = res.data.data.bannerId;
             this.bannerName = res.data.data.bannerName;
-            this.imgUrl = res.data.data.imgUrl ? "http://172.16.6.56:8081/" + res.data.data.imgUrl: "";
+            this.imgUrl = res.data.data.imgUrl ? this.imgUrlBase + res.data.data.imgUrl: "";
             
             if (res.data.data.post) {
               console.log('主页id存在')
@@ -130,7 +136,7 @@ export default {
       this.bannerName = "";
       this.imgUrl = "";
       this.articleTitle = "";
-      this.articleId = "";
+      this.articleId = 0;
       if (this.clickType == 0) {
         this.haveArticle = false;
       } else {

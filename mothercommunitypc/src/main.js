@@ -12,6 +12,11 @@ import http from './utils/http'
 import vueAxios from 'vue-axios'
 Vue.use(vueAxios, http)
 
+//引用 echarts
+import * as Echarts from 'echarts'
+
+Vue.prototype.echarts = Echarts
+
 Vue.config.productionTip = false
 
 Vue.use(ElementUI)
