@@ -1,9 +1,9 @@
 <template>
   <div class="homePage">
-    <div class="head">
+    <div class="head" v-loading.fullscreen.lock="fullscreenLoading">
       <el-row :gutter="12" class="head-card">
         <el-col :span="4">
-          <el-card shadow="always">今天数据</el-card>
+          <el-card shadow="always">{{title}}数据</el-card>
         </el-col>
         <el-col :span="4">
           <el-card shadow="always">
@@ -62,6 +62,7 @@ export default {
       countPost: "",
       countQuestion: "",
       countUser: "",
+      title: "今天",
       options: [
         {
           value: "0",
@@ -80,17 +81,19 @@ export default {
           label: "30日内"
         }
       ],
-      value: ""
+      value: "",
+      fullscreenLoading: false
     };
   },
   mounted() {
     console.log("这是自动执行");
-
+    this.fullscreenLoading = true;
     this.axios
       .get("/posterior/dateStatistics/countNewAdds?groupType=0")
       .then(res => {
         console.log(res.data);
         if (res.data.code == 200) {
+          this.fullscreenLoading = false;
           this.countAnswer = res.data.data.countAnswer;
           this.countComment = res.data.data.countComment;
           this.countPost = res.data.data.countPost;
@@ -98,6 +101,9 @@ export default {
           this.countUser = res.data.data.countUser;
 
           this.creatEchart();
+        }else {
+          this.fullscreenLoading = false;
+          this.defeated('服务器出错，请稍后重试');
         }
       })
       .catch(err => {
@@ -159,13 +165,44 @@ export default {
         ]
       });
     },
+    success(msg) {
+      this.$message({
+        showClose: true,
+        message: msg,
+        type: "success"
+      });
+    },
+    defeated(msg) {
+      this.$message({
+        showClose: true,
+        message: msg,
+        type: "error"
+      });
+    },
     getCount() {
       console.log(this.value);
+      this.fullscreenLoading = true;
+      switch (this.value) {
+        case '0':
+          this.title = "今天";
+          break;
+        case '1':
+          this.title = "昨天";
+          break;
+        case '2':
+          this.title = "7日内";
+          break;
+        case '3':
+          this.title = "30日内";
+          break;
+      }
+      
       this.axios
         .get("/posterior/dateStatistics/countNewAdds?groupType=" + this.value)
         .then(res => {
           console.log(res.data);
           if (res.data.code == 200) {
+            this.fullscreenLoading = false;
             this.countAnswer = res.data.data.countAnswer;
             this.countComment = res.data.data.countComment;
             this.countPost = res.data.data.countPost;
@@ -173,7 +210,10 @@ export default {
             this.countUser = res.data.data.countUser;
 
             this.creatEchart();
-          }
+          }else {
+          this.fullscreenLoading = false;
+          this.defeated('服务器出错，请稍后重试');
+        }
         })
         .catch(err => {
           console.log(err);

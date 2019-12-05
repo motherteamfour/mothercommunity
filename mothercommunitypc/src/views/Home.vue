@@ -25,7 +25,7 @@
               <span>用户管理</span>
             </template>
             <el-menu-item-group>
-              <el-menu-item index="/home/addUsers">管理员</el-menu-item>
+              <el-menu-item v-if="isSuperAdmin==1" index="/home/addUsers">管理员</el-menu-item>
               <el-menu-item index="/home/users">用户</el-menu-item>
               <el-menu-item index="/home/delUsers">已删除用户</el-menu-item>
             </el-menu-item-group>
@@ -100,7 +100,8 @@ export default {
   data() {
     return {
       userName: '',
-      userPicture: ''
+      userPicture: '',
+      isSuperAdmin: 0,
     }
   },
   computed: mapState({
@@ -121,7 +122,8 @@ export default {
     }
   },
   mounted() {
-    const userId = sessionStorage.getItem("userId")
+    const userId = sessionStorage.getItem("userId");
+    this.isSuperAdmin=sessionStorage.getItem("userId");
     this.axios
       .get(
         "/admin/findMyselfMessage?adminId="+userId)

@@ -1,5 +1,5 @@
 <template>
-  <div class="login">
+  <div class="login" v-loading.fullscreen.lock="fullscreenLoading">
     <form class="login-box" v-show="show">
       <h2>motherAdmin</h2>
       <p>妈妈怀孕管理系统</p>
@@ -52,7 +52,8 @@ export default {
       phoneFormat: false,
       codeFormat: false,
       userpassFormat: false,
-      userid: 1
+      userid: 1,
+      fullscreenLoading: false
     }
   },
   components: {
@@ -112,20 +113,25 @@ export default {
       this.defeated("密码格式不正确");
     },
     getCode(adminName,adminPhone) {
+      this.fullscreenLoading = true;
       if(this.usernameFormat==true&&this.phoneFormat==true) {
         this.axios
         .get("/admin/sendCode?adminName=" + adminName + "&adminPhone=" + adminPhone)
         .then((res) => {
           if(res.data.code==200) {
+            this.fullscreenLoading = false;
             this.success("验证码发送成功")
             console.log(res.data);
             this.userid = res.data.id;
           }else if(res.data.code==400){
+            this.fullscreenLoading = false;
             this.defeated("此用户名或者手机号不存在");
           }
         })
         .catch((error) => {
           console.log(error);
+          this.fullscreenLoading = false;
+          this.defeated('服务器出错，请稍后重试')
         });
       }else {
         this.defeated("用户名或者手机格式不正确");

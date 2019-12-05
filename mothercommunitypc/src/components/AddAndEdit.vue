@@ -1,5 +1,5 @@
 <template>
-  <div class="addAndEdit">
+  <div class="addAndEdit" v-loading.fullscreen.lock="fullscreenLoading">
     <p class="title">添加与修改</p>
     <form class="addAndEdit-form">
       <div class="addAndEdit-form-item">
@@ -75,7 +75,8 @@ export default {
       value: "",
       dialogImageUrl: "",
       dialogVisible: false,
-      fileList: []
+      fileList: [],
+      fullscreenLoading: false
     };
   },
   watch: {
@@ -97,6 +98,20 @@ export default {
     }
   },
   methods: {
+    success(msg) {
+      this.$message({
+        showClose: true,
+        message: msg,
+        type: "success"
+      });
+    },
+    defeated(msg) {
+      this.$message({
+        showClose: true,
+        message: msg,
+        type: "error"
+      });
+    },
     turnback() {
       this.input = "";
       this.value = "";
@@ -111,6 +126,7 @@ export default {
       this.fileList = [];
     },
     getBanner() {
+      this.fullscreenLoading = true;
       this.axios
         .get(
           `/banner/list/findByBannerId?bannerId=${this.bannerId}&bannerType=${this.clickType}`
@@ -124,10 +140,13 @@ export default {
               
               this.fileList[0].url="http://172.16.6.56:8081/" +res.data.data.imgUrl;
             }
+            this.fullscreenLoading = false;
           }
         })
         .catch(error => {
           console.log(error);
+          this.fullscreenLoading = false;
+          this.defeated('服务器出错，请稍后重试')
         });
     },
     handleRemove(file, fileList) {
@@ -149,9 +168,12 @@ export default {
         })
         .then(res => {
           console.log(res.data);
+          this.fullscreenLoading = false;
         })
         .catch(err => {
           console.log(err);
+          this.fullscreenLoading = false;
+          this.defeated('服务器出错，请稍后重试');
         });
     },
     addUserBanner(form) {
@@ -163,9 +185,12 @@ export default {
         })
         .then(res => {
           console.log(res.data);
+          this.fullscreenLoading = false;
         })
         .catch(err => {
           console.log(err);
+          this.fullscreenLoading = false;
+          this.defeated('服务器出错，请稍后重试');
         });
     },
     addQuestionBanner(form) {
@@ -177,9 +202,12 @@ export default {
         })
         .then(res => {
           console.log(res.data);
+          this.fullscreenLoading = false;
         })
         .catch(err => {
           console.log(err);
+          this.fullscreenLoading = false;
+          this.defeated('服务器出错，请稍后重试');
         });
     },
     updateCircleBanner(form) {
@@ -191,9 +219,12 @@ export default {
         })
         .then(res => {
           console.log(res.data);
+          this.fullscreenLoading = false;
         })
         .catch(err => {
           console.log(err);
+          this.fullscreenLoading = false;
+          this.defeated('服务器出错，请稍后重试');
         });
     },
     updateUserBanner(form) {
@@ -205,9 +236,12 @@ export default {
         })
         .then(res => {
           console.log(res.data);
+          this.fullscreenLoading = false;
         })
         .catch(err => {
           console.log(err);
+          this.fullscreenLoading = false;
+          this.defeated('服务器出错，请稍后重试');
         });
     },
     updateQuestionBanner(form) {
@@ -219,12 +253,16 @@ export default {
         })
         .then(res => {
           console.log(res.data);
+          this.fullscreenLoading = false;
         })
         .catch(err => {
           console.log(err);
+          this.fullscreenLoading = false;
+          this.defeated('服务器出错，请稍后重试');
         });
     },
     uploadSectionFile(params) {
+      this.fullscreenLoading = true;
       const file = params.file,
         fileType = file.type,
         isImage = fileType.indexOf("image") != -1,
@@ -278,6 +316,7 @@ export default {
       }
     },
     getArticle() {
+      this.fullscreenLoading = true;
       if (this.clickType == 1) {
         console.log("这是主页");
         this.axios
@@ -286,10 +325,14 @@ export default {
             console.log(res.data);
             if (res.data.code == 200) {
               this.options = res.data.data.list;
+              this.fullscreenLoading = false;
             }
+            this.fullscreenLoading = false;
           })
           .catch(err => {
             console.log(err);
+            this.fullscreenLoading = false;
+            this.defeated('服务器出错，请稍后重试');
           });
       } else if (this.clickType == 2) {
         console.log("这是问答");
@@ -305,10 +348,14 @@ export default {
             console.log(res.data);
             if (res.data.code == 200) {
               this.options = res.data.data;
+              this.fullscreenLoading = false;
             }
+            this.fullscreenLoading = false;
           })
           .catch(err => {
             console.log(err);
+            this.fullscreenLoading = false;
+            this.defeated('服务器出错，请稍后重试');
           });
       }
     },
@@ -324,6 +371,7 @@ export default {
       });
     },
     konwMore() {
+      this.fullscreenLoading = true;
       var id;
       if(typeof(this.value)=='string'){
         id = this.articleId
@@ -337,10 +385,14 @@ export default {
             console.log(res.data);
             if(res.data.code==200) {
               this.open(res.data.data.postTitle,res.data.data.postContent);
+              this.fullscreenLoading = false;
             }
+            this.fullscreenLoading = false;
           })
           .catch(err => {
             console.log(err);
+            this.fullscreenLoading = false;
+            this.defeated('服务器出错，请稍后重试')
           });
       } else if (this.clickType == 2) {
         this.axios
@@ -351,10 +403,14 @@ export default {
             console.log(res.data);
             if(res.data.code==200) {
               this.open(res.data.data.questionTitle,res.data.data.questionContent);
+              this.fullscreenLoading = false;
             }
+            this.fullscreenLoading = false;
           })
           .catch(err => {
             console.log(err);
+            this.fullscreenLoading = false;
+            this.defeated('服务器出错，请稍后重试')
           });
       }
     }

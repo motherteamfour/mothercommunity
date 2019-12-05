@@ -1,5 +1,5 @@
 <template>
-  <div class="login">
+  <div class="login" v-loading.fullscreen.lock="fullscreenLoading">
     <form class="login-box">
       <h2>motherAdmin</h2>
       <p>妈妈怀孕管理系统</p>
@@ -58,7 +58,8 @@ export default {
       userpassFormat: false,
       usernameFormat: false,
       codeFormat: false,
-      saveDays: 5  // cookie保存天数
+      saveDays: 5,  // cookie保存天数
+      fullscreenLoading: false
     };
   },
   components: {
@@ -157,6 +158,7 @@ export default {
       this.setCookie("", "", -1); //修改2值都为空，天数为负1天就好了
     },
     getLogin() {
+      this.fullscreenLoading = true;
       if (this.userpassFormat && this.usernameFormat) {
         if (this.codeFormat) {
           this.axios
@@ -188,17 +190,23 @@ export default {
                 // 获取参数（未登录时想访问的路由）
                 var url = this.$route.query.redirect;
 
-                url = url ? url : "/home";
+                url = url ? url : "/home/homePage";
+                this.fullscreenLoading = false;
                 // 切换路由
                 this.$router.replace(url);
               } else if (res.data.code == 400) {
+                this.fullscreenLoading = false;
                 this.defeated("用户名或密码错误");
               } else {
                 console.log("登陆失败");
+                this.fullscreenLoading = false;
+                this.defeated('登录失败')
               }
             })
             .catch(err => {
               console.log(err);
+              this.fullscreenLoading = false;
+              this.defeated('服务器出错，请稍后重试')
             });
         } else {
           this.defeated("验证码不正确");
