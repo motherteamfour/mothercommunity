@@ -28,7 +28,7 @@
           </li>
         </ul>
         <div v-if="userId!==userInfo.userId">
-          <button class="follow">关注</button>
+          <button class="follow" v-if="isFollow==0">关注</button>
         </div>
       </div>
     </div>

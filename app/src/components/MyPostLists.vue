@@ -1,46 +1,48 @@
 <template>
-  <div class="newpostss">
-    <div class="newposts">
-      <div class="user">
-        <div class="user-por">
-         <!--  <div class="portrait"> -->
-            <img :src="'http://172.16.6.38:8989/'+imgs" class="portrait" alt="">
+  <router-link :to="'/article/' + postId">
+    <div class="newpostss">
+      <div class="newposts">
+        <div class="user">
+          <div class="user-por">
+            <!--  <div class="portrait"> -->
+            <img :src="'http://172.16.6.38:8989/'+imgs" class="portrait" alt />
 
-          <!-- </div> -->
+            <!-- </div> -->
+          </div>
+          <div class="user-name">
+            <p>{{name}}</p>
+          </div>
         </div>
-        <div class="user-name">
-          <p>{{name}}</p>
-        </div>
-      </div>
-      <div class="right">
-        <div class="titlee">
-          <p>{{title}}</p>
-        </div>
-        <div class="state">
-          <span>孕4天</span>
-          <span>
-            {{time}}
+        <div class="right">
+          <div class="titlee">
+            <p>{{title}}</p>
+          </div>
+          <div class="state">
+            <span>孕4天</span>
             <span>
-              <i class="fa fa-commenting-o" aria-hidden="true"></i>
-              {{countco}}
+              {{time}}
+              <span>
+                <i class="fa fa-commenting-o" aria-hidden="true"></i>
+                {{countco}}
+              </span>
             </span>
-          </span>
+          </div>
         </div>
       </div>
     </div>
-  </div>
+  </router-link>
 </template>
 
 <script>
 export default {
   name: "NewPosts",
-  props: ["name", "title", "time", "countco","imgs"]
+  props: ["name", "title", "time", "countco", "imgs","postId"]
 };
 </script>
 
 <style lang="less" scoped>
 .newposts {
-    box-shadow: 0 0 8px rgb(236, 173, 173);
+  box-shadow: 0 0 8px rgb(236, 173, 173);
   padding: 10px;
   box-sizing: border-box;
   width: 710px;
@@ -53,7 +55,6 @@ export default {
   border-radius: 30px;
   /* padding: 20px 0; */
   .user {
-    
     width: 180px;
     height: 100%;
     /* background: yellow; */

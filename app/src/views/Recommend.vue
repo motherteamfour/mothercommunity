@@ -1,13 +1,5 @@
 <template>
   <div class="wrap">
-    <!--     <div class="swiper-container" ref="slider">
-      <div class="swiper-wrapper">
-        <div class="swiper-slide" v-for="(item, index) in swipeImg" :key="index">
-          <img :src="imgIp + item.imgUrl" alt />
-        </div>
-      </div>
-      <div class="swiper-pagination"></div>
-    </div>-->
     <div class="van-swiper">
       <van-swipe :autoplay="3000" indicator-color="white" :height="200">
         <van-swipe-item v-for="(item, index) in swipeImg" :key="index">
