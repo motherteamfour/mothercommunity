@@ -179,9 +179,9 @@ export default {
       text-align: center;
       color: #fff;
       padding: 3px;
-      background: #ffe469;
+      background: @themeColor;
       border-radius: 20px;
-      box-shadow: 0 0 15px #ffe469;
+      box-shadow: 0 0 15px @themeColor;
     }
   }
 

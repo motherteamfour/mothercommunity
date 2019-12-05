@@ -150,7 +150,7 @@ export default {
       this.$router.push("/infomation");
     },
     goTrigger() {
-      this.$router.push("/trigger");
+      this.$router.push("/selectState");
     },
     goBeforeDay() {
       /* this.userId = sessionStorage.getItem("userId"); */

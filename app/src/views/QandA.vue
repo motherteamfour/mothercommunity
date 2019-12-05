@@ -66,7 +66,6 @@ export default {
 @wenziColor: #8a8a8a;
 .q-and-a {
   width: 100%;
-
   .top {
     width: 100%;
     height: 400px;

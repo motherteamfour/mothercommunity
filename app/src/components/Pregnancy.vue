@@ -2,10 +2,10 @@
   <div class="pregnancy">
     <!-- 表单 -->
     <form class="prepare-form">
-      <div class="form-group">
+<!--       <div class="form-group">
         <p>选择预产期</p>
         <div class="one" @click="eventTime">{{menstrualTime}}</div>
-      </div>
+      </div> -->
       <div class="form-group">
         <input type="button" value="确定" @click="getConfirm" />
       </div>
@@ -104,10 +104,8 @@ export default {
       this.axios
         .post("/zp/user/updatestate", {
           userId: userId,
-          stateId: "2",
-          stateStarttime: this.menstrualTime,
-          menstrualExtent: this.menstrualDays,
-          menstrualCycle: this.menstrualPeriod
+          stateId: "3",
+          stateStarttime: "2019-12-5"
         })
         .then(res => {
           console.log(res.data);
@@ -129,6 +127,16 @@ export default {
 <style lang="less" scoped>
 @import "../assets/style/base.less";
 .pregnancy {
-  background-color: white;
+  text-align: center;
+  input {
+    margin-top: 50px;
+    width: 200px;
+    height: 70px;
+    border: none;
+    border-radius: 30px;
+    background: @themeColor;
+    color: #fff;
+    font-size: 30px;
+  }
 }
 </style>
