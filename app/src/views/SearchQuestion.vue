@@ -19,101 +19,150 @@
       <div class="wrap-hot">
         <p class="title">热门搜索</p>
         <div class="content">
-          <div class="one" v-for="(item, index) in hotLists" :key="index">{{item}}</div>
+          <div
+            class="one"
+            v-for="(item, index) in hotLists"
+            :key="index"
+            @click="seeHotSearch(item)"
+          >{{item}}</div>
         </div>
       </div>
       <div class="wrap-history">
         <p class="title">历史搜索</p>
         <div class="content">
           <div class="one" v-for="(item, index) in historyLists" :key="index">
-            <i class="fa fa-history" aria-hidden="true"></i>
-            {{item}}
-            <i class="fa fa-times" aria-hidden="true"></i>
+            <div class="text" @click="seeHistorySearch(item)">
+              <i class="fa fa-history" aria-hidden="true"></i>
+              {{item}}
+            </div>
+            <i class="fa fa-times" aria-hidden="true" @click="delOneHistory(item)"></i>
           </div>
         </div>
-        <p class="clear-history">清空记录</p>
+        <p class="clear-history" @click="delAllHistory()">清空记录</p>
       </div>
     </div>
   </div>
 </template>
 <script>
+import { mapMutations } from "vuex";
+
 export default {
   name: "SearchQuestion",
   data() {
     return {
+      userId: "",
       keyword: "",
       hotLists: {},
       historyLists: {}
     };
   },
   methods: {
+    ...mapMutations(["setSearchKeyword"]),
     back() {
       this.$router.go(-1); //返回上一层
     },
     handleError() {
       this.keyword = "";
     },
-    // 确认搜索问题 /question/ordinarySearch
+    // 搜索
+    search() {
+      this.setSearchKeyword(this.keyword); //this.keyword存入store
+      this.$router.replace("/suresearch");
+    },
+    // 确认搜索
     handleSure() {
-      var userId = sessionStorage.getItem("userId");
       var value = this.keyword.trim();
       console.log(value);
       if (!value.length) {
         alert("搜索关键词不能为空");
       } else {
-        let param = new URLSearchParams();
-        param.append("questionTitle", value);
-        param.append("userId", userId);
-        this.axios
-          .get(`/question/ordinarySearch`, param)
-          // .get( `/question/ordinarySearch?questionTitle=${value}&userId=${userId}`)
-          .then(res => {
-            console.log(res.data);
-            // 跳转到下一个页面,将数据传递给下一个页面
-            this.$router.replace("/suresearch");
-          })
-          .catch(err => {
-            console.log(err);
-          });
+        this.search();
       }
+    },
+    // 查看单个热门搜索
+    seeHotSearch(value) {
+      this.keyword = value;
+      this.search();
+    },
+    // 查看单个历史搜索
+    seeHistorySearch(value) {
+      this.keyword = value;
+      this.search();
+    },
+    //历史搜索
+    historySearch() {
+      this.axios({
+        url: `/question/historySearch?userId=${this.userId}`,
+        method: "get",
+        header: {
+          "Content-Type": "application/x-www-form-urlencoded"
+        }
+      })
+        .then(res => {
+          console.log(res.data);
+          this.historyLists = res.data.data;
+          console.log("历史搜索lists", this.historyLists);
+        })
+        .catch(err => {
+          console.log(err);
+        });
+    },
+    // 热门搜索
+    hotSearch() {
+      this.axios({
+        url: `/question/hotSearch`,
+        method: "get",
+        header: {
+          "Content-Type": "application/x-www-form-urlencoded"
+        }
+      })
+        .then(res => {
+          this.hotLists = res.data.data;
+          console.log("热门搜索", this.hotLists);
+        })
+        .catch(err => {
+          console.log(err);
+        });
+    },
+    // 删除一个历史搜索
+    delOneHistory(value) {
+      console.log("删除一个", value);
+      this.axios
+        .get(
+          `/question/delHistorySearch?searchMessage=${value}&userId=${this.userId}`
+        )
+        .then(res => {
+          console.log(res.data);
+          // 再次请求刷新历史搜索
+          this.historySearch();
+        })
+        .catch(err => {
+          console.log(err);
+        });
+    },
+    // 清空记录
+    delAllHistory() {
+      console.log("删除所有");
+      this.axios
+        .get(`/question/delAllHistorySearch?userId=${this.userId}`)
+        .then(res => {
+          console.log(res.data);
+          // 再次请求刷新历史搜索
+          this.historySearch();
+        })
+        .catch(err => {
+          console.log(err);
+        });
     }
   },
   created() {
-    var userId = sessionStorage.getItem("userId");
+    // 保存userId
+    this.userId = sessionStorage.getItem("userId");
 
     // 热门搜索 /question/hotSearch
-
-    this.axios({
-      url: `/question/hotSearch`,
-      method: "get",
-      header: {
-        "Content-Type": "application/x-www-form-urlencoded"
-      }
-    })
-      .then(res => {
-        this.hotLists = res.data.data;
-        console.log("热门搜索", this.hotLists);
-      })
-      .catch(err => {
-        console.log(err);
-      });
-
-    // 历史搜索 /question/historySearch
-    this.axios({
-      url: `/question/historySearch?userId=${userId}`,
-      method: "get",
-      header: {
-        "Content-Type": "application/x-www-form-urlencoded"
-      }
-    })
-      .then(res => {
-        console.log(res.data);
-        this.historyLists = res.data.data;
-        console.log("历史搜索lists", this.historyLists);
-      })
-      .catch(err => {
-        console.log(err);
-      });
+    this.hotSearch();
+    // 历史搜索
+    this.historySearch();
   }
 };
 </script>
@@ -208,6 +257,8 @@ export default {
       display: flex;
       justify-content: space-between;
       flex-wrap: wrap;
+      height: 330px;
+      overflow: hidden;
       .one {
         width: 220px;
         height: 70px;
@@ -236,12 +287,16 @@ export default {
       .fa-history {
         float: left;
       }
+      .text {
+        width: 90%;
+        float: left;
+      }
       .fa-times {
         float: right;
       }
       .fa {
         display: inline-block;
-        width: 60px;
+        width: 10%;
         height: 100px;
         line-height: 100px;
         color: #8a8a8a;
