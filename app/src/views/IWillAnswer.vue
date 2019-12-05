@@ -4,7 +4,7 @@
       <div class="status-bar"></div>
       <div class="navigation">
         <i class="fa fa-angle-left" @click="back"></i>回答
-        <span class="publish" @click="handlePublish">发表</span>
+        <span class="publish" @click="handlePublish()">发表</span>
       </div>
     </div>
     <div class="content">
@@ -47,14 +47,16 @@ export default {
     closeModel() {
       this.show = false;
     },
+    // 发表 /answer/answerToQuestion
     handlePublish() {
-      // 发表 /answer/answerToQuestion
       var userId = sessionStorage.getItem("userId");
+      var questionId = this.$route.params.questionId;
 
+      console.log(userId, this.content, questionId);
       this.axios({
-        url: `/question/addQuestion?userId=${userId}&qanswerContent =${this.content}&questionId=${this.questionId}`,
+        url: `/answer/answerToQuestion`,
         method: "post",
-        // data: ``,
+        data: `userId=${userId}&answerContent=${this.content}&questionId=${questionId}`,
         header: {
           "Content-Type": "application/x-www-form-urlencoded"
         }
@@ -63,7 +65,7 @@ export default {
           console.log(res.data);
           if (res.data.code == "200") {
             // 切换路由
-            var url = `/questiondetail/${res.data.data}`; //后端应该返回问题id,然后跳转到详情页（保留）
+            var url = `/questiondetail/${questionId}`; //后端应该返回问题id,然后跳转到详情页（保留）
             this.$router.replace(url);
           } else {
             console.log("提交失败");

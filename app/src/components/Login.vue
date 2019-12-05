@@ -70,21 +70,19 @@ export default {
             console.log(res.data);
             var token = res.data.token;
             var userId = res.data.data;
-            // 将token和userId保存
-            sessionStorage.setItem("token", token);
-            sessionStorage.setItem("userId", userId);
-            if (res.data.code == "200") {
-              // 非第一次登录
+            // 用户已注册
+            if (res.data.code == "200" || res.data.code == "201") {
+              // 将token和userId保存
+              sessionStorage.setItem("token", token);
+              sessionStorage.setItem("userId", userId);
+            }
 
-              // 切换路由
+            if (res.data.code == "200") {
+              // 非第一次登录进入首页
               this.$router.replace("/");
             } else if (res.data.code == "201") {
-              var url = this.$route.query.redirect;
-              url = url ? url : "/";
-              this.$router.replace(url);
-
               // 第一次登录进入填写信息的页面
-              // this.$router.replace("/selectState");
+              this.$router.replace("/selectState");
             } else if (res.data.code == "204") {
               // 该用户不存在，请先注册
               this.one = "提示";

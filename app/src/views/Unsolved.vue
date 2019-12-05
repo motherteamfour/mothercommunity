@@ -41,9 +41,6 @@ export default {
       .catch(err => {
         console.log(err);
       });
-  },
-  destroyed() {
-    console.log("组件被销毁");
   }
 };
 </script>
