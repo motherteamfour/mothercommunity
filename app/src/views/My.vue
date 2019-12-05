@@ -6,7 +6,7 @@
       <div class="user">
         <div class="portrait" @click="goMyResourcePage()">
           <!--   <p>头像</p> -->
-          <img :src="'http://172.16.6.38:8989/'+userInfo.userImgUrl" class="imgs" alt />
+          <img :src="imgUrl+userInfo.userImgUrl" class="imgs" alt />
         </div>
         <span class="username">{{userInfo.userName}}</span>
         <br />
@@ -62,9 +62,16 @@
       <button type="button" class="btn" @click="quitBtn">退出登录</button>
     </div>
 
-    <van-popup v-model="show" position="bottom" closeable close-icon="close" :style="{ height: '20%' }" class="pop">
+    <van-popup
+      v-model="show"
+      position="bottom"
+      closeable
+      close-icon="close"
+      :style="{ height: '20%' }"
+      class="pop"
+    >
       <button type="button" class="confirm" @click="select">确认退出</button>
-     <!--  <button type="button" @click="selectquit">取消</button> -->
+      <!--  <button type="button" @click="selectquit">取消</button> -->
     </van-popup>
   </div>
 </template>
@@ -75,6 +82,7 @@ export default {
   name: "My",
   data() {
     return {
+      imgUrl: "",
       fansnum: "",
       focusnum: "",
       userInfo: {},
@@ -89,6 +97,7 @@ export default {
     [Popup.name]: Popup
   },
   created() {
+    this.imgUrl = this.$store.state.imgUrl;    // 获取图片路径
     this.userId = sessionStorage.getItem("userId");
     let param = new URLSearchParams();
     param.append("userid", this.userId);
@@ -148,8 +157,8 @@ export default {
       this.show = !this.show;
     },
     select() {
-       sessionStorage.removeItem("token");
-        sessionStorage.removeItem("userId");
+      sessionStorage.removeItem("token");
+      sessionStorage.removeItem("userId");
       this.$router.replace("/login");
     }
   }
@@ -316,12 +325,12 @@ export default {
 }
 .confirm {
   width: 400px;
-      height: 80px;
-      background: @themeColor;
-      color: white;
-      border: none;
-      border-radius: 30px;
-      font-size: 30px;
-      outline: none;
+  height: 80px;
+  background: @themeColor;
+  color: white;
+  border: none;
+  border-radius: 30px;
+  font-size: 30px;
+  outline: none;
 }
 </style>

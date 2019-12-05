@@ -1,7 +1,7 @@
 <template>
   <div class="a-answer">
     <div class="title-wrap">
-      <img :src="imgUrl+'/'+information.user.userImgUrl" alt />
+      <img :src="imgUrl+information.user.userImgUrl" alt />
       <span class="title">{{information.user.userName}}</span>
     </div>
     <div class="content">{{information.answerContent}}</div>
