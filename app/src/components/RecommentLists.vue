@@ -1,8 +1,11 @@
 <template>
+ <router-link :to="'/article/' + postId">
   <div class="zhujianwai">
       <div class="zhujian">
         <div class="left">
           <div class="title">
+            <img :src="'http://172.16.6.38:8989/'+countComment.user.userImgUrl" class="imgss" alt="">
+            <!-- <span>{{countComment.user.}}</span> -->
             <p>{{countComment.postTitle}}</p>
           </div>
           <div class="content">
@@ -10,19 +13,22 @@
           </div>
         </div>
         <div class="right">
-          <div class="photo"></div>
+          <div class="photo">{{countComment.circleName}}</div>
         </div>
       </div>
       <div class="nameandcommend">
+        
         <span>{{countComment.user.userName}}</span>
+        <span>{{countComment.postTime}}-时间</span>
         <span>{{countComment.countComment}}-评论</span>
       </div>
     </div>
+ </router-link>
 </template>
 <script>
 export default {
   name: 'RecommtLists',
-  props:["countComment"]
+  props:["countComment","postId"]
 };
 </script>
 
@@ -54,12 +60,22 @@ export default {
         height: 120px;
 
         padding: 30px;
-        padding-left: 60px;
+        padding-left: 20px;
         box-sizing: border-box;
+        display: flex;
+        
+        justify-content: flex-start;
         p {
           font-size: 34px;
           font-weight: 500;
           
+        }
+        .imgss {
+          width: 50px;
+          height: 50px;
+          border: 1px solid red;
+          border-radius: 50%;
+          margin-right: 20px;
         }
       }
       .content {
@@ -90,6 +106,7 @@ export default {
         height: 200px; */
         padding: 10px;
        /*  background: pink; */
+       color: @themeColor;
       }
     }
   }
@@ -107,5 +124,6 @@ export default {
     }
   }
 }
+
 
 </style>

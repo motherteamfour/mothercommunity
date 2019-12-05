@@ -210,7 +210,7 @@ const routes = [
         path: 'infocomment', // 消息中的评论
         component: InfoComment,
         children: [
-          {
+          /* {
             path: '',
             name: 'Received',
             component: () => import('../views/Received.vue')
@@ -219,7 +219,7 @@ const routes = [
             path: 'sented',
             name: 'Sented',
             component: () => import('../views/Sented.vue'),
-          }
+          } */
         ]
 
       },
