@@ -3,63 +3,64 @@
     <div class="header">
       <div class="status-bar"></div>
       <div class="navigation">
-        <i class="fa fa-angle-left" @click="back"></i>
+        <i class="fa fa-angle-left" @click="back()"></i>搜索结果
       </div>
     </div>
     <div class="main">
-      <div class="wrap-serach">
-        <div class="search-box">
-          <i class="fa fa-search" aria-hidden="true"></i>
-          <input type="input" placeholder="请输入关键词" v-model="keyword" />
-          <i class="fa fa-times" aria-hidden="true" @click="handleError"></i>
-        </div>
-
-        <span class="sure" @click="handleSure">确定</span>
-      </div>
+      <ul class="list">
+        <li v-for="(item, index) in lists" :key="index">
+          <router-link :to="'/questiondetail/' + item.questionId">
+            <AQuestion
+              :questionTitle="item.questionTitle"
+              :questionContent="item.questionContent"
+              :questionReply="item.questionReply"
+              :questionPoints="item.questionPoints"
+            ></AQuestion>
+          </router-link>
+        </li>
+      </ul>
     </div>
   </div>
 </template>
 <script>
+import AQuestion from "@/components/AQuestion.vue";
+
 export default {
   name: "SureSearch",
+  components: {
+    AQuestion
+  },
   data() {
     return {
-      keyword: ""
+      keyword: "",
+      userId: "",
+      lists: []
     };
   },
   methods: {
     back() {
-      this.$router.go(-1); //返回上一层
+      this.$router.replace("/searchquestion"); //返回上一层
     },
-    handleError() {
-      this.keyword = "";
-    },
-    // 搜索问题 /question/ordinarySearch
-    handleSure() {
-      var value = this.keyword.trim();
-      console.log(value);
-      if (!value.length) {
-        alert("搜索关键词不能为空");
-      } else {
-        this.axios({
-          url: `/question/ordinarySearch?questionTitle=${value}`,
-          method: "get",
-          header: {
-            "Content-Type": "application/x-www-form-urlencoded"
-          }
+    getSearchResult() {
+      this.axios
+        .get(
+          `/question/ordinarySearch?questionTitle=${this.keyword}&userId=${this.userId}`
+        )
+        .then(res => {
+          console.log(res.data);
+          this.lists = res.data.data;
         })
-          .then(res => {
-            console.log(res.data);
-          })
-          .catch(err => {
-            console.log(err);
-          });
-      }
+        .catch(err => {
+          console.log(err);
+        });
     }
   },
   created() {
-    var userId = sessionStorage.getItem("userId");
-    console.log(userId);
+    this.userId = sessionStorage.getItem("userId");
+    this.keyword = this.$store.state.searchKeyword;
+    // 发送请求获取对应关键词的所有问题
+    console.log(this.userId, this.keyword);
+    this.getSearchResult();
   }
 };
 </script>
@@ -93,54 +94,9 @@ export default {
     }
   }
 }
+
 .main {
-  padding: 0 30px;
-  // background-color: skyblue;
-  .wrap-serach {
-    height: 160px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    .search-box {
-      width: 580px;
-      height: 80px;
-      background-color: #f2f2f2;
-      border-radius: 40px;
-      .fa {
-        width: 60px;
-        height: 80px;
-        line-height: 80px;
-        font-size: 30px;
-        text-align: center;
-        vertical-align: middle;
-        display: inline-block;
-        color: #adadad;
-      }
-      .fa-search {
-        text-align: right;
-      }
-      .fa-times {
-        text-align: left;
-      }
-      input {
-        width: 420px;
-        height: 80px;
-        padding: 0 20px;
-        background-color: #f2f2f2;
-        vertical-align: middle;
-        outline: none;
-        border: none;
-      }
-    }
-    .sure {
-      display: inline-block;
-      vertical-align: middle;
-      font-size: 30px;
-      height: 80px;
-      line-height: 80px;
-      letter-spacing: 10px;
-      color: @themeColor;
-    }
-  }
+  background-color: rgb(248, 248, 248);
+  padding: 30px;
 }
 </style>

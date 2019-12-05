@@ -29,7 +29,7 @@
         </div>
       </div>
     </div>
-    <router-link :to="'/iwillanswer'" class="footer">
+    <router-link :to="'/iwillanswer/'+this.info.questionId" class="footer">
       <p>我要回答</p>
     </router-link>
   </div>

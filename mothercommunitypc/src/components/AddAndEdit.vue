@@ -64,7 +64,7 @@ export default {
     imgUrl: String,
     articleTitle: String,
     isAdd: Boolean,
-    articleId: String,
+    articleId: Number,
     showAdd: Boolean,
     bannerId: Number
   },
@@ -312,13 +312,32 @@ export default {
           });
       }
     },
+    open(t,c) {
+      this.$alert(c, t, {
+        confirmButtonText: '确定',
+        callback: () => {
+          this.$message({
+            type: 'info',
+            message: '好看吗'
+          });
+        }
+      });
+    },
     konwMore() {
+      var id;
+      if(typeof(this.value)=='string'){
+        id = this.articleId
+      }else {
+        id = this.value
+      }
       if (this.clickType == 1) {
-        console.log(this.value);
         this.axios
-          .get("/post/getPost?postId=1&userId=1000")
+          .get("/post/getPost?postId=" + id + "&userId=1000")
           .then(res => {
             console.log(res.data);
+            if(res.data.code==200) {
+              this.open(res.data.data.postTitle,res.data.data.postContent);
+            }
           })
           .catch(err => {
             console.log(err);
@@ -326,10 +345,13 @@ export default {
       } else if (this.clickType == 2) {
         this.axios
           .get(
-            "/question/questionDetail?questionId=" + this.value + "&userId=1000"
+            "/question/questionDetail?questionId=" + id + "&userId=1000"
           )
           .then(res => {
             console.log(res.data);
+            if(res.data.code==200) {
+              this.open(res.data.data.questionTitle,res.data.data.questionContent);
+            }
           })
           .catch(err => {
             console.log(err);

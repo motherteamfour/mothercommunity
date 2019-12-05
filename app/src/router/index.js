@@ -261,7 +261,7 @@ const routes = [
 
   },
   {
-    path: '/iwillanswer',
+    path: '/iwillanswer/:questionId',
     name: 'IWillAnswer',
     component: () => import('../views/IWillAnswer.vue'),
 
