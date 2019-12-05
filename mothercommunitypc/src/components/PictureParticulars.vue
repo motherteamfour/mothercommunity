@@ -1,6 +1,6 @@
 <template>
   <div class="pictureParticulars">
-    <div v-show='showAdd'>
+    <div v-show="showAdd">
       <div class="pictureParticulars-top-btn">
         <el-button @click="addBanner">添加</el-button>
         <el-button @click="returnBack">返回</el-button>
@@ -12,19 +12,28 @@
           <el-table-column prop="bannerName" label="图片名字" align="center"></el-table-column>
           <el-table-column label="操作" align="center" width="360">
             <template slot-scope="scope">
-              <el-button
-                class="edit"
-                size="mini"
-                @click="handleEdit(scope.row.bannerId)"
-              >编辑</el-button>
-              <el-button size="mini" type="danger" @click="handleDelete(scope.$index, scope.row)">删除</el-button>
+              <el-button class="edit" size="mini" @click="handleEdit(scope.row.bannerId)">编辑</el-button>
+              <el-button size="mini" type="danger" @click="handleDelete(scope.row.bannerId)">删除</el-button>
             </template>
           </el-table-column>
         </el-table>
       </div>
     </div>
 
-    <AddAndEdit v-show='!showAdd' @showAddFn="changeShow" :haveArticle="haveArticle" :clickType="clickType"></AddAndEdit>
+    <AddAndEdit
+      v-show="!showAdd"
+      @sonRefresh="refersh"
+      @showAddFn="changeShow"
+      :haveArticle="haveArticle"
+      :clickType="clickType"
+      :bannerName="bannerName"
+      :imgUrl="imgUrl"
+      :articleTitle="articleTitle"
+      :isAdd="isAdd"
+      :showAdd="showAdd"
+      :bannerId="bannerId"
+      :articleId="articleId"
+    ></AddAndEdit>
   </div>
 </template>
 
@@ -41,9 +50,12 @@ export default {
     return {
       showAdd: true,
       haveArticle: true,
-      bannerName: '',
-      imgUrl: '',
-      articleTitle: ''
+      isAdd: true,
+      bannerName: "",
+      imgUrl: "",
+      articleTitle: "",
+      articleId: '',
+      bannerId: 0
     };
   },
   components: {
@@ -53,34 +65,78 @@ export default {
     handleEdit(id) {
       console.log(id);
       this.axios
-        .get(`/banner/list/findByBannerId?bannerId=${id}&bannerType=${this.clickType}`)
-        .then((res) => {
+        .get(
+          `/banner/list/findByBannerId?bannerId=${id}&bannerType=${this.clickType}`
+        )
+        .then(res => {
           console.log(res.data);
-          /* if(res.data.code==200) {
-            this.input = res.data.data.bannerName
-            this.input1 = res.data.data.imgUrl
-          } */
+          if (res.data.code == 200) {
+            this.bannerId = res.data.data.bannerId;
+            this.bannerName = res.data.data.bannerName;
+            this.imgUrl = res.data.data.imgUrl ? "http://172.16.6.56:8081/" + res.data.data.imgUrl: "";
+            
+            if (res.data.data.post) {
+              console.log('主页id存在')
+              this.articleTitle = res.data.data.post.postTitle;
+              this.articleId = res.data.data.post.postId;
+            }else if (res.data.data.question) {
+              console.log('问答id存在')
+              this.articleTitle = res.data.data.question.questionTitle;
+              this.articleId = res.data.data.question.questionId;
+            }
+            
+            this.isAdd = false;
+            this.haveArticle = this.clickType == 0? false:true;
+            
+            this.changeShow();
+          }
         })
-        .catch((error) => {
+        .catch(error => {
           console.log(error);
         });
     },
-    handleDelete(index, row) {
-      console.log(index, row);
+    handleDelete(id) {
+      console.log(id);
+      this.axios({
+        url: "/banner/delBanner",
+        method: "post",
+        data: `bannerId=${id}`,
+        header: {
+          "Content-Type": "application/X-WWW-form-urlencoded"
+        }
+      })
+        .then(res => {
+          console.log(res.data);
+          if (res.data.code == 200) {
+            this.refersh();
+          }
+        })
+        .catch(err => {
+          console.log(err);
+        });
+    },
+    refersh() {
+      this.$emit("getBannerFn", this.clickType);
     },
     returnBack() {
       this.$emit("showFn");
     },
     changeShow() {
-      this.showAdd = !this.showAdd
+      this.isAdd=this.isAdd ? true:false 
+      this.showAdd = !this.showAdd;
     },
     addBanner() {
-      if(this.clickType == 0) {
-        this.haveArticle=false
-      }else {
-        this.haveArticle=true
+      this.isAdd = true;
+      this.bannerName = "";
+      this.imgUrl = "";
+      this.articleTitle = "";
+      this.articleId = "";
+      if (this.clickType == 0) {
+        this.haveArticle = false;
+      } else {
+        this.haveArticle = true;
       }
-      this.changeShow()
+      this.changeShow();
     }
   }
 };

@@ -109,20 +109,6 @@ const routes = [
         }
       },
       {
-
-        path: 'searchquestion',//搜索问题
-        name: 'SearchQuestion',
-        component: () => import('../views/SearchQuestion.vue'),
-        meta: {
-          auth: true
-        }
-      },
-      {
-        path: 'questiondetail/:questionId',// 问题详情页
-        name: 'QuestionDetail',
-        component: () => import('../views/QuestionDetail.vue'),
-      },
-      {
         path: 'suresearch',// 确定搜索
         name: 'SureSearch',
         component: () => import('../views/SureSearch.vue'),
@@ -248,11 +234,12 @@ const routes = [
     component: () => import('../views/CircleGourp.vue')
   },
   {
-    path: '/article/:id',
+    path: '/article/:id', //帖子
     name: 'article',
     component: () => import('../views/Article.vue')
   },
   {
+<<<<<<< HEAD
     path: '/alterbirthday',// 修改生日
     name: 'alterbirthday',
     component: () => import('../views/AlterBirthday.vue')
@@ -267,6 +254,39 @@ const routes = [
     name: 'FocusPage',
     component: () => import('../views/FocusPage.vue')
   }
+=======
+    path: '/otherUsers/:id', //帖子
+    name: 'otherUsers',
+    component: () => import('../views/OtherUsers.vue')
+  },
+  // 问答-曾晶
+  {
+    path: '/ask',
+    name: 'Ask',
+    component: () => import('../views/Ask.vue'),
+
+  },
+  {
+    path: '/iwillanswer',
+    name: 'IWillAnswer',
+    component: () => import('../views/IWillAnswer.vue'),
+
+  },
+  {
+
+    path: '/searchquestion',//搜索问题
+    name: 'SearchQuestion',
+    component: () => import('../views/SearchQuestion.vue'),
+    meta: {
+      auth: true
+    }
+  },
+  {
+    path: '/questiondetail/:questionId',// 问题详情页
+    name: 'QuestionDetail',
+    component: () => import('../views/QuestionDetail.vue'),
+  },
+>>>>>>> 7acdce8bd3d33b7fc33a0a5963708e46f67ce3de
 ]
 
 

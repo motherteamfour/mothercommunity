@@ -18,7 +18,7 @@ export default {
     FollowedList
   },
   created() {
-    this.axios.get("post/fol?userId=1002").then(res => {
+    this.axios.get("post/fol?userId=1001").then(res => {
       this.hotList = res.data.data;
       console.log(res.data);
     });

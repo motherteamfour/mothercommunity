@@ -19,8 +19,16 @@
           <td><input type="text" placeholder="请输入联系电话" class="tel mod" v-model="inputTel" @blur="tel(inputTel)"></td>
         </tr>
         <tr>
+          <td>性别：</td>
+          <td>
+            <select class="mod sel" v-model="sex">
+              <option value="0" selected>男</option>
+              <option value="1">女</option>
+            </select></td>
+        </tr>
+        <tr>
           <td colspan="2">
-            <el-button type="button" class="add" :disabled="disadd1 && disadd2 && disadd3" @click="addAdmin">添加</el-button>
+            <el-button type="button" class="add" @click="addAdmin">添加</el-button>
             <el-button type="button" class="exit" @click="exit">清空</el-button>
           </td>
         </tr>
@@ -29,33 +37,12 @@
     <div class="tab-two">
       <div>
         <div class="top">
-          <input type="text" class="user" placeholder="请输入需要搜索的用户名">
-          <input type="text" class="username" placeholder="请输入需要搜索的姓名">
-          <button type="button" class="seek-btn">搜索</button>
+          <input type="text" class="user" v-model="userSearch" placeholder="请输入需要搜索的用户名">
+          <input type="text" class="username" v-model="usersName" placeholder="请输入需要搜索的姓名">
+          <button type="button" class="seek-btn" @click="search">搜索</button>
           <button type="button" class="del-btn">删除</button>
         </div>
       </div>
-      <!-- <table>
-        <tr>
-          <th><input type="checkbox"></th>
-          <th>id</th>
-          <th>用户名</th>
-          <th>姓名</th>
-          <th>联系方式</th>
-          <th class="caozuo">操作</th>
-        </tr>
-        <tr v-for="(item,index) in trs" :key="index.id">
-          <td><input type="checkbox"></td>
-          <td>{{item.id}}</td>
-          <td>{{item.user}}</td>
-          <td>{{item.username}}</td>
-          <td>{{item.tel}}</td>
-          <td>
-            <button type="button" class="compile">编辑</button>
-            <button type="button" class="del" @click="del(index)">删除</button>
-          </td>
-        </tr>
-      </table> -->
       <el-table
         ref="multipleTable"
         :data="tableData"
@@ -63,17 +50,26 @@
         style="width: 98%; margin:0 auto;"
       >
         <el-table-column type="selection" width="120"></el-table-column>
-        <el-table-column prop label="序号" width="120"></el-table-column>
-        <el-table-column prop="userName" label="用户名" width="120"></el-table-column>
-        <el-table-column prop="userPhone" label="姓名" width="120"></el-table-column>
-        <el-table-column prop="state.stateMessage" label="联系方式" width="120"></el-table-column>
+        <el-table-column type="index" :index="indexMethod" label="序号" width="120"></el-table-column>
+        <el-table-column prop="adminNickName" label="用户名" width="120"></el-table-column>
+        <el-table-column prop="adminName" label="姓名" width="120"></el-table-column>
+        <el-table-column prop="adminPhone" label="联系方式" width="120"></el-table-column>
         <el-table-column label="操作" show-overflow-tooltip>
           <template slot-scope="scope">
-            <el-button class="btn"  @click="delBtn(scope.row.userId)">删除</el-button>
-            <el-button class="btn" @click="resumeBtn(scope.row.userId)">恢复</el-button>
+            <el-button class="btn"  @click="delBtn(scope.row.adminId)" :disabled="scope.row.isSuper==1">删除</el-button>
           </template>
         </el-table-column>
       </el-table>
+      <el-pagination
+          class="paging"
+          @size-change="handleSizeChange"
+          @current-change="handleCurrentChange"
+          :current-page.sync="page"
+          background
+          layout="prev, pager, next"
+          :page-size="sizePage"
+          :total="userTotal"
+        ></el-pagination>
     </div>
   </div>
   
@@ -85,32 +81,113 @@ export default {
   name:"addUsers",
   data(){
     return {
-      trs:[],
       // 对添加账户添加初始值
       inputUsername : "",
       inputPassword : "",
       inputName : "",
       inputTel : "",
-      disadd1 : false,
-      disadd2 : false,
-      disadd3 : false,
+      sex:"",
       tableData:[],
+      userTotal: 0,
+      page:1,
+      sizePage: 2,
+      userSearch:"",
+      usersName:""
+      
     }
   },
   created() {
     this.axios
-      .get("admin/findAdminByConditions?size=1&sizePage=6")
+      .get("/admin/listAdmin?size=1&sizePage=2")
       .then(res => {
         console.log(res.data.data);
         if (res.data.code == 200) {
           this.tableData = res.data.data.list;
+          //分页
+          this.userTotal = res.data.data.total;
         }
       })
       .catch(error => {
         console.log(error);
       });
   },
+  mounted() {
+    
+  },
   methods:{
+    handleSelectionChange(val) {
+      this.selAll = val;
+      console.log(this.selAll);
+    },
+    handleSizeChange(val) {
+      console.log(`每页 ${val} 条`);
+    },
+    handleCurrentChange(val) {
+      console.log(`当前页: ${val}`);
+      console.log(this.sizePage);
+      if(this.value==''&&this.userSearch=='') {
+        this.getAllUsers(val, this.sizePage);
+      }else {
+        this.searchPage(val, this.sizePage);
+      }
+    },
+    //搜索
+    search(){
+      this.axios({
+        url:"/admin/findAdminByConditions",
+        method:"post",
+        data: `size=1&sizePage=2&userName=${this.userSearch}&userState=${this.usersName}`,
+        headers:{
+          "Content-Type":"application/x-www-form-urlencoded"
+        },        
+      })
+      .then((res) => {
+        console.log(res.data);
+        if(res.data.code==200) {
+          this.tableData = res.data.data.list;
+          this.userTotal = res.data.data.total;
+        }else {
+          this.tableData = [];
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });      
+    },
+    searchPage(size, sizePage) {
+      this.axios({
+          url: "/admin/findAdminByConditions",
+          method: "post",
+          data: `size=${size}&sizePage=${sizePage}&userName=${this.userSearch}&userState=${this.usersName}`,
+          header: {
+            "Content-Type": "application/X-WWW-form-urlencoded"
+          }
+        })
+        .then((res) => {
+          console.log(res.data);
+          if(res.data.code==200) {
+            this.tableData = res.data.data.list;
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    },
+    getAllUsers(size, sizePage) {
+      this.axios
+        .get("/admin/findAdminByConditions=" + size + "&sizePage=" + sizePage)
+        .then(res => {
+          if (res.data.code == 200) {
+            this.tableData = res.data.data.list;
+          }
+        })
+        .catch(error => {
+          console.log(error);
+        });
+    },
+
+
+
     //清空效果
     exit:function(){
       this.inputUsername = "",
@@ -120,26 +197,39 @@ export default {
     },
     //添加管理员
     addAdmin(){
+      console.log(typeof(this.inputName))
+      console.log(typeof(this.inputUsername))
+      console.log(typeof(this.inputPassword))
+      console.log(typeof(this.inputTel))
+      console.log(typeof(this.sex))
+      this.axios({
+        url:"/admin/addAdmin",
+        method:"post",
+        //不能使用回车换行
+        data:`adminName=${this.inputName}&adminNickName=${this.inputUsername}&adminPassword=${this.inputPassword}&adminPhone=${this.inputTel}&adminSex=${this.sex}`,
+        headers:{
+          "Content-Type":"application/x-www-form-urlencoded"
+        },
+        
+      })
 
-    },
-    del(i) {
-      this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        type: 'warning'
-      }).then(() => {
-        this.trs.splice(i, 1);
-        this.$message({
-          type: 'success',
-          message: '删除成功!'
+      .then(res=>{
+        console.log(res.data)
+        this.axios
+        .get("/admin/listAdmin?size=1&sizePage=2")
+        .then(res => {
+          console.log(res.data.data);
+          if (res.data.code == 200) {
+            this.tableData = res.data.data.list;
+          }
+        })
+        .catch(error => {
+          console.log(error);
         });
-      }).catch(() => {
-        this.$message({
-          type: 'info',
-          message: '已取消删除'
-        });          
-      });
-       
+      })
+      .catch(error=>{
+        console.log(error)
+      })
     },
     defeated(msg) {
       this.$message({
@@ -153,9 +243,7 @@ export default {
       var pat = /^[a-zA-Z]{5,15}$/;
       if(!pat.test(message)){
         this.defeated("请输入5-15位的字母") 
-        if(message!=""){
-        return  this.disadd1 = true
-      }
+
       }
       
     },
@@ -163,23 +251,64 @@ export default {
       var pat = /^[a-zA-Z0-9_]{5,15}$/;
       if(!pat.test(message)){
         this.defeated("请输入5-15位的字母、数字和下划线")
-        if(message!=""){
-        return this.disadd2= true
-      }
+
       }
     },
     tel(message){
       var pat = /^1[3|4|5|6|7|8|9]\d{9}/;
       if(!pat.test(message)){
         this.defeated("电话号码格式不正确")
-        if(message!=""){
-        return this.disadd3 = true
-      }
+  
       }
     },
-   
-  },
+    // 删除
+    delBtn(adminId){
+      // var userIds = this.userIds.join
+      console.log(adminId);
+      // const params = new URLSearchParams()
+      // params.append('userId',userId)
+      this.axios({
+        url:"/admin/delAdmin",
+        method:"post",
+        data: `adminId=${adminId}`,
+        headers:{
+          "Content-Type":"application/x-www-form-urlencoded"
+        },
+      // data:params
+        
+      })
+      .then(res=>{
+        console.log(res.data)
 
+          this.axios
+          .get("/admin/listAdmin?size=1&sizePage=2")
+          .then(res => {
+            console.log(res.data.data);
+              this.tableData = res.data.data.list;
+          })
+        
+        
+      })
+      .catch(error=>{
+        console.log(error)
+      })
+      // this.axios.post("/admin/delUser", 
+      //   {
+      //     userId: userId
+      //   })
+      //   .then(res => {
+      //     console.log(res.data,"1111");
+      //   })
+      //   .catch(err => {
+      //     console.log(err);
+      //   })
+      
+    },
+    //序号的编写
+    indexMethod(index){
+      return (index+ 1) + ( this.page - 1 ) * this.sizePage
+    }
+  }
 }
 </script>
 
@@ -222,9 +351,17 @@ button:hover {
   background: #fff;
   padding:0 0 0 10px;
 }
-.seek-btn,.del-btn{
+.sel{
+  width: 196px;
+  height: 42px;
+}
+.seek-btn,.del-btn,.btn{
   background:@bg-btn;
   margin: 5px;
+}
+.btn:hover{
+  background: #009687d0;
+  color: white
 }
 .userId,.username,.user{
   width: 182px;

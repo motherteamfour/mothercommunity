@@ -8,8 +8,14 @@
         <div class="questions" @click="questionSet">问答轮播</div>
       </div>
     </div>
-    
-    <PictureParticulars v-show="!showEidt" @showFn="changeShow" :clickType="clickType" :bannerLists="bannerLists"></PictureParticulars>
+
+    <PictureParticulars
+      v-show="!showEidt"
+      @getBannerFn="getBanner"
+      @showFn="changeShow"
+      :clickType="clickType"
+      :bannerLists="bannerLists"
+    ></PictureParticulars>
   </div>
 </template>
 
@@ -17,32 +23,32 @@
 import PictureParticulars from "@/components/PictureParticulars.vue";
 
 export default {
-  name: 'manngePicture',
+  name: "manngePicture",
   data() {
     return {
       showEidt: true,
       clickType: -1,
       bannerLists: []
-    }
+    };
   },
   components: {
     PictureParticulars
   },
   methods: {
     changeShow() {
-      this.showEidt=!this.showEidt
+      this.showEidt = !this.showEidt;
     },
     circleSet() {
       this.clickType = 0;
       this.axios
         .get("/banner/list?bannerType=" + this.clickType)
-        .then((res) => {
-          console.log(res.data)
-          if(res.data.code==200) {
-            this.bannerLists = res.data.data
+        .then(res => {
+          console.log(res.data);
+          if (res.data.code == 200) {
+            this.bannerLists = res.data.data;
           }
         })
-        .catch((error) => {
+        .catch(error => {
           console.log(error);
         });
       this.changeShow();
@@ -51,13 +57,13 @@ export default {
       this.clickType = 1;
       this.axios
         .get("/banner/list?bannerType=" + this.clickType)
-        .then((res) => {
-          console.log(res.data)
-          if(res.data.code==200) {
-            this.bannerLists = res.data.data
+        .then(res => {
+          console.log(res.data);
+          if (res.data.code == 200) {
+            this.bannerLists = res.data.data;
           }
         })
-        .catch((error) => {
+        .catch(error => {
           console.log(error);
         });
       this.changeShow();
@@ -66,6 +72,29 @@ export default {
       this.clickType = 2;
       this.axios
         .get("/banner/list?bannerType=" + this.clickType)
+        .then(res => {
+          console.log(res.data);
+          if (res.data.code == 200) {
+            this.bannerLists = res.data.data;
+          }
+        })
+        .catch(error => {
+          console.log(error);
+        });
+      this.changeShow();
+    },
+    getBanner(i) {
+      if (i == 0) {
+        this.circleSetSon(i);
+      } else if (i == 1) {
+        this.homeSetSon(i);
+      } else if (i == 2) {
+        this.questionSetSon(i);
+      }
+    },
+    circleSetSon(i) {
+      this.axios
+        .get("/banner/list?bannerType=" + i)
         .then((res) => {
           console.log(res.data)
           if(res.data.code==200) {
@@ -75,51 +104,80 @@ export default {
         .catch((error) => {
           console.log(error);
         });
-      this.changeShow();
+    },
+    homeSetSon(i) {
+      this.axios
+        .get("/banner/list?bannerType=" + i)
+        .then((res) => {
+          console.log(res.data)
+          if(res.data.code==200) {
+            this.bannerLists = res.data.data
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    },
+    questionSetSon(i) {
+      this.axios
+        .get("/banner/list?bannerType=" + i)
+        .then((res) => {
+          console.log(res.data)
+          if(res.data.code==200) {
+            this.bannerLists = res.data.data
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+        });
     }
   }
-}
+};
 </script>
 
 <style lang="less" scoped>
-  .manngePicture{
-    width: 1146px;
-    height: 638px;
-    margin: 10px;
-    background: #fff;
+.manngePicture {
+  width: 1146px;
+  height: 638px;
+  margin: 10px;
+  background: #fff;
 
-    .title {
-      font-size: 28px;
-      font-weight: 500;
-      padding: 50px 0;
-    }
-    .community,.circle,.questions {
-      display: inline-block;
-      width: 300px;
-      height: 200px;
-      background: lavender;
-      margin: 40px 10px;
-      line-height: 200px;
-      font-size: 28px;
-      font-weight: 600;
-      color: #000;
-      cursor: pointer;
-    }
-    .community:hover,.circle:hover,.questions:hover {
-      opacity: .8;
-      color: #555;
-    }
-    .community {
-      background: url(../assets/images/002.jpg) no-repeat;
-      background-size: 100%;
-    }
-    .circle {
-      background: url(../assets/images/003.jpg) no-repeat;
-      background-size: 100%;
-    }
-    .questions {
-      background: url(../assets/images/004.jpg) no-repeat;
-      background-size: 100%;
-    }
+  .title {
+    font-size: 28px;
+    font-weight: 500;
+    padding: 50px 0;
   }
+  .community,
+  .circle,
+  .questions {
+    display: inline-block;
+    width: 300px;
+    height: 200px;
+    background: lavender;
+    margin: 40px 10px;
+    line-height: 200px;
+    font-size: 28px;
+    font-weight: 600;
+    color: #000;
+    cursor: pointer;
+  }
+  .community:hover,
+  .circle:hover,
+  .questions:hover {
+    opacity: 0.8;
+    color: #555;
+  }
+  .community {
+    background: url(../assets/images/002.jpg) no-repeat;
+    background-size: 100%;
+  }
+  .circle {
+    background: url(../assets/images/003.jpg) no-repeat;
+    background-size: 100%;
+  }
+  .questions {
+    background: url(../assets/images/004.jpg) no-repeat;
+    background-size: 100%;
+  }
+}
 </style>

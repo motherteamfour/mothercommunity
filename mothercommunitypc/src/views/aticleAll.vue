@@ -15,109 +15,64 @@
       </select>
       <input type="text" class="username" placeholder="请输入需要搜索的用户名" />
       <input type="text" class="title" placeholder="请输入需要搜索的标题" />
-      <button type="button" class="seek-btn" @click="sousuo">搜索</button>
+      <button type="button" class="seek-btn">搜索</button>
       <button type="button" class="del-btn">删除</button>
       <button type="button" class="unRecommend">推荐</button>
     </div>
     <div class="table">
-      <table>
-        <tr>
-          <th>
-            <input type="checkbox" @click="selectAll" />
-          </th>
-          <th>ID</th>
-          <th>用户名</th>
-          <th>标题</th>
-          <th>文章类型</th>
-          <th>发布时间</th>
-          <th>收藏数量</th>
-          <th>点赞数量</th>
-          <th class="caozuo">操作</th>
-        </tr>
-        <tr v-for="(item,index) in comsts" :key="index.id">
-          <td>
-            <input type="checkbox" v-model="item.isSel" />
-          </td>
-          <td>{{item.id}}</td>
-          <td>{{item.username}}</td>
-          <td>{{item.title}}</td>
-          <td>{{item.type}}</td>
-          <td>{{item.time}}</td>
-          <td>{{item.collect}}</td>
-          <td>{{item.praise}}</td>
-          <td>
-            <button type="button" class="check-btn">查看</button>
-            <button type="button" class="del-btn" @click="del(index)">删除</button>
-            <button type="button" class="unRecommend">推荐</button>
-          </td>
-        </tr>
-      </table>
+
+      <el-table
+        ref="multipleTable"
+        :data="tableData"
+        tooltip-effect="dark"
+        style="width: 98%; margin:0 auto;"
+      >
+        <el-table-column type="selection" width="60" align="center"></el-table-column>
+        <el-table-column prop label="ID" width="60" align="center"></el-table-column>
+        <el-table-column prop="user.userName" label="用户名" width="120" align="center"></el-table-column>
+        <el-table-column prop="postTitle" label="标题" width="120" align="center"></el-table-column>
+        <el-table-column prop="categoryName" label="大圈子" width="100" align="center"></el-table-column>
+        <el-table-column prop="circleName" label="小圈子" width="100" align="center"></el-table-column>
+        <el-table-column prop="user.userStartTime" label="发布时间" width="120" align="center"></el-table-column>
+        <el-table-column prop="countCollection" label="收藏数量" width="100" align="center"></el-table-column>
+        <el-table-column prop="countFabulous" label="点赞数量" width="100" align="center"></el-table-column>
+        
+        <el-table-column label="操作" show-overflow-tooltip align="center">
+           <!-- slot-scope="scope" -->
+          <template slot-scope="scope">
+            <el-button class="check-btn">查看</el-button>
+            <el-button class="del-btn" @click="deleteAtic(scope.row.postId)">删除</el-button>
+            <el-button class="unRecommend" @click="recom(scope.row.postId)">推荐</el-button>
+          </template>
+        </el-table-column>
+      </el-table>
     </div>
   </div>
 </template>
 
 <script>
-const comsts = [
-  {
-    id: 1,
-    username: "lilei",
-    title: "朝花夕拾",
-    time: "2017.1.5",
-    type: "怀孕",
-    collect: 20,
-    praise: 30
-  },
-  {
-    id: 2,
-    username: "haiqiong",
-    title: "朝花夕拾",
-    time: "2017.1.5",
-    type: "怀孕",
-    collect: 20,
-    praise: 30
-  },
-  {
-    id: 3,
-    username: "lilei",
-    title: "朝花夕拾",
-    time: "2017.1.5",
-    type: "怀孕",
-    collect: 20,
-    praise: 30
-  }
-];
+
 export default {
-  name: "users",
+  name: "aticleAll",
   data() {
     return {
-      comsts: [],
-      list: ["1","2","3","四",4]
+      tableData: [],
     };
   },
   created() {
-    this.comsts = comsts;
+    this.axios.get("/posterior/postmanagement/notRecommend?page=1&pagesize=6")
+    .then(res=>{
+      console.log(res.data)
+      this.tableData = res.data.data.list;
+    })
+    .catch(error=>{
+      console.log(error)
+    })
   },
   computed: {
-    // isSelectAll:function(){
-    //   return this.comsts.every(function(val) {
-    //     return val.isSel
-    //   })
-    // }
+
   },
   methods: {
-    selectAll: function(e) {
-      if (e.target.checked) {
-        this.comsts = this.comsts.map(function(item) {
-          item.isSel = true;
-          return item;
-        });
-      } else {
-        this.comsts = this.comsts.map(function(item) {
-          item.isSel = false;
-          return item;
-        });
-      }
-    },
     del(i) {
       this.$confirm("此操作将永久删除该文件, 是否继续?", "提示", {
         confirmButtonText: "确定",
@@ -138,26 +93,49 @@ export default {
           });
         });
     },
-    sousuo() {
-    
-      console.log(typeof(this.list.join(",")))
-      var liset = this.list.join(",")
+    //推荐
+    recom(postId){
       this.axios({
-        method: "put",
-        url:
-          "/posterior/postmanagement/removePostByIds",
-        data: {
-          postIds:liset
-        }
+        url:"/posterior/postmanagement/updatePostRecommendById",
+        method:"post",
+        data:`postId=${postId}`,
+        headers:{
+          "Content-Type":"application/x-www-form-urlencoded"
+        },
       })
-        .then(function(response) {
-          console.log(response,"chenggong ")
-          
+      .then(res=>{
+        console.log(res.data)
+      })
+      .catch(error=>{
+        console.log(error)
+      })
+    },
+    //文章删除
+    deleteAtic(postId){
+      this.axios({
+        url:"/posterior/postmanagement/removePostById",
+        method:"post",
+        data:`postId=${postId}`,
+        headers:{
+          "Content-Type":"application/x-www-form-urlencoded"
+        },
+      })
+      .then(res=>{
+        console.log(res.data)
+        this.axios.get("/posterior/postmanagement/notRecommend?page=1&pagesize=6")
+        .then(res=>{
+          console.log(res.data)
+          this.tableData = res.data.data.list;
         })
-        .catch(function(response) {
-          console.log(response,"shibai ")
-        });
+        .catch(error=>{
+          console.log(error)
+        })
+      })
+      .catch(error=>{
+        console.log(error)
+      })
     }
+    
   },
   
 };

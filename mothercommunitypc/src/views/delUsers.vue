@@ -1,15 +1,17 @@
 <template>
   <div>
     <div class="top">
-      <input type="text" class="username" placeholder="请输入需要搜索的用户名">
-      <select class="conition">
-        <option value="备孕中">备孕中</option>
-        <option value="已怀孕">已怀孕</option>
-        <option value="已出生">已出生</option>
+      <input type="text" class="username" v-model="userSearch" placeholder="请输入需要搜索的用户名">
+      
+      <select class="conition" v-model="value">
+        <option value="1">所有用户</option>
+        <option value="2">备孕中</option>
+        <option value="3">已怀孕</option>
+        <option value="4">已出生</option>
       </select>
       <button type="button" class="seek-btn" @click="search">搜索</button>
       <button type="button" class="del-btn">删除</button>
-      <button type="button" class="recover">恢复</button>
+      <button type="button" class="recover" @click="resumes">恢复</button>
     </div>
     <el-table
         ref="multipleTable"
@@ -17,18 +19,28 @@
         tooltip-effect="dark"
         style="width: 98%; margin:0 auto;"
       >
-        <el-table-column type="selection" width="120"></el-table-column>
-        <el-table-column prop label="序号" width="120"></el-table-column>
-        <el-table-column prop="userName" label="用户名" width="120"></el-table-column>
-        <el-table-column prop="userPhone" label="电话号码" width="120"></el-table-column>
-        <el-table-column prop="state.stateMessage" label="备孕状态" width="120"></el-table-column>
-        <el-table-column label="操作" show-overflow-tooltip>
+        <el-table-column type="selection" width="60" align="center"></el-table-column>
+        <el-table-column type="index" :index="indexMethod" label="序号" width="120" align="center"></el-table-column>
+        <el-table-column prop="userName" label="用户名" width="120" align="center"></el-table-column>
+        <el-table-column prop="userPhone" label="电话号码" width="120" align="center"></el-table-column>
+        <el-table-column prop="state.stateMessage" label="备孕状态" width="120" align="center"></el-table-column>
+        <el-table-column label="操作" show-overflow-tooltip align="center">
           <template slot-scope="scope">
             <el-button class="btn"  @click="delBtn(scope.row.userId)">删除</el-button>
             <el-button class="btn" @click="resumeBtn(scope.row.userId)">恢复</el-button>
           </template>
         </el-table-column>
       </el-table>
+      <el-pagination
+          class="paging"
+          @size-change="handleSizeChange"
+          @current-change="handleCurrentChange"
+          :current-page.sync="page"
+          background
+          layout="prev, pager, next"
+          :page-size="sizePage"
+          :total="userTotal"
+        ></el-pagination>
   </div>
 </template>
 
@@ -38,7 +50,13 @@ export default {
   name:"users",
   data() {
     return {
-     tableData:[]
+    tableData:[],
+    userSearch:"",
+    value:"",
+    userTotal: 0,
+    page:1,
+    sizePage: 6,
+    number:0
     }
   },
   created() {
@@ -47,7 +65,10 @@ export default {
       .then(res => {
         console.log(res.data.data);
         if (res.data.code == 200) {
+          //将数据库中的数据对象赋值到自己创建的数据库中
           this.tableData = res.data.data.list;
+          //将数据库中的总条数赋值到按钮上，自动分页
+          this.userTotal = res.data.data.total;
         }
       })
       .catch(error => {
@@ -61,16 +82,55 @@ export default {
     
   },
   methods: {
+    handleSizeChange(val) {
+      console.log(`每页 ${val} 条`);
+    },
+    handleCurrentChange(val) {
+      console.log(`当前页: ${val}`);
+      console.log(this.sizePage);
+      if(this.value==''&&this.userSearch=='') {
+        this.getAllUsers(val, this.sizePage);
+      }else {
+        this.searchPage(val, this.sizePage);
+      }
+    },
+    getAllUsers(size, sizePage) {
+      this.axios
+        .get("/admin/delUserList?size=" + size + "&sizePage=" + sizePage)
+        .then(res => {
+          if (res.data.code == 200) {
+            this.tableData = res.data.data.list;
+          }
+        })
+        .catch(error => {
+          console.log(error);
+        });
+    },
+    //删除
     delBtn(userId) {
       console.log(userId);
-      this.axios
-        .delete("/admin/deleteUser?userId=1000")
-        .then(res=>{
-          console.log(res.data)
-        })
-        .catch(error=>{
-          console.log(error)
-        })
+      this.axios({
+        url:"/admin/deleteUser",
+        method:"post",
+        data: `userId=${userId}`,
+        headers:{
+          "Content-Type":"application/x-www-form-urlencoded"
+        },
+      })
+      .then(res=>{
+        console.log(res.data)
+        this.axios
+          .get("/admin/delUserList?size=1&sizePage=6")
+          .then(res => {
+              this.tableData = res.data.data.list;
+          }) 
+          .catch(error => {
+            console.log(error);
+          });   
+      })
+      .catch(error=>{
+        console.log(error)
+      })
     },
     //恢复
     resumeBtn(userId){
@@ -96,7 +156,10 @@ export default {
             if (res.data.code == 200) {
               this.tableData = res.data.data.list;
             }
-          })            
+          }) 
+          .catch(error => {
+            console.log(error);
+          });           
       })
       .catch(error=>{
         console.log(error)
@@ -114,48 +177,60 @@ export default {
       
     },
     //搜索
-    search(userName){
-        // var userIds = this.userIds.join
-      console.log(userName);
-      // const params = new URLSearchParams()
-      // params.append('userId',userId)
+    search(){
+
+      console.log();
       this.axios({
-        url:" /admin/findUserByConditions?size=1&sizePage=6",
+        url:"/admin/findUserByConditions",
         method:"post",
-        data: `Name=${userName}`,
+        data: `size=1&sizePage=6&userName=${this.userSearch}&userState=${this.value}`,
         headers:{
           "Content-Type":"application/x-www-form-urlencoded"
         },
-      // data:params
         
       })
-      .then(res=>{
-        console.log(res.data)
-          this.axios
-          .get("/admin/findUserByConditions?size=1&sizePage=6")
-          .then(res => {
-            if (res.data.code == 200) {
-              this.tableData = res.data.data.list;
-            }
-          })            
+      .then((res) => {
+        console.log(res.data);
+        if(res.data.code==200) {
+          this.tableData = res.data.data.list;
+          this.userTotal = res.data.data.total;
+        }else {
+          this.tableData = [];
+        }
       })
-      .catch(error=>{
-        console.log(error)
-      })
-      // this.axios.post("/admin/delUser", 
-      //   {
-      //     userId: userId
-      //   })
-      //   .then(res => {
-      //     console.log(res.data,"1111");
-      //   })
-      //   .catch(err => {
-      //     console.log(err);
-      //   })
+      .catch((err) => {
+        console.log(err);
+      });
+ 
       
     },
-     
+    //搜索完成之后的分页
+    searchPage(size, sizePage) {
+      this.axios({
+          url: "/admin/findUserByConditions",
+          method: "post",
+          data: `size=${size}&sizePage=${sizePage}&userName=${this.userSearch}&userState=${this.value}`,
+          header: {
+            "Content-Type": "application/X-WWW-form-urlencoded"
+          }
+        })
+        .then((res) => {
+          console.log(res.data);
+          if(res.data.code==200) {
+            this.tableData = res.data.data.list;
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    },
+    //恢复多个
+    resumes(){},
+    //序号的编写
+    indexMethod(index){
+      return (index+ 1) + ( this.page - 1 ) * this.sizePage
     }
+  }
   
 
 }
