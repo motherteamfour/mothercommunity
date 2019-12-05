@@ -19,6 +19,11 @@ export default {
 </script>
 
 <style lang="less" scoped>
+.lists{
+  width: 750px;
+  height: 100vh;
+  background: greenyellow;
+}
 .lis {
   width: 710px;
   height: 150px;

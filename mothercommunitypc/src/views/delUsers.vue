@@ -10,7 +10,7 @@
         <option value="4">已出生</option>
       </select>
       <button type="button" class="seek-btn" @click="search">搜索</button>
-      <button type="button" class="del-btn">删除</button>
+      <button type="button" class="del-btn" @click="delAll">删除</button>
       <button type="button" class="recover" @click="resumes">恢复</button>
     </div>
     <el-table
@@ -18,6 +18,7 @@
         :data="tableData"
         tooltip-effect="dark"
         style="width: 98%; margin:0 auto;"
+        @selection-change="handleSelectionChange"
       >
         <el-table-column type="selection" width="60" align="center"></el-table-column>
         <el-table-column type="index" :index="indexMethod" label="序号" width="120" align="center"></el-table-column>
@@ -51,6 +52,9 @@ export default {
   data() {
     return {
     tableData:[],
+    selAll:[],
+    selectAll1:[],
+    selectAll2:"",
     userSearch:"",
     value:"",
     userTotal: 0,
@@ -82,6 +86,10 @@ export default {
     
   },
   methods: {
+    handleSelectionChange(val) {
+      this.selAll = val;
+      console.log(this.selAll);
+    },
     handleSizeChange(val) {
       console.log(`每页 ${val} 条`);
     },
@@ -123,6 +131,7 @@ export default {
           .get("/admin/delUserList?size=1&sizePage=6")
           .then(res => {
               this.tableData = res.data.data.list;
+              
           }) 
           .catch(error => {
             console.log(error);
@@ -181,7 +190,7 @@ export default {
 
       console.log();
       this.axios({
-        url:"/admin/findUserByConditions",
+        url:"/admin/findDelUserByConditions",
         method:"post",
         data: `size=1&sizePage=6&userName=${this.userSearch}&userState=${this.value}`,
         headers:{
@@ -200,14 +209,12 @@ export default {
       })
       .catch((err) => {
         console.log(err);
-      });
- 
-      
+      }); 
     },
     //搜索完成之后的分页
     searchPage(size, sizePage) {
       this.axios({
-          url: "/admin/findUserByConditions",
+          url: "/admin/findDelUserByConditions",
           method: "post",
           data: `size=${size}&sizePage=${sizePage}&userName=${this.userSearch}&userState=${this.value}`,
           header: {
@@ -225,11 +232,87 @@ export default {
         });
     },
     //恢复多个
-    resumes(){},
+    resumes(){
+      console.log()
+      if(this.selAll.length>0){
+        this.selAll.forEach(item=>{
+          this.selectAll1.push(item.userId)
+          console.log(this.selectAll1)
+          
+        });
+        this.selectAll2 = this.selectAll1.join(",")
+      } 
+      console.log(this.selectAll1)
+      this.axios({
+        url:"/admin/resumeUsers",
+        method:"post",
+        data: `ids=${this.selectAll2}`,
+        headers:{
+          "Content-Type":"application/x-www-form-urlencoded"
+        },
+      })
+      .then(res=>{
+        console.log(res.data)
+         this.axios
+        .get("/admin/delUserList?size=1&sizePage=6")
+        .then(res => {
+          console.log(res.data.data);
+          if (res.data.code == 200) {
+            this.tableData = res.data.data.list;
+          }
+        })
+        .catch(error => {
+          console.log(error);
+        });
+      })
+      .catch(error=>{
+        console.log(error)
+      })
+    },
     //序号的编写
     indexMethod(index){
       return (index+ 1) + ( this.page - 1 ) * this.sizePage
-    }
+    },
+    //删除多条数据
+    delAll() {
+      console.log()
+      if(this.selAll.length>0){
+        this.selAll.forEach(item=>{
+          this.selectAll1.push(item.userId)
+          console.log(this.selectAll1)
+          
+        });
+        this.selectAll2 = this.selectAll1.join(",")
+      } 
+      console.log(this.selectAll1)
+      this.axios({
+        url:"/admin/deleteUsers",
+        method:"post",
+        data: `ids=${this.selectAll2}`,
+        headers:{
+          "Content-Type":"application/x-www-form-urlencoded"
+        },
+      })
+      .then(res=>{
+        console.log(res.data)
+         this.axios
+        .get("/admin/delUserList?size=1&sizePage=6")
+        .then(res => {
+          console.log(res.data.data);
+          if (res.data.code == 200) {
+            this.tableData = res.data.data.list;
+          } 
+        })
+        .catch(error => {
+          console.log(error);
+        });
+      })
+      .catch(error=>{
+        console.log(error)
+      })
+      
+
+    },
   }
   
 

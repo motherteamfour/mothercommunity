@@ -228,7 +228,7 @@ export default {
       } 
       console.log(this.selectAll1)
       this.axios({
-        url:"/admin/deleteUsers",
+        url:"/admin/delUsers",
         method:"post",
         data:`ids=${this.selectAll2}`,
         headers:{
