@@ -228,6 +228,7 @@ const routes = [
     path: '/otherUsers/:id', //帖子
     name: 'otherUsers',
     component: () => import('../views/OtherUsers.vue')
+  },
   // 问答-曾晶
   {
     path: '/ask',
