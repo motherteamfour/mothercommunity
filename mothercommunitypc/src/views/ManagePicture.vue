@@ -1,5 +1,5 @@
 <template>
-  <div class="manngePicture">
+  <div class="manngePicture" v-loading.fullscreen.lock="fullscreenLoading">
     <div v-show="showEidt">
       <p class="title">点击所需板块进行设置</p>
       <div>
@@ -28,7 +28,8 @@ export default {
     return {
       showEidt: true,
       clickType: -1,
-      bannerLists: []
+      bannerLists: [],
+      fullscreenLoading: false
     };
   },
   components: {
@@ -38,48 +39,83 @@ export default {
     changeShow() {
       this.showEidt = !this.showEidt;
     },
+    success(msg) {
+      this.$message({
+        showClose: true,
+        message: msg,
+        type: "success"
+      });
+    },
+    defeated(msg) {
+      this.$message({
+        showClose: true,
+        message: msg,
+        type: "error"
+      });
+    },
     circleSet() {
+      this.fullscreenLoading = true;
       this.clickType = 0;
       this.axios
         .get("/banner/list?bannerType=" + this.clickType)
         .then(res => {
           console.log(res.data);
           if (res.data.code == 200) {
+            this.fullscreenLoading = false;
             this.bannerLists = res.data.data;
+          }else {
+            this.fullscreenLoading = false;
+            this.defeated('服务器出错，请稍后重试');
           }
         })
         .catch(error => {
           console.log(error);
+          this.fullscreenLoading = false;
+          this.defeated('服务器出错，请稍后重试');
         });
       this.changeShow();
     },
     homeSet() {
+      this.fullscreenLoading = true;
       this.clickType = 1;
       this.axios
         .get("/banner/list?bannerType=" + this.clickType)
         .then(res => {
           console.log(res.data);
           if (res.data.code == 200) {
+            this.fullscreenLoading = false;
             this.bannerLists = res.data.data;
+          }else {
+            this.fullscreenLoading = false;
+            this.defeated('服务器出错，请稍后重试');
           }
         })
         .catch(error => {
           console.log(error);
+          this.fullscreenLoading = false;
+          this.defeated('服务器出错，请稍后重试');
         });
       this.changeShow();
     },
     questionSet() {
+      this.fullscreenLoading = true;
       this.clickType = 2;
       this.axios
         .get("/banner/list?bannerType=" + this.clickType)
         .then(res => {
           console.log(res.data);
           if (res.data.code == 200) {
+            this.fullscreenLoading = false;
             this.bannerLists = res.data.data;
+          }else {
+            this.fullscreenLoading = false;
+            this.defeated('服务器出错，请稍后重试');
           }
         })
         .catch(error => {
           console.log(error);
+          this.fullscreenLoading = false;
+          this.defeated('服务器出错，请稍后重试');
         });
       this.changeShow();
     },
@@ -93,42 +129,63 @@ export default {
       }
     },
     circleSetSon(i) {
+      this.fullscreenLoading = true;
       this.axios
         .get("/banner/list?bannerType=" + i)
         .then((res) => {
           console.log(res.data)
           if(res.data.code==200) {
+            this.fullscreenLoading = false;
             this.bannerLists = res.data.data
+          }else {
+            this.fullscreenLoading = false;
+            this.defeated('服务器出错，请稍后重试');
           }
         })
         .catch((error) => {
           console.log(error);
+          this.fullscreenLoading = false;
+          this.defeated('服务器出错，请稍后重试');
         });
     },
     homeSetSon(i) {
+      this.fullscreenLoading = true;
       this.axios
         .get("/banner/list?bannerType=" + i)
         .then((res) => {
           console.log(res.data)
           if(res.data.code==200) {
+            this.fullscreenLoading = false;
             this.bannerLists = res.data.data
+          }else {
+            this.fullscreenLoading = false;
+            this.defeated('服务器出错，请稍后重试');
           }
         })
         .catch((error) => {
           console.log(error);
+          this.fullscreenLoading = false;
+          this.defeated('服务器出错，请稍后重试');
         });
     },
     questionSetSon(i) {
+      this.fullscreenLoading = true;
       this.axios
         .get("/banner/list?bannerType=" + i)
         .then((res) => {
           console.log(res.data)
           if(res.data.code==200) {
+            this.fullscreenLoading = false;
             this.bannerLists = res.data.data
+          }else {
+            this.fullscreenLoading = false;
+            this.defeated('服务器出错，请稍后重试');
           }
         })
         .catch((error) => {
           console.log(error);
+          this.fullscreenLoading = false;
+          this.defeated('服务器出错，请稍后重试');
         });
     }
   }

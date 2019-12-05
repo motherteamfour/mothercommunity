@@ -1,5 +1,5 @@
 <template>
-  <div class="messageManage">
+  <div class="messageManage" v-loading.fullscreen.lock="fullscreenLoading">
     <div v-show="showEdit">
       <div v-show="showEdit" class="messageManage-search">
         <el-select class="messageManage-search-select" v-model="value" placeholder="请选择">
@@ -91,7 +91,8 @@ export default {
       userTotal: 0,
       sizePage: 6,
       multipleSelection: [],
-      receiveIds: []
+      receiveIds: [],
+      fullscreenLoading: false
     };
   },
   computed: mapState({
@@ -146,15 +147,22 @@ export default {
       this.showEdit = !this.showEdit;
     },
     getAllUsers(size, sizePage) {
+      this.fullscreenLoading = true;
       this.axios
         .get("/admin/userList?size=" + size + "&sizePage=" + sizePage)
         .then(res => {
           if (res.data.code == 200) {
+            this.fullscreenLoading = false;
             this.tableData = res.data.data.list;
+          }else {
+            this.fullscreenLoading = false;
+            this.defeated('服务器出错，请稍后重试');
           }
         })
         .catch(error => {
           console.log(error);
+          this.fullscreenLoading = false;
+          this.defeated('服务器出错，请稍后重试');
         });
     },
     getReceiveIds() {
@@ -173,6 +181,7 @@ export default {
       this.toggleSelection();
     },
     search() {
+      this.fullscreenLoading = true;
       this.axios({
           url: "/admin/findUserByConditions",
           method: "post",
@@ -184,17 +193,22 @@ export default {
         .then((res) => {
           console.log(res.data);
           if(res.data.code==200) {
+            this.fullscreenLoading = false;
             this.tableData = res.data.data.list;
             this.userTotal = res.data.data.total;
           }else {
+            this.fullscreenLoading = false;
             this.tableData = [];
           }
         })
         .catch((err) => {
           console.log(err);
+          this.fullscreenLoading = false;
+          this.defeated('服务器出错，请稍后重试');
         });
     },
     searchPage(size, sizePage) {
+      this.fullscreenLoading = true;
       this.axios({
           url: "/admin/findUserByConditions",
           method: "post",
@@ -206,22 +220,33 @@ export default {
         .then((res) => {
           console.log(res.data);
           if(res.data.code==200) {
+            this.fullscreenLoading = false;
             this.tableData = res.data.data.list;
+          }else {
+            this.fullscreenLoading = false;
+            this.defeated('服务器出错，请稍后重试');
           }
         })
         .catch((err) => {
           console.log(err);
+          this.fullscreenLoading = false;
+          this.defeated('服务器出错，请稍后重试');
         });
     }
   },
   mounted() {
+    this.fullscreenLoading = true;
     this.axios
       .get("/admin/userList?size=1&sizePage=6")
       .then(res => {
         console.log(res.data);
         if (res.data.code == 200) {
+          this.fullscreenLoading = false;
           this.userTotal = res.data.data.total;
           this.tableData = res.data.data.list;
+        }else {
+          this.fullscreenLoading = false;
+          this.defeated('服务器出错，请稍后重试');
         }
       })
       .catch(error => {

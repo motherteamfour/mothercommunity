@@ -1,5 +1,5 @@
 <template>
-  <div class="pictureParticulars">
+  <div class="pictureParticulars" v-loading.fullscreen.lock="fullscreenLoading">
     <div v-show="showAdd">
       <div class="pictureParticulars-top-btn">
         <el-button @click="addBanner">添加</el-button>
@@ -56,7 +56,8 @@ export default {
       imgUrl: "",
       articleTitle: "",
       articleId: 0,
-      bannerId: 0
+      bannerId: 0,
+      fullscreenLoading: false
     };
   },
   computed: mapState({
@@ -68,8 +69,23 @@ export default {
     AddAndEdit
   },
   methods: {
+    success(msg) {
+      this.$message({
+        showClose: true,
+        message: msg,
+        type: "success"
+      });
+    },
+    defeated(msg) {
+      this.$message({
+        showClose: true,
+        message: msg,
+        type: "error"
+      });
+    },
     handleEdit(id) {
       console.log(id);
+      this.fullscreenLoading = true;
       this.axios
         .get(
           `/banner/list/findByBannerId?bannerId=${id}&bannerType=${this.clickType}`
@@ -77,6 +93,7 @@ export default {
         .then(res => {
           console.log(res.data);
           if (res.data.code == 200) {
+            
             this.bannerId = res.data.data.bannerId;
             this.bannerName = res.data.data.bannerName;
             this.imgUrl = res.data.data.imgUrl ? this.imgUrlBase + res.data.data.imgUrl: "";
@@ -93,16 +110,20 @@ export default {
             
             this.isAdd = false;
             this.haveArticle = this.clickType == 0? false:true;
-            
+            this.fullscreenLoading = false;
             this.changeShow();
           }
+          this.fullscreenLoading = false;
         })
         .catch(error => {
           console.log(error);
+          this.fullscreenLoading = false;
+          this.defeated("服务器出错，请稍后重试")
         });
     },
     handleDelete(id) {
       console.log(id);
+      this.fullscreenLoading = true;
       this.axios({
         url: "/banner/delBanner",
         method: "post",
@@ -114,11 +135,17 @@ export default {
         .then(res => {
           console.log(res.data);
           if (res.data.code == 200) {
+            this.fullscreenLoading = false;
             this.refersh();
+          }else {
+            this.fullscreenLoading = false;
+            this.defeated("服务器出错，请稍后重试");
           }
         })
         .catch(err => {
           console.log(err);
+          this.fullscreenLoading = false;
+          this.defeated("服务器出错，请稍后重试");
         });
     },
     refersh() {
