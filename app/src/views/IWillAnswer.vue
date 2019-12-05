@@ -47,7 +47,32 @@ export default {
     closeModel() {
       this.show = false;
     },
-    handlePublish() {}
+    handlePublish() {
+      // 发表 /answer/answerToQuestion
+      var userId = sessionStorage.getItem("userId");
+
+      this.axios({
+        url: `/question/addQuestion?userId=${userId}&qanswerContent =${this.content}&questionId=${this.questionId}`,
+        method: "post",
+        // data: ``,
+        header: {
+          "Content-Type": "application/x-www-form-urlencoded"
+        }
+      })
+        .then(res => {
+          console.log(res.data);
+          if (res.data.code == "200") {
+            // 切换路由
+            var url = `/questiondetail/${res.data.data}`; //后端应该返回问题id,然后跳转到详情页（保留）
+            this.$router.replace(url);
+          } else {
+            console.log("提交失败");
+          }
+        })
+        .catch(err => {
+          console.log(err);
+        });
+    }
   }
 };
 </script>
@@ -86,8 +111,7 @@ export default {
   }
 }
 .content {
-  width: 100%;
-  // height: 100vh;
+  height: 1000px;
   padding: 0 30px;
   textarea {
     width: 100%;
