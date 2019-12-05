@@ -5,42 +5,88 @@
       <div class="navigation">
         <i class="fa fa-angle-left" @click="back"></i>
         问题详情
-        <i class="fa fa-star-o"></i>
-        <!-- <i class="fa fa-star" aria-hidden="true"></i> -->
+        <div class="wrap-fa" @click="handleCollect()">
+          <i class="fa fa-star-o" aria-hidden="true" v-if="!info.collectState"></i>
+          <i class="fa fa-star" aria-hidden="true" v-else></i>
+        </div>
       </div>
     </div>
     <div class="main">
       <div class="question">
         <div class="title-wrap">
           <i class="fa fa-question-circle" aria-hidden="true"></i>
-          <span class="title">宝宝感冒去不去医院啊，他不肯吃饭</span>
+          <span class="title">{{info.questionTitle}}</span>
         </div>
-        <div class="content">
-          宝宝感冒了,大冷天的看着心痛死了宝宝感冒了,大冷
-          天的看着心痛死了宝宝感冒了,大冷天的看着心痛死了宝宝感冒了,大冷天的看着心痛
-          死了宝宝感冒了,大冷天的看着心痛死了宝宝感冒了,大冷天的看着心痛死了
-          宝宝感冒了,大冷天的看着心痛死了宝宝感冒了,大冷天的看着心痛死了
-        </div>
+        <div class="content">{{info.questionContent}}</div>
       </div>
       <div class="all-answers">
         <div class="all-num">
-          全部回答(
-          <span class="num">30</span>)
+          <h6>全部回答</h6>
+          <span class="num">({{num}})</span>
         </div>
-        <div class="one-answer"></div>
+        <div class="answer-list">
+          <AAnswer v-for="(item,index) in info.answers" :key="index" :info="item"></AAnswer>
+        </div>
       </div>
     </div>
+    <router-link :to="'/iwillanswer'" class="footer">
+      <p>我要回答</p>
+    </router-link>
   </div>
 </template>
 <script>
+import AAnswer from "@/components/AAnswer.vue";
+
 export default {
   name: "QuestionDetail",
+  components: {
+    AAnswer
+  },
+  data() {
+    return {
+      info: [],
+      num: ""
+    };
+  },
   methods: {
     back() {
       this.$router.go(-1); //返回上一层
+    },
+    handleCollect() {
+      this.info.collectState = !this.info.collectState;
+      var userId = sessionStorage.getItem("userId");
+      var questionId = this.info.questionId;
+      var collectState = this.info.collectState;
+      console.log("收藏吗", questionId, userId, collectState);
+      if (collectState) {
+        // console.log("我要收藏");
+        this.axios
+          .get(
+            `/question/collectQuestion?questionId=${questionId}&userId=${userId}`
+          )
+          .then(res => {
+            console.log("收藏：", res.data);
+          })
+          .catch(err => {
+            console.log(err);
+          });
+      } else {
+        // console.log("我要取消收藏");
+        this.axios
+          .get(
+            `/question/cancelCollectQuestion?questionId=${questionId}&userId=${userId}`
+          )
+          .then(res => {
+            console.log("取消收藏：", res.data);
+          })
+          .catch(err => {
+            console.log(err);
+          });
+      }
     }
   },
   created() {
+    console.log("创建");
     console.log("当前文章 id", this.$route.params.questionId);
     var questionId = this.$route.params.questionId;
     var userId = sessionStorage.getItem("userId");
@@ -54,8 +100,9 @@ export default {
     })
       .then(res => {
         console.log("问题详情：", res.data);
-        this.lists = res.data.data;
-        console.log(this.lists);
+        this.info = res.data.data;
+        this.num = this.info.answers.length;
+        console.log(this.info);
       })
       .catch(err => {
         console.log(err);
@@ -70,6 +117,7 @@ export default {
 .question-detail {
   width: 100%;
   height: 100vh;
+  // background-color: transparent;
   // background-color: #efefef;
 }
 .header {
@@ -92,23 +140,29 @@ export default {
       color: #ccc;
       float: left;
     }
-    .fa-star-o {
-      font-size: 50px;
-      vertical-align: top;
-      color: #ccc;
-      // display: inline-block;
+    .wrap-fa {
       float: right;
-      height: 80px;
-      line-height: 80px;
-      vertical-align: middle;
+      .fa-star-o,
+      .fa-star {
+        font-size: 50px;
+        vertical-align: top;
+        color: #ccc;
+        // display: inline-block;
+        height: 80px;
+        line-height: 80px;
+        vertical-align: middle;
+      }
+      .fa-star {
+        color: @themeColor;
+      }
     }
   }
 }
 .main {
-  // background-color: #efefef;
+  background-color: #efefef;
   .question {
     background-color: #efefef;
-    padding: 0 30px;
+    padding: 20px 30px;
     .fa-question-circle {
       font-size: 40px;
       padding-right: 20px;
@@ -116,8 +170,8 @@ export default {
     }
     .title {
       font-size: 28px;
-      height: 60px;
-      line-height: 60px;
+      height: 40px;
+      line-height: 40px;
       font-weight: bold;
     }
     .content {
@@ -126,13 +180,34 @@ export default {
     }
   }
   .all-answers {
-    // padding: 0 30px;
+    padding: 0 30px;
+    border-radius: 20px 20px 0 0;
+    background-color: white;
     .all-num {
       height: 100px;
       line-height: 100px;
-      border-radius: 10px 10px 0 0;
       border-bottom: 1px solid #efefef;
+      border-radius: 10px 10px 0 0;
+
+      h6 {
+        display: inline-block;
+      }
+      .num {
+        font-size: 30px;
+      }
     }
   }
+}
+.footer {
+  height: 90px;
+  width: 100%;
+  font-size: 32px;
+  border-top: 1px solid #eaeaea;
+  color: @themeColor;
+  line-height: 90px;
+  text-align: center;
+  position: fixed;
+  bottom: 0;
+  left: 0;
 }
 </style>
