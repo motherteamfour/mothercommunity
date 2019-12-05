@@ -10,10 +10,11 @@
       </span>
     </div>
     <NewPosts v-for="(item, index) in lists" :key="index"
-    :name="item.userName"
+    :name="item.user.userName"
     :title="item.postTitle"
     :time="item.postTime"
-    :countco="item.isRecommend"></NewPosts>
+    :countco="item.isRecommend"
+    :imgs="item.user.userImgUrl"></NewPosts>
 
   </div>
 </template>
@@ -31,13 +32,13 @@ export default {
   },
   created() {
     this.axios({
-      url: "/user/findPostAllByUserId?userId=1002",
+      url: "/user/findPostAllByUserId?userid=1001",
       methods: "GET"
     })
     .then(res => {
       this.lists = res.data.data;
 
-      console.log(res.data.data);
+      console.log("faxieshu",res.data.data);
     })
   },
   methods: {

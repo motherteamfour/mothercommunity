@@ -6,7 +6,7 @@
       <div class="user">
         <div class="portrait" @click="goMyResourcePage()">
         <!--   <p>头像</p> -->
-          <img :src="userInfo.userImgUrl" alt="">
+          <img :src="'http://172.16.6.38:8989/'+userInfo.userImgUrl" class="imgs" alt="">
         </div>
         <span class="username">{{userInfo.userName}}</span>
         <br />
@@ -29,7 +29,7 @@
       <li>
         <img src="../assets/img/my/fatie.png" alt />
         <span class="title">我的发帖</span>
-        <span class="num">{{getPostnum}}</span>
+        <span class="num">{{getPostnum.length}}</span>
         <img src="../assets/img/my/youjiantou.png" alt @click="goNewpostPage()" />
       </li>
       <li>
@@ -41,7 +41,7 @@
       <li style="border-bottom: none">
         <img src="../assets/img/my/shoucang.png" alt />
         <span class="title">我的收藏</span>
-        <span class="num">0</span>
+        <span class="num">{{collnum}}</span>
         <img src="../assets/img/my/youjiantou.png" alt @click="goCollectPage()" />
       </li>
     </ul>
@@ -71,12 +71,13 @@ export default {
       fansnum: "",
       focusnum: "",
       userInfo: {},
-      getPostnum: ""
+      getPostnum: "",
+      collnum: "",
     }
   },
   created() {
     let param = new URLSearchParams();
-    param.append("id","1002");
+    param.append("userid","1001");
     this.axios.post("/zp/fant/countFants", param).then(res => {
       this.fansnum = res.data.data;
       console.log('粉丝数',res.data);
@@ -86,16 +87,22 @@ export default {
       console.log('关注数',res.data);
     });
     this.axios.post("/zp/user/findMyself", param).then(res => {
+      console.log("xx",res.data);
       this.userInfo = res.data.data;
     });
     this.axios({
-      url: "/user/findCollectByUserId?userId=1001",
+      url: "/user/findPostAllByUserId?userid=1003",
       methods: "GET"
     })
     .then(res => {
-      console.log(res.data);
-      /* this.getPostnum = res.data.data.length; */
-    })
+      console.log("发帖数",res.data);
+      this.getPostnum = res.data.data;
+    }),
+    this.axios.post("/zp/user/countconllectpost", param).then(res => {
+      this.collnum = res.data.data;
+      console.log(res.data.data);
+      console.log('收藏数',this.collnum);
+    });
    
   },
   methods: {
@@ -162,9 +169,15 @@ export default {
         /*  position: absolute;
         left: 60px;
         top: 140px; */
-        p {
+      /*   overflow: hidden; */
+        /* p {
           text-align: center;
           line-height: 180px;
+        } */
+        .imgs {
+          width: 100%;
+          height: 100%;
+          border-radius: 50%;
         }
       }
       .username {

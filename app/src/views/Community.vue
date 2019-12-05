@@ -6,7 +6,7 @@
           <i class="fa fa-lastfm" aria-hidden="true"></i>
           <span>切换</span>
         </div>
-        <!--  v-model="value" -->
+       <!--  <van-search placeholder="请输入搜索关键词" v-model="value" /> -->
         <van-search placeholder="请输入搜索关键词" shape="round" class="inputbox" @click="goSearchPages()" />
 
         <div @click="goInfo()">
@@ -62,9 +62,9 @@
     </div>
     <div class="recommend">热门推荐</div>
 
-    <RecommentLists></RecommentLists>
-    <RecommentLists></RecommentLists>
-    <RecommentLists></RecommentLists>
+    <RecommentLists v-for="(item, index) in referer.list" :key="index"
+    :countComment="item"></RecommentLists>
+    
   </div>
 </template>
 
@@ -75,6 +75,7 @@ import Swiper from "swiper";
 import { Search } from "vant";
 export default {
   name: "Community",
+  
   data() {
     return {
       contact: [],
@@ -82,7 +83,11 @@ export default {
         require("@/assets/img/circleswipetest/swipe1.jpg"),
         require("@/assets/img/circleswipetest/swipe2.jpg")
       ],
-      babylong: {}
+      babylong: {},
+      referer: {},
+      valueDate: '',
+      dayday: ''
+
     };
   },
   components: {
@@ -98,6 +103,8 @@ export default {
     params.push(year,month,day);
     console.log('sssssss',params);
     var date = params.join("-");
+    var dates = this.dayday;
+    console.log(dates);
     this.axios
       .get(`/messagePush/findNowDay`, {
         params: {
@@ -108,7 +115,22 @@ export default {
       .then(res => {
         this.babylong = res.data.data;
       });
+      this.axios
+      .get(`/posterior/postmanagement/recommend`, {
+        params: {
+          page: "",
+          pagesize: ""
+        }
+      })
+      .then(res => {
+        this.referer = res.data.data;
+        console.log("ssssssss",this.referer);
+      });
+   
+     
+      this.valueDate = new Date();
   },
+  
   methods: {
     goSearchPages() {
       this.$router.push("/searchs");
@@ -119,18 +141,60 @@ export default {
     goTrigger() {
       this.$router.push("/trigger");
     },
-    goAfterDay() {
+    goBeforeDay() {
      
-     /*  var time = new Date();
-      var day = Date.parse(time);
-      var da = day/1000/60/60/24;
-      console.log(da + 1); */
-
-    /* for(var i = 1; i > 0 ; i++) {
-      console.log(da+i);
-    } */
+    this.valueDate = new Date(this.valueDate.setDate(this.valueDate.getDate() -1 ))
+       this.dayday = this.valueDate.getFullYear() + '-' + (this.valueDate.getMonth()+1) + '-' + this.valueDate.getDate();
+       this.axios
+      .get(`/messagePush/findNowDay`, {
+        params: {
+          userId: "1001",
+          date: this.dayday
+        }
+      })
+      .then(res => {
+        this.babylong = res.data.data;
+      });
+      this.axios
+      .get(`/posterior/postmanagement/recommend`, {
+        params: {
+          page: "",
+          pagesize: ""
+        }
+      })
+      .then(res => {
+        this.referer = res.data.data;
+        console.log("ssssssss",this.referer);
+      });
+     
+      console.log(this.dayday);
     },
-    goBeforeDay() {}
+    goAfterDay() {
+      this.valueDate = new Date(this.valueDate.setDate(this.valueDate.getDate() +1 ));
+      this.dayday = this.valueDate.getFullYear() + '-' + (this.valueDate.getMonth()+1) + '-' + this.valueDate.getDate();
+this.axios
+      .get(`/messagePush/findNowDay`, {
+        params: {
+          userId: "1001",
+          date: this.dayday
+        }
+      })
+      .then(res => {
+        this.babylong = res.data.data;
+      });
+      this.axios
+      .get(`/posterior/postmanagement/recommend`, {
+        params: {
+          page: "",
+          pagesize: ""
+        }
+      })
+      .then(res => {
+        this.referer = res.data.data;
+        console.log("ssssssss",this.referer);
+      });
+      console.log(this.dayday);
+    }
   },
   mounted() {
     new Swiper(".swiper-container", {

@@ -27,7 +27,7 @@ export default {
   },
   created () {
     let param = new URLSearchParams();
-    param.append("userId","1002");
+    param.append("userid","1002");
     this.axios.post("/zp/fant/findattention", param).then(res => {
       console.log(res.data);
       this.focusnum = res.data.data;

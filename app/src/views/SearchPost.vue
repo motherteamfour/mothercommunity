@@ -2,16 +2,16 @@
   <div class="searchpost">
     <p class="hint">热门搜索</p>
     <ul class="hotsearch">
-      <li v-for="(item, index) in searchlists" :key="index">{{item}}</li>
+      <li v-for="(item, index) in searchlists" :key="index" @click="searchss(item)">{{item}}</li>
     </ul>
     <p class="hint">历史记录</p>
     <ul class="history">
-      <li v-for="(item, index) in history" :key="index" @click="searchpost()">
-        <span>
+      <li v-for="(item, index) in history" :key="index">
+        <span @click="searchpost(item)">
           <i class="fa fa-clock-o" aria-hidden="true"></i>
           <span>{{item}}</span>
         </span>
-        <span @click="del()">
+        <span @click="del(item)">
           <i class="fa fa-times" aria-hidden="true"></i>
         </span>
       </li>
@@ -30,7 +30,8 @@ export default {
   data() {
     return {
       searchlists: [],
-      history: []
+      history: [],
+      postnum: []
     };
   },
 
@@ -47,10 +48,41 @@ export default {
   },
 
   methods: {
-    del() {
+    searchss(index){
+      console.log("数据",index);
+      this.axios({
+        url: `/search/searchPost?userId=1001&searchMessage=${index}`,
+        methods: "GET"
+      })
+      .then (res => {
+        console.log(res.data);
+        if(res.data.code == 200) {
+          this.$router.push('/searchs/havingpost');
+          this.postnum = res.data.data;
+          console.log(this.postnum);
+          /* this.$store.dispatch('getpostnum', this.postnum); */
+        }
+      })
+    },
+    searchpost(item) {
+      this.axios({
+        url: `/search/searchPost?userId=1001&searchMessage=${item}`,
+        methods: "GET"
+      })
+      .then (res => {
+        console.log(res.data);
+        if(res.data.code == 200) {
+          this.$router.push('/searchs/havingpost');
+          this.postnum = res.data.data;
+          console.log(this.postnum);
+          /* this.$store.dispatch('getpostnum', this.postnum); */
+        }
+      })
+    },
+    del(item) {
       this.axios
         .get(
-          "/search/deleteHistoryBySearchMessage?searchMessage=宝宝喝酒&userId=1001"
+          `/search/deleteHistoryBySearchMessage?searchMessage=${item}&userId=1001`
         )
         .then(res => {
           if (res.code == 200) {

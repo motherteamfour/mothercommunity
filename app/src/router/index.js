@@ -30,8 +30,6 @@ const routes = [
     ]
   },
   {
-<<<<<<< HEAD
-=======
     path: '/register',//注册
     name: 'Register',
     component: () => import('../views/Register.vue'),
@@ -54,7 +52,6 @@ const routes = [
   },
   // app
   {
->>>>>>> c4b90a251d33fe4458d3369a86eb1d0120ebbf53
     path: '/',
     component: Home,
     children: [

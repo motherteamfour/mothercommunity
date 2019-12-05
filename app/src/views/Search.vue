@@ -53,7 +53,7 @@ export default {
     goback() {
       this.$router.push("/");
     },
-    search() {
+    /* search() {
       this.result = this.val;
       console.log(this.result);
       var value = this.result
@@ -67,10 +67,10 @@ export default {
           this.$router.replace('/searchs/havingpost');
           this.postnum = res.data.data;
           console.log(this.postnum);
-          this.$store.commit("/main", this.postnum);
+          this.$store.dispatch('getpostnum', this.postnum);
         }
       })
-    }
+    } */
   }
 };
 </script>

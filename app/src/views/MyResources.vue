@@ -12,8 +12,10 @@
       <li style="border-bottom: none">
         <span class="title">头像</span>
         <span class="num">
-          <span class="portrait"></span>
-          <i class="fa fa-angle-right" aria-hidden="true"></i>
+          <van-uploader :after-read="afterRead">
+            <img :src="'http://172.16.6.38:8989/'+userInfo.userImgUrl" class="portrait" alt />
+          </van-uploader>
+          <i class="fa fa-angle-right" aria-hidden="true" @click="postImg()"></i>
         </span>
       </li>
     </ul>
@@ -38,6 +40,15 @@
         <span class="title">宝妈生日</span>
         <span class="num">
           <span>{{userInfo.userBirthday}}</span>
+
+          <!-- export default {
+          methods: {-->
+          <!--  afterRead(file) {
+      // 此时可以自行将文件上传至服务器
+      console.log(file);
+    }
+  }
+          };-->
           <i class="fa fa-angle-right" aria-hidden="true"></i>
         </span>
       </li>
@@ -45,23 +56,25 @@
     <ul class="lists">
       <li style="border-bottom: none">
         <span class="title">用户ID：{{userInfo.userId}}</span>
-        
       </li>
     </ul>
-    
   </div>
 </template>
 
 <script>
+import { Uploader } from "vant";
 export default {
-  data () {
+  data() {
     return {
       userInfo: {}
-    }
+    };
+  },
+  components: {
+    [Uploader.name]: Uploader
   },
   created() {
     let param = new URLSearchParams();
-    param.append("id","1001"); 
+    param.append("userid", "1001");
     this.axios.post("/zp/user/findMyself", param).then(res => {
       console.log(res.data);
       this.userInfo = res.data.data;
@@ -75,10 +88,20 @@ export default {
       this.$router.push("./my");
     },
     gonicknamepage() {
-      this.$router.push("/altername")
+      this.$router.push("/altername");
     },
     gobirthdaypage() {
-      this.$router.push("alterbirthday")
+      this.$router.push("alterbirthday");
+    },
+    afterRead(file) {
+      console.log(file);
+      let param = new FormData();
+      param.append("url", file.file);
+      param.append("userid", 1001);
+      console.log(param.url);
+      this.axios.post("/zp/user/updateuserhesd", param).then(res => {
+        console.log(res.data);
+      });
     }
   }
 };
@@ -122,7 +145,7 @@ export default {
     background: white;
     margin: 40px auto;
     li {
-     /*  height: 140px; */
+      /*  height: 140px; */
       display: flex;
       justify-content: space-between;
       align-items: center;
@@ -134,8 +157,8 @@ export default {
         font-size: 30px;
       }
       .num {
-       height: 140px;
-       /*   line-height: 140px; */
+        height: 140px;
+        /*   line-height: 140px; */
         display: flex;
         justify-content: flex-start;
         align-items: center;
@@ -143,7 +166,7 @@ export default {
           display: inline-block;
           width: 120px;
           height: 120px;
-          background: yellow;
+          border: 1px solid red;
           border-radius: 50%;
           vertical-align: baseline;
           margin-right: 14px;
@@ -165,11 +188,10 @@ export default {
       justify-content: space-between;
       align-items: center;
       padding: 0 40px;
-     
+
       .title {
         display: inline-block;
         font-size: 30px;
-     
       }
       .num {
         display: flex;
@@ -181,7 +203,6 @@ export default {
           margin-right: 14px;
         }
       }
-      
     }
   }
 }

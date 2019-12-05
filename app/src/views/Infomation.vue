@@ -33,13 +33,13 @@
           <div class="gray">帮小友思考思考时时刻刻是给你点了一个赞</div>
         </div>
       </li>
-      <li @click="goInform()">
+      <li @click="goInform()" >
         <div class="photo pink">
           <i class="fa fa-volume-up" aria-hidden="true"></i>
         </div>
         <div class="category">
           <div class="right">
-            <div class="category">
+            <div class="category" v-if="informLists != undefined">
               <span class="title">通知</span>
               <span class="gray">{{informLists[0].messageTime}}</span>
             </div>

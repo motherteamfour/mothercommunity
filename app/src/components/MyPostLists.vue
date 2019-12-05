@@ -3,7 +3,10 @@
     <div class="newposts">
       <div class="user">
         <div class="user-por">
-          <div class="portrait"></div>
+          <div class="portrait">
+                      <img :src="'http://172.16.6.38:8989/'+imgs" class="imgs" alt="">
+
+          </div>
         </div>
         <div class="user-name">
           <p>{{name}}</p>
@@ -31,7 +34,7 @@
 <script>
 export default {
   name: "NewPosts",
-  props: ["name", "title", "time", "countco"]
+  props: ["name", "title", "time", "countco","imgs"]
 };
 </script>
 
@@ -60,6 +63,12 @@ export default {
         height: 100px;
         background: rgb(151, 135, 135);
         border-radius: 50%;
+        img {
+          width: 100%;
+          height: 100%;
+          border-radius: 50%;
+          border: 1px solid red;
+        }
       }
     }
     .user-name {

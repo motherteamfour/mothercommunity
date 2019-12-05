@@ -1,7 +1,10 @@
 <template>
   <div class="search">
     <div class="searchbox">
-      <HavingPostList v-for="(item, index) in postnum" :key="index"></HavingPostList>
+      <HavingPostList v-for="(item, index) in postnum" :key="index"
+      :title="item.postTitle"
+      :content="item.postContent"
+      :username="item.user.userName"></HavingPostList>
     </div>
   </div>
 </template>
@@ -9,9 +12,14 @@
 <script>
 import HavingPostList from '../components/HavingPostList';
 export default {
-  props: ['postnum'],
+  props:['title','content','username'],
   components: {
     HavingPostList
+  },
+  methods: {
+    /* getpostnum({commit},postnum){
+      commit("getpostnum", postnum);
+    } */
   }
 };
 </script>

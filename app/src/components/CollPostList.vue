@@ -1,26 +1,29 @@
 <template>
-  <div class="collpostlist">
+  <div class="collpostlist" v-if="colllist != undefined">
      <ul>
       <li>
         <div class="user">
-          <div class="portrait"></div>
+          
+          <img :src="'http://172.16.6.38:8989/'+colllist.user.userImgUrl"  class="portrait" alt="">
+
+         
           <div>
-            <p class="username">辣妈307948</p>
-            <p class="state">孕3天</p>
+            <p class="username">{{colllist.user.userName}}</p>
+            <!-- <p class="state">孕3天</p> -->
           </div>
         </div>
         <div class="content">
-          <p class="title">题目</p>
-          <p class="con">内容</p>
+          <p class="title">{{colllist.questionTitle}}</p>
+          <p class="con">{{colllist.questionContent}}</p>
         </div>
         <div class="foot">
           <span>
             <i class="fa fa-clock-o" aria-hidden="true"></i>
-            16小时前
+            {{colllist.questionTime}}
           </span>
           <span>
             <i class="fa fa-commenting-o" aria-hidden="true"></i>
-            2
+            {{colllist.questionCollections}}
           </span>
         </div>
       </li>
@@ -30,7 +33,8 @@
 
 <script>
 export default {
-  name: "CollPostList"
+  name: "CollPostList",
+  props: ["colllist"]
 }
 </script>
 
@@ -51,7 +55,7 @@ export default {
         .portrait {
           width: 80px;
           height: 80px;
-          background: red;
+          border:1px solid red;
           border-radius: 50%;
           margin: 0 20px;
         }
