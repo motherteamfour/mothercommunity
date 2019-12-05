@@ -49,6 +49,7 @@ export default {
         
       } */
     /*  }, */
+<<<<<<< HEAD
     ...mapMutations(["searctPost"]),
 
     goback() {
@@ -74,6 +75,12 @@ export default {
       })
      /*  this.$store.dispatch('getLists'); */
      }
+=======
+
+    goback() {
+      this.$router.push("/");
+    }
+>>>>>>> efaf820ea8f18cb7c0f16e7322504846330422a5
   }
 };
 </script>
