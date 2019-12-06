@@ -201,16 +201,12 @@ const routes = [
           }
         ]
       },
-      {
-        path: 'infomation', // 消息
-        name: "Infomation",
-        component: () => import('../views/Infomation.vue')
-      },
+      
       {
         path: 'infocomment', // 消息中的评论
         component: InfoComment,
         children: [
-          /* {
+          {
             path: '',
             name: 'Received',
             component: () => import('../views/Received.vue')
@@ -219,7 +215,7 @@ const routes = [
             path: 'sented',
             name: 'Sented',
             component: () => import('../views/Sented.vue'),
-          } */
+          }
         ]
 
       },
@@ -301,6 +297,12 @@ const routes = [
     path: '/questiondetail/:questionId',// 问题详情页
     name: 'QuestionDetail',
     component: () => import('../views/QuestionDetail.vue'),
+  },
+  // 赵蕊
+  {
+    path: '/infomation', // 消息
+    name: "Infomation",
+    component: () => import('../views/Infomation.vue')
   },
 ]
 
