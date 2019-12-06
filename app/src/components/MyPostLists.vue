@@ -5,7 +5,7 @@
         <div class="user">
           <div class="user-por">
             <!--  <div class="portrait"> -->
-            <img :src="'http://172.16.6.38:8989/'+imgs" class="portrait" alt />
+            <img :src="'http:///172.17.4.107:8989/'+imgs" class="portrait" alt />
 
             <!-- </div> -->
           </div>

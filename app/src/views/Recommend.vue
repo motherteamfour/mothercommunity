@@ -13,7 +13,7 @@
         <li v-for="(item, index) in circle" :key="index">
           <router-link :to="'/group/' + item.circleId">
             <div class="circle-pic">
-              <img :src="'http://172.16.6.45:8989' + item.circleUrl" alt />
+              <img :src="imgUrl+ item.circleUrl" alt />
             </div>
             <p class="circle-name">{{item.circleName}}</p>
           </router-link>
@@ -60,6 +60,7 @@ export default {
   name: "Recommend",
   data() {
     return {
+      imgUrl: "",
       swipeImg: [],
       circle: [],
       hotList: [],
@@ -190,6 +191,7 @@ export default {
     });
   },
   created() {
+    this.imgUrl = this.$store.state.imgUrl; // 获取图片路径
     this.userId = sessionStorage.getItem("userId"); //获取userid
     this.imgIp = this.$store.state.imgUrl;
     this.axios.get("/circle/list").then(res => {

@@ -10,7 +10,7 @@
     </van-sticky>
     <div class="user-wrap">
       <div class="avatar">
-        <img :src="'http://172.16.6.38:8989/' + userInfo.userImgUrl" alt />
+        <img :src="'http://172.17.4.107:8989/' + userInfo.userImgUrl" alt />
       </div>
       <div class="user-info">
         <ul class="count">

@@ -7,7 +7,7 @@
         </div>
       </nav>
       <div class="group-info">
-        <img :src="'http://172.16.6.45:8989' + circleUrl" alt="">
+        <img :src="'http://172.17.4.107:8989/' + circleUrl" alt />
         <p class="group-name">{{circleName}}</p>
         <p class="group-num">帖子数 {{hotList.length}}</p>
       </div>
@@ -44,9 +44,9 @@ export default {
       lLoading: -1,
       cLoading: -1,
       hotList: [],
-      circleName: '',
-      circleUrl: '',
-      imgIp: ''
+      circleName: "",
+      circleUrl: "",
+      imgIp: ""
     };
   },
   components: {
@@ -62,7 +62,7 @@ export default {
         console.log(res.data);
         if (res.data.code == 200) {
           this.fLoading = -1;
-           this.getList();
+          this.getList();
         }
       });
     },
@@ -75,7 +75,7 @@ export default {
           if (res.data.code == 200) {
             console.log(res.data);
             this.fLoading = -1;
-             this.getList();
+            this.getList();
           }
         });
     },

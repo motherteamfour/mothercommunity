@@ -33,7 +33,7 @@
               :class="setColor(index)"
             >
               <div class="circle-pic">
-                <img :src="'http://172.16.6.45:8989' + item.circleUrl" alt />
+                <img :src="imgUrl + item.circleUrl" alt />
               </div>
               <p>{{item.circleName}}</p>
               <div class="btns">
@@ -60,7 +60,7 @@
       <div class="followed-wrap" v-show="isAll==2">
         <ul>
           <li class="followed-item" v-for="(item, index) in followedCircle" :key="index">
-            <img :src="'http://172.16.6.45:8989' + item.circles.circleUrl" alt />
+            <img :src="imgUrl + item.circles.circleUrl" alt />
             <p>{{item.circles.circleName}}</p>
           </li>
         </ul>
@@ -79,16 +79,19 @@ export default {
   },
   data() {
     return {
+      imgUrl: "",
       isAll: 1,
       isActive: 1,
       category: [],
       subClass: [],
       isLoading: -1,
       followedCircle: [],
-      imgIp: ''
+      imgIp: ""
     };
   },
   created() {
+    // 获取图片路径
+    this.imgUrl = this.$store.state.imgUrl;
     this.axios.get("/search/searchTop10").then(res => {
       console.log(res.data);
     });
