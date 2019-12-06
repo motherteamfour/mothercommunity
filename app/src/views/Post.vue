@@ -42,7 +42,7 @@
               @click="selected(item.circleId)"
             >
               <div class="img-wrap">
-                <img :src="'http://172.16.6.45:8989' + item.circles.circleUrl" alt />
+                <img :src="'http://172.17.4.107:8989' + item.circles.circleUrl" alt />
               </div>
               <p>{{item.circles.circleName}}</p>
             </li>
@@ -55,7 +55,7 @@
           <ul>
             <li v-for="(item, index) in allCircle" :key="index" @click="selected(item.circleId)">
               <div>
-                <img :src="'http://172.16.6.45:8989' + item.circleUrl" alt />
+                <img :src="'http://172.17.4.107:8989' + item.circleUrl" alt />
               </div>
               <p>{{item.circleName}}</p>
             </li>

@@ -2,7 +2,7 @@
   <div class="fans">
     <div class="fanslist">
       
-        <img :src="'http://172.16.6.38:8989/'+userimg" alt=""  class="por">
+        <img :src="'http://172.17.4.107:8989/'+userimg" alt=""  class="por">
       
       <div class="username">{{username}}</div>
     </div>

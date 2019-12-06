@@ -15,7 +15,7 @@
         <p class="title">{{list.postTitle}}</p>
         <p class="content">{{list.postContent}}</p>
         <div class="pic">
-          <img v-for="(img, index) in list.postImgs" :key="index" :src="'http://172.16.6.46:8989/' + img.postUrl">
+          <img v-for="(img, index) in list.postImgs" :key="index" :src="'http://172.17.4.107:8989/' + img.postUrl">
         </div>
       </div>
     </router-link>

@@ -4,7 +4,7 @@
       <div class="title">{{user.postTitle}}</div>
       <div class="content">{{user.postContent}}</div>
       <div class="user">
-        <img :src="'http://172.16.6.38:8989/'+user.user.userImgUrl" class="imgs" alt />
+        <img :src="'http://172.17.4.107:8989/'+user.user.userImgUrl" class="imgs" alt />
 
         <span class="username">{{user.user.userName}}</span>
       </div>
