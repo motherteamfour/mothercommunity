@@ -1,18 +1,25 @@
 <template>
-  <form class="login-form">
-    <div class="form-group">
-      <span>手机号</span>
-      <input type="text" placeholder="输入手机号" v-model="username" @change="verifyPhone"/>
+  <div class="register">
+    <div class="header">
+      <div class="status-bar"></div>
+      <div class="navigation">
+        <i class="fa fa-angle-left" @click="back"></i>忘记密码
+      </div>
     </div>
-    <div class="form-group">
-      <span>验证码</span>
-
-      <input type="password" placeholder="输入验证码" v-model="userpass" @keyup.enter="getLogin" />
-      <button type="button" class="send-verify" @click="getVerifyCode">验证码</button>
-    </div>
-    <div class="form-group login-from-group">
-      <input type="button" value="登录" @click="getLogin" />
-    </div>
+    <form class="register-form">
+      <div class="form-group">
+        <span>手机号</span>
+        <input type="text" placeholder="输入手机号" v-model="username" />
+      </div>
+      <!-- <div class="form-group">
+        <span>验证码</span>
+        <input type="password" placeholder="输入验证码" v-model="userpass" />
+        <button type="button" class="send-verify" @click="getVerifyCode">验证码</button>
+      </div>-->
+      <div class="form-group register-from-group">
+        <input type="button" value="下一步" @click="getVerifyCode" />
+      </div>
+    </form>
     <!-- 模态框 -->
     <van-popup class="model" v-model="show" round>
       <div class="top">
@@ -22,18 +29,19 @@
       </div>
       <div class="bottom" @click="closeModel">好的</div>
     </van-popup>
-  </form>
-  
+  </div>
 </template>
 
 <script>
+import { mapMutations } from "vuex";
+
 import Vue from "vue";
 import { Popup } from "vant";
 
 Vue.use(Popup);
 
 export default {
-  name: "login",
+  name: "Register",
   data() {
     return {
       username: "",
@@ -45,72 +53,26 @@ export default {
     };
   },
   methods: {
-    // 验证手机号码是否合法
-    verifyPhone() {
-      if (!/^1[3456789]\d{9}$/.test(this.username)) {
-        this.one = "提示";
-        this.two = "手机号不合法";
-        this.show = true;
-      }
+    ...mapMutations(["setPhone"]),
+    back() {
+      this.$router.go(-1); //返回上一层
     },
-    // 验证码登录
-    getLogin() {
-      console.log("登录");
-      if (this.username.length == 0 || this.userpass.length == 0) {
-        this.one = "提示";
-        this.two = "验证码或手机号不能为空";
-        this.show = true;
-      } else {
-        this.axios
-          .post(
-            `/zp/user/loginByCode?phone=${this.username}&code=${this.userpass}`
-          )
-          .then(res => {
-            console.log(res.data);
-            var token = res.data.token;
-            var userId = res.data.data;
-            // 用户已注册
-            if (res.data.code == "200" || res.data.code == "201") {
-              // 将token和userId保存
-              sessionStorage.setItem("token", token);
-              sessionStorage.setItem("userId", userId);
-            }
 
-            if (res.data.code == "200") {
-              // 非第一次登录进入首页
-              this.$router.replace("/");
-            } else if (res.data.code == "201") {
-              // 第一次登录进入填写信息的页面
-              this.$router.replace("/selectState");
-            } else if (res.data.code == "204") {
-              // 该用户不存在，请先注册
-              this.one = "提示";
-              this.two = "该用户不存在，请先注册";
-              this.show = true;
-            } else if (res.data.code == "400") {
-              //账号或密码错误
-              this.one = "提示";
-              this.two = "账号或密码错误";
-              this.show = true;
-            }
-          })
-          .catch(err => {
-            console.log(err);
-          });
-      }
-    },
     // 获取验证码
     getVerifyCode() {
-      var value = this.username.trim();
-      console.log("用户名", value);
-      if (!value.length) {
-        alert("搜索关键词不能为空");
+      var name = this.username.trim();
+      console.log("用户名", name);
+      if (!name.length) {
+        this.one = "未填写手机号码";
+        this.two = "请输入手机号";
+        this.show = true;
       } else {
         this.axios
           .post(`zp/user/sendcode?phone=${this.username}`)
           .then(res => {
+            this.setPhone(this.username);
             console.log("获取验证码：", res.data);
-            this.info = res.data.data;
+            this.$router.replace(`/FindPassword`);
           })
           .catch(err => {
             console.log(err);
@@ -128,8 +90,34 @@ export default {
 @import "../assets/style/base.less";
 @zitiColor: #ccc;
 
-.login-form {
+.header {
+  padding: 0 30px;
+  background-color: @themeColor;
+
+  .status-bar,
+  .navigation {
+    width: 100%;
+  }
+  .status-bar {
+    height: 40px;
+  }
+  .navigation {
+    height: 88px;
+    line-height: 88px;
+    color: white;
+    text-align: center;
+    font-size: 36px;
+    .fa-angle-left {
+      font-size: 80px;
+      vertical-align: top;
+      color: #ccc;
+      float: left;
+    }
+  }
+}
+.register-form {
   padding: 0 20px;
+  margin-top: 120px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -137,7 +125,7 @@ export default {
 
   .form-group {
     font-size: 28px;
-    // color: @zitiColor;
+    color: @zitiColor;
     border-bottom: 1px solid @zitiColor;
     width: 600px;
 
@@ -173,6 +161,7 @@ export default {
       border: none;
       outline: none;
       font-size: 28px;
+      color: black;
     }
 
     input[type="button"] {
@@ -191,12 +180,11 @@ export default {
       }
     }
   }
-  .login-from-group {
+  .register-from-group {
     border: none;
     width: 500px;
   }
 }
-
 .model {
   background-color: rgb(255, 255, 255);
   border-radius: 20px;

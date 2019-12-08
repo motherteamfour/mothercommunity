@@ -1,11 +1,11 @@
 <template>
   <div class="pregnancy">
     <!-- 表单 -->
-    <form class="prepare-form">
-<!--       <div class="form-group">
-        <p>选择预产期</p>
-        <div class="one" @click="eventTime">{{menstrualTime}}</div>
-      </div> -->
+    <form class="pregnancy-form">
+      <div class="form-group">
+        <p>输入预产期</p>
+        <div class="one" @click="eventTime">{{expectedDate}}</div>
+      </div>
       <div class="form-group">
         <input type="button" value="确定" @click="getConfirm" />
       </div>
@@ -46,8 +46,8 @@ export default {
       minDate: new Date(1000, 10, 1),
       maxDate: new Date(3000, 10, 1),
       currentDate: new Date(),
-      menstrualTime: new Date(), //上一次月经时间
-      selectTime: ""
+      expectedDate: new Date(), //预产期
+      selectDate: ""
     };
   },
   methods: {
@@ -59,15 +59,7 @@ export default {
       m = m < 10 ? "0" + m : m;
       var d = date.getDate();
       d = d < 10 ? "0" + d : d;
-      this.menstrualTime = y + "-" + m + "-" + d;
-    },
-    eventDay() {
-      this.current = 1;
-      this.show = true;
-    },
-    eventPeriod() {
-      this.current = 2;
-      this.show = true;
+      this.expectedDate = y + "-" + m + "-" + d;
     },
     eventTime() {
       this.current = 3;
@@ -82,30 +74,24 @@ export default {
     // 月经时间时间
     changeTime(picker) {
       var timeArr = picker.getValues();
-      this.selectTime = timeArr[0] + "-" + timeArr[1] + "-" + timeArr[2];
-      console.log(this.selectTime);
+      this.selectDate = timeArr[0] + "-" + timeArr[1] + "-" + timeArr[2];
+      console.log(this.selectDate);
     },
     confirmTime() {
       console.log("确认");
-      this.menstrualTime = this.selectTime; //设置时间
+      this.expectedDate = this.selectDate; //设置时间
       this.show = false; //隐藏模态框
     },
     // 确认提交
     getConfirm() {
       var userId = sessionStorage.getItem("userId");
-      console.log(
-        "确认提交",
-        this.menstrualDays,
-        this.menstrualPeriod,
-        this.menstrualTime
-      );
+      console.log("确认提交", this.expectedDate);
       // 发送Ajax向后台传递数据
-      // /zp/user/updatestate
       this.axios
         .post("/zp/user/updatestate", {
           userId: userId,
           stateId: "3",
-          stateStarttime: "2019-12-5"
+          stateStarttime: this.expectedDate
         })
         .then(res => {
           console.log(res.data);
@@ -126,17 +112,45 @@ export default {
 
 <style lang="less" scoped>
 @import "../assets/style/base.less";
-.pregnancy {
-  text-align: center;
-  input {
-    margin-top: 50px;
-    width: 200px;
-    height: 70px;
-    border: none;
-    border-radius: 30px;
-    background: @themeColor;
-    color: #fff;
-    font-size: 30px;
+
+.pregnancy-form {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  // margin: 0 auto;
+  .form-group {
+    display: inline-block;
+    p {
+      font-size: 24px;
+      color: #b0b0b0;
+      height: 80px;
+      line-height: 80px;
+      text-align: center;
+    }
+    .one {
+      width: 380px;
+      height: 80px;
+      line-height: 80px;
+      text-align: center;
+      // left: 80px;
+      border-radius: 40px;
+      background-color: white;
+      font-size: 22px;
+      color: @themeColor;
+    }
+    input[type="button"] {
+      width: 380px;
+      height: 80px;
+      line-height: 80px;
+      margin-top: 165px;
+      text-align: center;
+      border-radius: 40px;
+      background-color: @themeColor;
+      font-size: 22px;
+      color: white;
+      border: none;
+      outline: none;
+    }
   }
 }
 </style>

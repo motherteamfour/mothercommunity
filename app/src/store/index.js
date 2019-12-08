@@ -3,7 +3,7 @@ import Vuex from 'vuex'
 import http from '../utils/http'
 import vueAxios from 'vue-axios'
 
-Vue.use(Vuex,vueAxios, http)
+Vue.use(Vuex, vueAxios, http)
 
 export default new Vuex.Store({
   state: {
@@ -32,10 +32,10 @@ export default new Vuex.Store({
     /* getLists() {
       
     } */
-    
+
   },
   getters: {
-    
+
   },
   modules: {
   }
