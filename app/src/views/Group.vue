@@ -7,7 +7,7 @@
         </div>
       </nav>
       <div class="group-info">
-        <img :src="'http://172.17.4.107:8989/' + circleUrl" alt />
+        <img :src="imgUrl + circleUrl" alt />
         <p class="group-name">{{circleName}}</p>
         <p class="group-num">帖子数 {{hotList.length}}</p>
       </div>
@@ -22,6 +22,7 @@
         :fLoading="fLoading"
         :lLoading="lLoading"
         :cLoading="cLoading"
+        :loading="loading"
         @followFn="follow"
         @cancleFollowFn="cancleFollow"
         @praiseFn="praise"
@@ -46,7 +47,8 @@ export default {
       hotList: [],
       circleName: "",
       circleUrl: "",
-      imgIp: ""
+      imgUrl: "",
+      loading: true
     };
   },
   components: {
@@ -57,7 +59,7 @@ export default {
       this.fLoading = i;
       let param = new URLSearchParams();
       param.append("followUserId", userId);
-      param.append("userId", "1001");
+      param.append("userId", this.userId);
       this.axios.post("/user/fol", param).then(res => {
         console.log(res.data);
         if (res.data.code == 200) {
@@ -69,7 +71,7 @@ export default {
     cancleFollow(i, userId) {
       this.fLoading = i;
       this.axios
-        .delete(`/user/notFol?followUserId=${userId}&userId=1001`)
+        .delete(`/user/notFol?followUserId=${userId}&userId=${this.userId}`)
         .then(res => {
           console.log(res.data);
           if (res.data.code == 200) {
@@ -83,7 +85,7 @@ export default {
       this.lLoading = i;
       let param2 = new URLSearchParams();
       param2.append("postId", postId);
-      param2.append("userId", "1001");
+      param2.append("userId", this.userId);
       this.axios.post("/post/like", param2).then(res => {
         console.log(res.data);
         if (res.data.code == 200) {
@@ -96,7 +98,7 @@ export default {
     canclePraise(i, postId) {
       this.lLoading = i;
       this.axios
-        .delete(`/post/notLike?postId=${postId}&userId=1001`)
+        .delete(`/post/notLike?postId=${postId}&userId=${this.userId}`)
         .then(res => {
           console.log(res.data);
           if (res.data.code == 200) {
@@ -112,7 +114,7 @@ export default {
       this.cLoading = i;
       let param3 = new URLSearchParams();
       param3.append("postId", postId);
-      param3.append("userId", "1001");
+      param3.append("userId", this.userId);
       this.axios.post("/post/col", param3).then(res => {
         console.log(res.data);
         if (res.data.code == 200) {
@@ -125,7 +127,7 @@ export default {
     },
     cancleCollect(i, postId) {
       this.axios
-        .delete(`/post/notCol?postId=${postId}&userId=1001`)
+        .delete(`/post/notCol?postId=${postId}&userId=${this.userId}`)
         .then(res => {
           console.log(res.data);
           if (res.data.code == 200) {
@@ -139,7 +141,7 @@ export default {
     },
     getList() {
       this.axios
-        .get(`/cir/post?circleId=${this.groupId}&userId=1001`)
+        .get(`/cir/post?circleId=${this.groupId}&userId=${this.userId}`)
         .then(res => {
           console.log(res.data);
           if (res.data.data !== null) {
@@ -149,6 +151,7 @@ export default {
             this.hotList.forEach((item, index) => {
               item.idn = index;
             });
+            this.loading = false;
           }
           console.log(this.hotList);
         });
@@ -158,6 +161,8 @@ export default {
     }
   },
   created() {
+    this.userId = sessionStorage.getItem("userId");
+    this.imgUrl = this.$store.state.imgUrl; // 获取图片路径
     this.imgIp = this.$store.state.imgUrl;
     console.log(this.imgIp);
     this.groupId = this.$route.params.id;

@@ -11,12 +11,14 @@
       <p class="circle-title">圈子推荐</p>
       <ul>
         <li v-for="(item, index) in circle" :key="index">
-          <router-link :to="'/group/' + item.circleId">
-            <div class="circle-pic">
-              <img :src="imgUrl+ item.circleUrl" alt />
-            </div>
-            <p class="circle-name">{{item.circleName}}</p>
-          </router-link>
+          <van-skeleton avatar :loading="circleLoading" avatar-size="50">
+            <router-link :to="'/group/' + item.circleId">
+              <div class="circle-pic">
+                <img :src="imgUrl+ item.circleUrl" alt />
+              </div>
+              <p class="circle-name">{{item.circleName}}</p>
+            </router-link>
+          </van-skeleton>
         </li>
         <li>
           <router-link to="/circlegourp">
@@ -30,6 +32,7 @@
     </section>
     <section class="hot">
       <p class="hot-title">热门帖子</p>
+
       <HotList
         v-for="(item, index) in hotList"
         :key="index"
@@ -38,7 +41,7 @@
         :fLoading="fLoading"
         :lLoading="lLoading"
         :cLoading="cLoading"
-        :userId="userId"
+        :loading="loading"
         @followFn="follow"
         @cancleFollowFn="cancleFollow"
         @praiseFn="praise"
@@ -55,6 +58,7 @@ import HotList from "@/components/HotList.vue";
 import "@/assets/style/swiper.min.css";
 import Swiper from "swiper";
 import { Swipe, SwipeItem } from "vant";
+import { Skeleton } from "vant";
 
 export default {
   name: "Recommend",
@@ -68,13 +72,16 @@ export default {
       lLoading: -1,
       cLoading: -1,
       imgIp: "",
-      userId: 1
+      userId: 1,
+      loading: true,
+      circleLoading: true
     };
   },
   components: {
     HotList,
     [Swipe.name]: Swipe,
-    [SwipeItem.name]: SwipeItem
+    [SwipeItem.name]: SwipeItem,
+    [Skeleton.name]: Skeleton
   },
   methods: {
     follow(i, userId) {
@@ -168,6 +175,9 @@ export default {
           item.idn = index;
         });
         console.log(this.hotList);
+        if (res.data.code == 200) {
+          this.loading = false;
+        }
       });
     }
   },
@@ -189,14 +199,18 @@ export default {
       // 如果需要滚动条
       scrollbar: ".swiper-scrollbar"
     });
+    this.circleLoading = false;
   },
   created() {
+    this.circleLoading = true;
     this.imgUrl = this.$store.state.imgUrl; // 获取图片路径
     this.userId = sessionStorage.getItem("userId"); //获取userid
     this.imgIp = this.$store.state.imgUrl;
     this.axios.get("/circle/list").then(res => {
       //请求推荐圈子数据
-      this.circle = res.data.data.splice(0, 7);
+      if (res.data.code == 200) {
+        this.circle = res.data.data.splice(0, 7);
+      }
     });
     this.getHotList();
     this.axios.get("/banner/BannerContent").then(res => {
