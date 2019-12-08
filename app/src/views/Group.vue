@@ -14,7 +14,7 @@
     </header>
     <section class="hot">
       <p class="hot-title">全部帖子</p>
-      <div class="no-post" v-if="hotList != null">
+      <div class="no-post" v-if="hotList.length == 0">
         暂无帖子
       </div>
       <HotList
