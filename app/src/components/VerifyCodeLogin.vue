@@ -2,13 +2,14 @@
   <form class="login-form">
     <div class="form-group">
       <span>手机号</span>
-      <input type="text" placeholder="输入手机号" v-model="username" @change="verifyPhone"/>
+      <input type="text" placeholder="输入手机号" v-model="username" @change="verifyPhone" />
     </div>
     <div class="form-group">
       <span>验证码</span>
 
       <input type="password" placeholder="输入验证码" v-model="userpass" @keyup.enter="getLogin" />
-      <button type="button" class="send-verify" @click="getVerifyCode">验证码</button>
+      <button type="button" class="send-verify" @click="getVerifyCode" v-show="current==1">验证码</button>
+      <button type="button" class="send-verify" v-show="current==2">{{count1}}</button>
     </div>
     <div class="form-group login-from-group">
       <input type="button" value="登录" @click="getLogin" />
@@ -17,16 +18,16 @@
     <van-popup class="model" v-model="show" round>
       <div class="top">
         <p class="one">{{one}}</p>
-        <!-- 未填写手机号码 -->
         <p class="two">{{two}}</p>
       </div>
       <div class="bottom" @click="closeModel">好的</div>
     </van-popup>
   </form>
-  
 </template>
 
 <script>
+import { mapActions, mapMutations } from "vuex";
+
 import Vue from "vue";
 import { Popup } from "vant";
 
@@ -36,15 +37,22 @@ export default {
   name: "login",
   data() {
     return {
+      current: 1,
       username: "",
       userpass: "",
-      info: "",
       show: false,
       one: "",
       two: ""
     };
   },
+  computed: {
+    count1() {
+      return this.$store.state.countDown; // 写法1
+    }
+  },
   methods: {
+    ...mapActions(["decrementSync"]),
+    ...mapMutations(["resetcountDown"]),
     // 验证手机号码是否合法
     verifyPhone() {
       if (!/^1[3456789]\d{9}$/.test(this.username)) {
@@ -104,13 +112,29 @@ export default {
       var value = this.username.trim();
       console.log("用户名", value);
       if (!value.length) {
-        alert("搜索关键词不能为空");
+        this.one = "提示";
+        this.two = "请先输入手机号码";
+        this.show = true;
       } else {
         this.axios
           .post(`zp/user/sendcode?phone=${this.username}`)
           .then(res => {
             console.log("获取验证码：", res.data);
-            this.info = res.data.data;
+
+            if (res.data.code == 200) {
+              this.current = 2;
+              var that = this;
+              var timer = setInterval(function() {
+                that.decrementSync();
+                console.log(that.$store.state.countDown);
+                if (that.$store.state.countDown <= 1) {
+                  clearInterval(timer);
+                  that.current = 1;
+                  // 重置倒计时数字
+                  that.resetcountDown(60);
+                }
+              }, 1000);
+            }
           })
           .catch(err => {
             console.log(err);
