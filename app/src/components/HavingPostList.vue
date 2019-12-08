@@ -1,10 +1,10 @@
 <template>
-  <div class="lists">
+  <div class="listss">
     <div class="lis">
       <div class="title">{{user.postTitle}}</div>
       <div class="content">{{user.postContent}}</div>
       <div class="user">
-        <img :src="'http://172.16.6.38:8989/'+user.user.userImgUrl" class="imgs" alt />
+        <img :src="'http://172.17.4.107:8989/'+user.user.userImgUrl" class="imgs" alt />
 
         <span class="username">{{user.user.userName}}</span>
       </div>
@@ -19,13 +19,19 @@ export default {
 </script>
 
 <style lang="less" scoped>
-.lis {
-  width: 710px;
+.listss{
+  width: 650px;
+  height: 100vh;
+  /* background: greenyellow; */
+  .lis {
+  width: 690px;
   height: 150px;
-
-  border: 1px solid red;
+  background: white;
+ /*  border: 1px solid red; */
   padding-left: 20px;
-  margin: 10px auto;
+  margin: 15px auto;
+  border-radius: 30px;
+  box-shadow: 0 0 10px rgb(245, 223, 227);
   .title {
   }
   .content {
@@ -39,8 +45,8 @@ export default {
     align-items: center;
     .imgs {
       display: inline-block;
-      width: 30px;
-      height: 30px;
+      width: 40px;
+      height: 40px;
       background: red;
       border-radius: 50px;
     }
@@ -53,4 +59,6 @@ export default {
     }
   }
 }
+}
+
 </style>

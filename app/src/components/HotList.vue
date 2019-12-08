@@ -1,67 +1,91 @@
 <template>
-  <div class="hot-item">
-    <div class="user-info" v-if="list.user != undefined">
-      <router-link :to="'/otherUsers/' + list.user.userId">
-        <div class="user-left">
-          <div class="avater">
-            <img :src="'http://172.16.6.38:8989/' + list.user.userImgUrl" alt />
+  <van-skeleton title avatar :row="3" :loading="loading" avatar-size= 45>
+    <div class="hot-item">
+      <div class="user-info" v-if="list.user != undefined">
+        <router-link :to="'/otherUsers/' + list.user.userId">
+          <div class="user-left">
+            <div class="avater">
+              <img :src=" imgIp + list.user.userImgUrl" alt />
+            </div>
+            <p class="username">{{list.user.userName}}</p>
           </div>
-          <p class="username">{{list.user.userName}}</p>
+        </router-link>
+        <div v-if="list.userId!=userId && isFollowPage!=1">
+          <div class="follow" v-if="!list.isFollow" @click="follow(list.idn, list.userId)">+关注</div>
+          <div class="followed" v-else @click="cancleFollow(list.idn, list.userId)">
+            <i class="fa fa-check"></i>
+            已关注
+          </div>
+        </div>
+      </div>
+      <router-link :to="'/article/'+ list.postId ">
+        <div class="brief clearfix">
+          <p class="title">{{list.postTitle}}</p>
+          <p class="content">{{list.postContent}}</p>
+          <div class="pic" v-if="list.postImgs.length !== 0">
+            <img :src="imgIp + list.postImgs[0].postUrl" />
+          </div>
         </div>
       </router-link>
-      <div class="follow" v-if="!list.isFollow" @click="follow(list.idn, list.userId)">+关注</div>
-      <div class="followed" v-else @click="cancleFollow(list.idn, list.userId)">
-        <i class="fa fa-check"></i>
-        已关注
-      </div>
-    </div>
-    <router-link :to="'/article/'+ list.postId ">
-      <div class="brief clearfix">
-        <p class="title">{{list.postTitle}}</p>
-        <p class="content">{{list.postContent}}</p>
-        <div class="pic" v-if="list.postImgs.length !== 0">
-          <img :src="'http://172.16.6.45:8989/' + list.postImgs[0].postUrl" />
+      <div class="options">
+        <div v-if="!list.isLike" class="praise-wrap">
+          <van-loading v-show="lLoading == list.idn" size="14px" color="#1989fa" vertical></van-loading>
+          <div v-show="lLoading !== list.idn">
+            <i @click="praise(list.idn, list.postId)" class="fa fa-heart-o" aria-hidden="true"></i>
+            <span @click="praise(list.idn, list.postId)">赞({{list.countFabulous}})</span>
+          </div>
+        </div>
+        <div style="color: red" v-else class="praise-wrap">
+          <i @click="canclePraise(list.idn, list.postId)" class="fa fa-heart" aria-hidden="true"></i>
+          <span @click="canclePraise(list.idn, list.postId)">已赞({{list.countFabulous}})</span>
+        </div>
+        <router-link :to="'/article/'+ list.postId ">
+          <div>
+            <i class="fa fa-comment-o" aria-hidden="true"></i>
+            <span>评论{{list.countComment}}</span>
+          </div>
+        </router-link>
+        <div v-if="!list.isCollect" class="collect-wrap">
+          <i @click="collect(list.idn, list.postId)" class="fa fa-star-o" aria-hidden="true"></i>
+          <span @click="collect(list.idn, list.postId)">收藏({{list.countCollection}})</span>
+        </div>
+        <div style="color: #f8d742" v-else class="collect-wrap">
+          <i @click="cancleCollect(list.idn, list.postId)" class="fa fa-star" aria-hidden="true"></i>
+          <span @click="cancleCollect(list.idn, list.postId)">已收藏({{list.countCollection}})</span>
         </div>
       </div>
-    </router-link>
-    <div class="options">
-      <div v-if="!list.isLike" class="praise-wrap">
-        <van-loading v-show="lLoading == list.idn" size="14px" color="#1989fa" vertical></van-loading>
-        <div v-show="lLoading !== list.idn">
-          <i @click="praise(list.idn, list.postId)" class="fa fa-heart-o" aria-hidden="true"></i>
-          <span @click="praise(list.idn, list.postId)">赞({{list.countFabulous}})</span>
-        </div>
-      </div>
-      <div style="color: red" v-else class="praise-wrap">
-        <i @click="canclePraise(list.idn, list.postId)" class="fa fa-heart" aria-hidden="true"></i>
-        <span @click="canclePraise(list.idn, list.postId)">已赞({{list.countFabulous}})</span>
-      </div>
-      <div>
-        <i class="fa fa-comment-o" aria-hidden="true"></i>
-        <span>评论{{list.countComment}}</span>
-      </div>
-      <div v-if="!list.isCollect" class="collect-wrap">
-        <i @click="collect(list.idn, list.postId)" class="fa fa-star-o" aria-hidden="true"></i>
-        <span @click="collect(list.idn, list.postId)">收藏({{list.countCollection}})</span>
-      </div>
-      <div style="color: #f8d742" v-else class="collect-wrap">
-        <i @click="cancleCollect(list.idn, list.postId)" class="fa fa-star" aria-hidden="true"></i>
-        <span @click="cancleCollect(list.idn, list.postId)">已收藏({{list.countCollection}})</span>
-      </div>
     </div>
-  </div>
+  </van-skeleton>
 </template>
 
 <script>
 import { Loading } from "vant";
+import { Skeleton } from "vant";
+
 export default {
   name: "HotList",
   data() {
-    return {};
+    return {
+      userId: 0
+    };
   },
-  props: ["list", "isAll", "fLoading", "lLoading", "cLoading"],
+  props: [
+    "list",
+    "isAll",
+    "fLoading",
+    "lLoading",
+    "cLoading",
+    "imgIp",
+    "isFollowPage",
+    "loading"
+  ],
   components: {
-    [Loading.name]: Loading
+    [Loading.name]: Loading,
+    [Skeleton.name]: Skeleton
+  },
+  created() {
+    this.userId = sessionStorage.getItem("userId"); //获取userid
+    console.log(this.userId);
   },
   methods: {
     followStyle(i) {
@@ -131,6 +155,7 @@ export default {
         overflow: hidden;
         text-align: center;
         line-height: 70px;
+        border: 1px solid #eee;
         img {
           width: 120%;
         }
@@ -146,14 +171,14 @@ export default {
       height: 40px;
       line-height: 40px;
       font-size: 24px;
-      border: 3px solid #f8d742;
-      color: #f8d742;
+      border: 3px solid @themeColor;
+      color: @themeColor;
       border-radius: 5px;
       line-height: 40px;
       font-weight: 600;
       text-align: center;
       border-radius: 20px;
-      box-shadow: 0 0 15px #ffe469;
+      box-shadow: 0 0 15px @themeColor;
     }
     .followed {
       width: 100px;
@@ -165,9 +190,9 @@ export default {
       text-align: center;
       color: #fff;
       padding: 3px;
-      background: #ffe469;
+      background: @themeColor;
       border-radius: 20px;
-      box-shadow: 0 0 15px #ffe469;
+      box-shadow: 0 0 15px @themeColor;
     }
   }
 
@@ -175,8 +200,9 @@ export default {
     margin-top: 20px;
     .pic {
       width: 100%;
+      margin-top: 10px;
       img {
-        max-height: 300px;
+        max-height: 250px;
         border-radius: 20px;
       }
     }
@@ -185,8 +211,12 @@ export default {
       font-weight: 600;
     }
     .content {
+      display: -webkit-box;
+      -webkit-box-orient: vertical;
+      -webkit-line-clamp: 2;
+      overflow: hidden;
       font-size: 28px;
-      margin: 10px 0;
+      margin-top: 20px;
     }
   }
   .options {

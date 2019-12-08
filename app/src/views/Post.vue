@@ -42,7 +42,7 @@
               @click="selected(item.circleId)"
             >
               <div class="img-wrap">
-                <img :src="'http://172.16.6.45:8989' + item.circles.circleUrl" alt />
+                <img :src="imgUrl + item.circles.circleUrl" alt />
               </div>
               <p>{{item.circles.circleName}}</p>
             </li>
@@ -54,10 +54,12 @@
           </div>
           <ul>
             <li v-for="(item, index) in allCircle" :key="index" @click="selected(item.circleId)">
-              <div>
-                <img :src="'http://172.16.6.45:8989' + item.circleUrl" alt />
-              </div>
-              <p>{{item.circleName}}</p>
+              <van-skeleton avatar :row="1" :loading="loading">
+                <div>
+                  <img :src="imgUrl + item.circleUrl" alt />
+                </div>
+                <p>{{item.circleName}}</p>
+              </van-skeleton>
             </li>
           </ul>
         </div>
@@ -70,6 +72,7 @@
 import { Uploader } from "vant";
 import { ImagePreview } from "vant";
 import { ActionSheet } from "vant";
+import { Skeleton } from "vant";
 
 export default {
   name: "Post",
@@ -82,13 +85,21 @@ export default {
       groupName: "请选择圈子",
       groupid: -1,
       title: "",
-      content: ""
+      content: "",
+      userId: 0,
+      imgUrl: "",
+      loading: true
     };
   },
   components: {
     [ActionSheet.name]: ActionSheet,
     [ImagePreview.name]: ImagePreview,
-    [Uploader.name]: Uploader
+    [Uploader.name]: Uploader,
+    [Skeleton.name]: Skeleton
+  },
+  created() {
+    this.imgUrl = this.$store.state.imgUrl; // 获取图片路径
+    this.userId = sessionStorage.getItem("userId");
   },
   methods: {
     back() {
@@ -101,7 +112,8 @@ export default {
     },
     getCircle() {
       this.circleShow = !this.circleShow;
-      this.axios.get("/userCircle/list?userId=1001").then(res => {
+      this.axios.get(`/userCircle/list?userId=${this.userId}`).then(res => {
+        console.log(res.data);
         if (res.data.code == 200) {
           this.followedCircle = res.data.data;
         }
@@ -109,6 +121,7 @@ export default {
       this.axios.get("/circle/list").then(res => {
         if (res.data.code == 200) {
           this.allCircle = res.data.data;
+          this.loading = false
         }
       });
     },
@@ -126,12 +139,14 @@ export default {
               postContent: this.content,
               postImgs: res.data.data,
               postTitle: this.title,
-              userId: 1004
+              userId: this.userId
             })
             .then(res => {
               console.log(res.data);
-              this.$router.replace('/article/' + res.data.data);
+              this.$router.replace("/article/" + res.data.data);
             });
+        } else {
+          this.$router.replace("/post/fromhome");
         }
       });
     }

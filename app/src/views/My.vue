@@ -5,8 +5,8 @@
       <h3>我的</h3>
       <div class="user">
         <div class="portrait" @click="goMyResourcePage()">
-        <!--   <p>头像</p> -->
-          <img :src="'http://172.16.6.38:8989/'+userInfo.userImgUrl" class="imgs" alt="">
+          <!--   <p>头像</p> -->
+          <img :src="imgUrl+userInfo.userImgUrl" class="imgs" alt />
         </div>
         <span class="username">{{userInfo.userName}}</span>
         <br />
@@ -57,61 +57,79 @@
         <span class="num tel">手机号码</span>
       </li>
     </ul>
+
     <div class="btnbox">
       <button type="button" class="btn" @click="quitBtn">退出登录</button>
     </div>
+
+    <van-popup
+      v-model="show"
+      position="bottom"
+      closeable
+      close-icon="close"
+      :style="{ height: '20%' }"
+      class="pop"
+    >
+      <button type="button" class="confirm" @click="select">确认退出</button>
+      <!--  <button type="button" @click="selectquit">取消</button> -->
+    </van-popup>
   </div>
 </template>
 
 <script>
+import { Popup } from "vant";
 export default {
   name: "My",
-  data () {
+  data() {
     return {
+      imgUrl: "",
       fansnum: "",
       focusnum: "",
       userInfo: {},
       getPostnum: "",
       collnum: "",
       userId: 1001,
-      replynum: ""
-    }
+      replynum: "",
+      show: false
+    };
+  },
+  components: {
+    [Popup.name]: Popup
   },
   created() {
+    this.imgUrl = this.$store.state.imgUrl;    // 获取图片路径
     this.userId = sessionStorage.getItem("userId");
     let param = new URLSearchParams();
-    param.append("userid",this.userId);
+    param.append("userid", this.userId);
     this.axios.post("/zp/fant/countFants", param).then(res => {
       this.fansnum = res.data.data;
-      console.log('粉丝数',res.data);
+      console.log("粉丝数", res.data);
     });
     this.axios.post("/zp/fant/countattention", param).then(res => {
       this.focusnum = res.data.data;
-      console.log('关注数',res.data);
+      console.log("关注数", res.data);
     });
     this.axios.post("/zp/user/findMyself", param).then(res => {
-      console.log("xx",res.data);
+      console.log("xx", res.data);
       this.userInfo = res.data.data;
     });
     this.axios({
       url: `/user/findPostAllByUserId?userid=${this.userId}`,
       methods: "GET"
-    })
-    .then(res => {
-      console.log("发帖数",res.data);
+    }).then(res => {
+      console.log("发帖数", res.data);
       this.getPostnum = res.data.data;
     }),
-    this.axios.post("/zp/user/countconllectpost", param).then(res => {
-      this.collnum = res.data.data;
-      console.log(res.data.data);
-      console.log('收藏数',this.collnum);
-    }),
-    this.axios.post("/zp/user/countreturnpost", param).then(res => {
-      this.replynum = res.data.data;
-     /*  console.log(res.data.data); */
-      console.log('回帖数',res.data);
-    });
-   
+      this.axios.post("/zp/user/countconllectpost", param).then(res => {
+        this.collnum = res.data.data;
+        console.log(res.data.data);
+        console.log("收藏数", this.collnum);
+      }),
+      this.axios.post("/zp/user/countreturnpost", param).then(res => {
+        this.replynum = res.data.data;
+        /*  console.log(res.data.data); */
+        console.log("回帖数", res.data);
+      });
   },
   methods: {
     goNewpostPage() {
@@ -136,7 +154,12 @@ export default {
       this.axios({});
     },
     quitBtn() {
-      this.$router.push("/login");
+      this.show = !this.show;
+    },
+    select() {
+      sessionStorage.removeItem("token");
+      sessionStorage.removeItem("userId");
+      this.$router.replace("/login");
     }
   }
 };
@@ -180,7 +203,7 @@ export default {
         /*  position: absolute;
         left: 60px;
         top: 140px; */
-      /*   overflow: hidden; */
+        /*   overflow: hidden; */
         /* p {
           text-align: center;
           line-height: 180px;
@@ -294,5 +317,20 @@ export default {
       outline: none;
     }
   }
+}
+.pop {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.confirm {
+  width: 400px;
+  height: 80px;
+  background: @themeColor;
+  color: white;
+  border: none;
+  border-radius: 30px;
+  font-size: 30px;
+  outline: none;
 }
 </style>

@@ -1,8 +1,11 @@
 <template>
-  <div class="zhujianwai">
+  <router-link :to="'/article/' + postId">
+    <div class="zhujianwai">
       <div class="zhujian">
         <div class="left">
           <div class="title">
+            <img :src="imgUrl+countComment.user.userImgUrl" class="imgss" alt />
+            <!-- <span>{{countComment.user.}}</span> -->
             <p>{{countComment.postTitle}}</p>
           </div>
           <div class="content">
@@ -10,19 +13,29 @@
           </div>
         </div>
         <div class="right">
-          <div class="photo"></div>
+          <div class="photo">{{countComment.circleName}}</div>
         </div>
       </div>
       <div class="nameandcommend">
         <span>{{countComment.user.userName}}</span>
+        <span>{{countComment.postTime}}-时间</span>
         <span>{{countComment.countComment}}-评论</span>
       </div>
     </div>
+  </router-link>
 </template>
 <script>
 export default {
-  name: 'RecommtLists',
-  props:["countComment"]
+  name: "RecommtLists",
+  props: ["countComment", "postId"],
+  data() {
+    return {
+      imgUrl: ""
+    };
+  },
+  created() {
+    this.imgUrl = this.$store.state.imgUrl; // 获取图片路径
+  }
 };
 </script>
 
@@ -40,7 +53,7 @@ export default {
   margin: 20px auto;
   .zhujian {
     width: 710px;
-   /*  height: 240px; */
+    /*  height: 240px; */
 
     display: flex;
     justify-content: flex-start;
@@ -54,12 +67,21 @@ export default {
         height: 120px;
 
         padding: 30px;
-        padding-left: 60px;
+        padding-left: 20px;
         box-sizing: border-box;
+        display: flex;
+
+        justify-content: flex-start;
         p {
           font-size: 34px;
           font-weight: 500;
-          
+        }
+        .imgss {
+          width: 50px;
+          height: 50px;
+          border: 1px solid red;
+          border-radius: 50%;
+          margin-right: 20px;
         }
       }
       .content {
@@ -68,19 +90,18 @@ export default {
         /*   background: yellow; */
         padding: 10px;
         padding-top: 0;
-        
+
         box-sizing: border-box;
         p {
           font-size: 26px;
           color: gray;
-          
         }
       }
     }
     .right {
-       width: 300px;
-     /* height: 200px; */
-    /*   background: grey; */
+      width: 300px;
+      /* height: 200px; */
+      /*   background: grey; */
 
       display: flex;
       justify-content: center;
@@ -89,7 +110,8 @@ export default {
         /* width: 260px;
         height: 200px; */
         padding: 10px;
-       /*  background: pink; */
+        /*  background: pink; */
+        color: @themeColor;
       }
     }
   }
@@ -107,5 +129,4 @@ export default {
     }
   }
 }
-
 </style>

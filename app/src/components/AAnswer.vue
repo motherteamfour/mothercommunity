@@ -1,7 +1,7 @@
 <template>
   <div class="a-answer">
     <div class="title-wrap">
-      <img :src="imgUrl+'/'+information.user.userImgUrl" alt />
+      <img :src="imgUrl+information.user.userImgUrl" alt />
       <span class="title">{{information.user.userName}}</span>
     </div>
     <div class="content">{{information.answerContent}}</div>
@@ -85,7 +85,7 @@ export default {
     padding-bottom: 10px;
     img {
       display: inline-block;
-      background-color: lemonchiffon;
+      // background-color: lemonchiffon;
       width: 50px;
       height: 50px;
       margin-right: 20px;

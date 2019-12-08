@@ -20,12 +20,6 @@ const routes = [
         path: '',
         name: 'Entrance',//登陆-(密码登陆/验证码登陆)
         component: () => import('../views/Entrance.vue'),
-      },
-      {
-        path: '/findpassword',//找回密码
-        name: 'FindPassword',
-        component: () => import('../views/FindPassword.vue'),
-
       }
     ]
   },
@@ -35,17 +29,22 @@ const routes = [
     component: () => import('../views/Register.vue'),
   },
   {
-    path: '/registerPass',//注册设置密码
+    path: '/registerpass',//注册设置密码
     name: 'RegisterPass',
     component: () => import('../views/RegisterPass.vue'),
   },
   {
-    path: '/findpassword',//找回密码
+    path: '/ForgetPassword',//忘记密码
+    name: 'ForgetPassword',
+    component: () => import('../views/ForgetPassword.vue'),
+  },
+  {
+    // FindPassword
+    path: '/FindPassword',//找回密码
     name: 'FindPassword',
     component: () => import('../views/FindPassword.vue'),
   },
   {
-    // SelectState
     path: '/selectState',//选择状态
     name: 'SelectState',
     component: () => import('../views/SelectState.vue'),
@@ -60,6 +59,9 @@ const routes = [
         path: '',
         name: 'Community',
         component: () => import('../views/Community.vue'),
+        meta: {
+          auth: true
+        }
       },
       //圈子--颜志鹏
       {
@@ -70,11 +72,17 @@ const routes = [
             path: '',
             name: 'Recommend',
             component: () => import('../views/Recommend.vue'),
+            meta: {
+              auth: true
+            }
           },
           {
             path: 'followed',
             name: 'Followed',
             component: () => import('../views/Followed.vue'),
+            meta: {
+              auth: true
+            }
           }
 
         ]
@@ -90,6 +98,9 @@ const routes = [
             path: "",
             name: "HotQuestion",//热门问题
             component: () => import('../views/HotQuestion.vue'),
+            meta: {
+              auth: true
+            }
 
           },
           {
@@ -124,12 +135,17 @@ const routes = [
       {
         path: 'my',//我的
         component: My,
+        meta: {
+          auth: true
+        }
       },
       {
         path: 'newpost', //我的发帖
         name: 'NewPost',
         component: () => import('../views/NewPost.vue'),
-        
+        meta: {
+          auth: true
+        }
       },
       {
         path: 'reply', //我的回帖
@@ -184,11 +200,7 @@ const routes = [
           }
         ]
       },
-      {
-        path: 'infomation', // 消息
-        name: "Infomation",
-        component: () => import('../views/Infomation.vue')
-      },
+
       {
         path: 'infocomment', // 消息中的评论
         component: InfoComment,
@@ -232,6 +244,11 @@ const routes = [
     path: '/circlegourp', //所有圈子
     name: 'circlegourp',
     component: () => import('../views/CircleGourp.vue')
+  },
+  {
+    path: '/otherUsers/:id', //帖子
+    name: 'otherUsers',
+    component: () => import('../views/OtherUsers.vue')
   },
   {
     path: '/article/:id', //帖子
@@ -280,6 +297,12 @@ const routes = [
     name: 'QuestionDetail',
     component: () => import('../views/QuestionDetail.vue'),
   },
+  // 赵蕊
+  {
+    path: '/infomation', // 消息
+    name: "Infomation",
+    component: () => import('../views/Infomation.vue')
+  },
 ]
 
 
@@ -291,21 +314,21 @@ const router = new VueRouter({
 
 // 注册全局守卫
 // 在访问路由之前进行拦截
-// router.beforeEach((to, from, next) => {
-//   // 获取 token，登录的标识
-//   var token = sessionStorage.getItem("token")
+router.beforeEach((to, from, next) => {
+  // 获取 token，登录的标识
+  var token = sessionStorage.getItem("token")
 
-//   if (to.meta.auth) { // 判断是否需要权限
-//     if (token) { // 再次判断是否已经有权限了
-//       next()
-//     } else {
-//       next({ // 没有权限，导向登录页
-//         path: "/login",
-//         query: { redirect: to.fullPath } // 记录原本想访问的路由
-//       })
-//     }
-//   } else {
-//     next() // 想去哪就去哪
-//   }
-// })
+  if (to.meta.auth) { // 判断是否需要权限
+    if (token) { // 再次判断是否已经有权限了
+      next()
+    } else {
+      next({ // 没有权限，导向登录页
+        path: "/login",
+        query: { redirect: to.fullPath } // 记录原本想访问的路由
+      })
+    }
+  } else {
+    next() // 想去哪就去哪
+  }
+})
 export default router

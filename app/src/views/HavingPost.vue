@@ -2,8 +2,6 @@
   <div class="search">
     <div class="searchbox">
       <HavingPostList v-for="(item, index) in postnum" :key="index"
-     
-   
       :user="item"></HavingPostList><!--  :title="item.postTitle"
       :content="item.postContent" -->
     </div>  <!--  :username="item.user.userName" -->
@@ -52,7 +50,7 @@ export default {
 .search {
   width: 750px;
   /* height: 1000px; */
- /*  background: greenyellow; */
+  background: rgb(248,248,248);
 }
 .searchbox {
   width: 710px;
@@ -61,9 +59,9 @@ export default {
   margin: 0 auto;
 
   font-size: 36px;
-  display: flex;
+  /* display: flex;
   justify-content: space-between;
-  align-items: center;
+  align-items: center; */
   letter-spacing: 2px;
 }
 </style>

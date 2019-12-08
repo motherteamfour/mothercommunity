@@ -37,6 +37,7 @@ export default {
 </script>
 
 <style lang="less" scoped>
+@import "../assets/style/base.less";
 .home-tabbar {
   width: 750px;
   height: 88px;
@@ -45,7 +46,7 @@ export default {
   display: flex;
   justify-content: space-around;
   align-items: center;
-  background: #eee;
+  background: #fff;
 }
 .home-tabbar li {
     display: inline-block;
@@ -53,7 +54,11 @@ export default {
     height: 80px;
     text-align: center;
     a{
-      font-size: 24px;
+      font-size: 28px;
     }
+}
+
+.router-link-exact-active {
+  color: @themeColor;
 }
 </style>

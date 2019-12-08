@@ -10,7 +10,7 @@
     </van-sticky>
     <div class="user-wrap">
       <div class="avatar">
-        <img :src="'http://172.16.6.38:8989/' + userInfo.userImgUrl" alt="">
+        <img :src="imgUrl + userInfo.userImgUrl" alt />
       </div>
       <div class="user-info">
         <ul class="count">
@@ -27,15 +27,19 @@
             <span>粉丝</span>
           </li>
         </ul>
-        <button class="follow">关注</button>
+        <div class="follow-wrap">
+          <button class="follow"  v-if="userId!=userInfo.userId">关注</button>
+        </div>
       </div>
     </div>
     <div class="posts">
       <ul>
         <li class="post-item" v-for="(item, index) in post" :key="index">
-          <p class="title">{{item.postTitle}}</p>
-          <p class="post-content">{{item.postContent}}</p>
-          <p class="time">{{item.postTime}}</p>
+          <router-link :to="'/article/' + item.postId">
+            <p class="title">{{item.postTitle}}</p>
+            <p class="post-content">{{item.postContent}}</p>
+            <p class="time">{{item.postTime}}</p>
+          </router-link>
         </li>
       </ul>
     </div>
@@ -52,45 +56,49 @@ export default {
       userInfo: {},
       fans: 0,
       followed: 0,
-      post: []
+      post: [],
+      imgUrl: ""
     };
   },
   components: {
     [Sticky.name]: Sticky
   },
   created() {
+    this.imgUrl = this.$store.state.imgUrl; // 获取图片路径
     this.userId = this.$route.params.id;
-    console.log(this.userId);
     let param = new URLSearchParams();
     param.append("userid", this.userId);
-    this.axios
-      .post("/zp/user/findMyself",param)
-      .then(res => {
+    this.axios.post("/zp/user/findMyself", param).then(res => {
+      this.userInfo = res.data.data;
+      console.log(this.userInfo);
+      this.axios.get(`/user/isFol?userId=1001&followUserId=1023`).then(res => {
         console.log(res.data);
-        this.userInfo = res.data.data;
       });
-    this.axios
-      .post("/zp/fant/countattention",param)
-      .then(res => {
-        console.log(res.data);
-        this.followed = res.data.data;
-      });
-    this.axios
-      .post("/zp/fant/countFants",param)
-      .then(res => {
-        console.log(res.data);
-        this.fans = res.data.data;
-      });
+    });
+    this.axios.post("/zp/fant/countattention", param).then(res => {
+      this.followed = res.data.data;
+    });
+    this.axios.post("/zp/fant/countFants", param).then(res => {
+      this.fans = res.data.data;
+    });
     this.axios
       .get(`/user/findPostAllByUserId?userid=${this.userId}`)
       .then(res => {
-        console.log(res.data);
-        this.post = res.data.data
+        this.post = res.data.data;
       });
   },
   methods: {
     back() {
       this.$router.go(-1); //返回上一层
+    },
+    getFollow() {
+      this.axios
+        .get(
+          `/user/isFol?userId=${this.userId}&followUserId=${this.userInfo.userId}`
+        )
+        .then(res => {
+          console.log(res.data);
+        });
     }
   }
 };
@@ -165,15 +173,19 @@ header {
       font-size: 24px;
     }
   }
-  .follow {
+  .follow-wrap {
     margin-top: 30px;
     width: 300px;
     height: 50px;
-    font-size: 28px;
-    background: @themeColor;
-    border: none;
-    border-radius: 30px;
-    color: #fff;
+    .follow {
+      width: 100%;
+      height: 100%;
+      font-size: 28px;
+      background: @themeColor;
+      border: none;
+      border-radius: 30px;
+      color: #fff;
+    }
   }
 }
 
@@ -194,7 +206,11 @@ header {
     }
     .post-content {
       font-size: 28px;
-      padding: 20px 0;
+      margin: 20px 0;
+      display: -webkit-box;
+      -webkit-box-orient: vertical;
+      -webkit-line-clamp: 1;
+      overflow: hidden;
     }
     .time {
       font-size: 26px;

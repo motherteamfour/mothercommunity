@@ -1,6 +1,22 @@
 <template>
   <div class="q-and-a">
-    <div class="top">轮播图</div>
+    <div class="top">
+      <!-- 轮播图 -->
+      <van-swipe :autoplay="3000" indicator-color="white">
+        <van-swipe-item>
+          <img src="@/assets/img/qanda/lunbo.png" />
+        </van-swipe-item>
+        <van-swipe-item>
+          <img src="@/assets/img/qanda/lunbo.png" />
+        </van-swipe-item>
+        <van-swipe-item>
+          <img src="@/assets/img/qanda/lunbo.png" />
+        </van-swipe-item>
+        <van-swipe-item>
+          <img src="@/assets/img/qanda/lunbo.png" />
+        </van-swipe-item>
+      </van-swipe>
+    </div>
     <div class="main">
       <div class="one">
         <router-link :to="'/ask'" class="ask">
@@ -34,6 +50,11 @@
 </template>
 
 <script>
+import Vue from "vue";
+import { Swipe, SwipeItem } from "vant";
+
+Vue.use(Swipe).use(SwipeItem);
+
 export default {
   name: "QandA",
   data() {
@@ -64,11 +85,14 @@ export default {
 @wenziColor: #8a8a8a;
 .q-and-a {
   width: 100%;
-
   .top {
     width: 100%;
     height: 400px;
     background-color: @themeColor;
+    img{
+      width: 100%;
+      height: auto;
+    }
   }
   .main {
     width: 100%;

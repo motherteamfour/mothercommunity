@@ -7,19 +7,25 @@
         </div>
       </nav>
       <div class="group-info">
-        <p class="group-name">怀孕圈</p>
-        <p class="group-num">帖子数 2658</p>
+        <img :src="imgUrl + circleUrl" alt />
+        <p class="group-name">{{circleName}}</p>
+        <p class="group-num">帖子数 {{hotList.length}}</p>
       </div>
     </header>
     <section class="hot">
       <p class="hot-title">全部帖子</p>
+      <div class="no-post" v-if="hotList.length == 0">
+        暂无帖子
+      </div>
       <HotList
         v-for="(item, index) in hotList"
         :key="index"
         :list="item"
+        :imgIp="imgIp"
         :fLoading="fLoading"
         :lLoading="lLoading"
         :cLoading="cLoading"
+        :loading="loading"
         @followFn="follow"
         @cancleFollowFn="cancleFollow"
         @praiseFn="praise"
@@ -41,7 +47,11 @@ export default {
       fLoading: -1,
       lLoading: -1,
       cLoading: -1,
-      hotList: []
+      hotList: [],
+      circleName: "",
+      circleUrl: "",
+      imgUrl: "",
+      loading: true
     };
   },
   components: {
@@ -52,25 +62,25 @@ export default {
       this.fLoading = i;
       let param = new URLSearchParams();
       param.append("followUserId", userId);
-      param.append("userId", "1001");
+      param.append("userId", this.userId);
       this.axios.post("/user/fol", param).then(res => {
         console.log(res.data);
         if (res.data.code == 200) {
           this.fLoading = -1;
-          this.hotList[i].isFollow = !this.hotList[i].isFollow;
+          this.getList();
         }
       });
     },
     cancleFollow(i, userId) {
       this.fLoading = i;
       this.axios
-        .delete(`/user/notFol?followUserId=${userId}&userId=1001`)
+        .delete(`/user/notFol?followUserId=${userId}&userId=${this.userId}`)
         .then(res => {
           console.log(res.data);
           if (res.data.code == 200) {
             console.log(res.data);
             this.fLoading = -1;
-            this.hotList[i].isFollow = !this.hotList[i].isFollow;
+            this.getList();
           }
         });
     },
@@ -78,7 +88,7 @@ export default {
       this.lLoading = i;
       let param2 = new URLSearchParams();
       param2.append("postId", postId);
-      param2.append("userId", "1001");
+      param2.append("userId", this.userId);
       this.axios.post("/post/like", param2).then(res => {
         console.log(res.data);
         if (res.data.code == 200) {
@@ -91,7 +101,7 @@ export default {
     canclePraise(i, postId) {
       this.lLoading = i;
       this.axios
-        .delete(`/post/notLike?postId=${postId}&userId=1001`)
+        .delete(`/post/notLike?postId=${postId}&userId=${this.userId}`)
         .then(res => {
           console.log(res.data);
           if (res.data.code == 200) {
@@ -107,7 +117,7 @@ export default {
       this.cLoading = i;
       let param3 = new URLSearchParams();
       param3.append("postId", postId);
-      param3.append("userId", "1001");
+      param3.append("userId", this.userId);
       this.axios.post("/post/col", param3).then(res => {
         console.log(res.data);
         if (res.data.code == 200) {
@@ -120,7 +130,7 @@ export default {
     },
     cancleCollect(i, postId) {
       this.axios
-        .delete(`/post/notCol?postId=${postId}&userId=1001`)
+        .delete(`/post/notCol?postId=${postId}&userId=${this.userId}`)
         .then(res => {
           console.log(res.data);
           if (res.data.code == 200) {
@@ -132,25 +142,35 @@ export default {
         });
       console.log(postId);
     },
+    getList() {
+      this.axios
+        .get(`/cir/post?circleId=${this.groupId}&userId=${this.userId}`)
+        .then(res => {
+          console.log(res.data);
+          if (res.data.data !== null) {
+            this.circleName = res.data.data.circleName;
+            this.circleUrl = res.data.data.circleUrl;
+            this.hotList = res.data.data.posts;
+            this.hotList.forEach((item, index) => {
+              item.idn = index;
+            });
+            this.loading = false;
+          }
+          console.log(this.hotList);
+        });
+    },
     back() {
       this.$router.go(-1); //返回上一层
     }
   },
   created() {
+    this.userId = sessionStorage.getItem("userId");
+    this.imgUrl = this.$store.state.imgUrl; // 获取图片路径
+    this.imgIp = this.$store.state.imgUrl;
+    console.log(this.imgIp);
     this.groupId = this.$route.params.id;
     console.log(this.groupId);
-    this.axios
-      .get(`/post/cir?circleId=${this.groupId}&userId=1001`)
-      .then(res => {
-        console.log(res.data);
-        if (res.data.data !== null) {
-          this.hotList = res.data.data;
-          this.hotList.forEach((item, index) => {
-            item.idn = index;
-          });
-        }
-        console.log(this.hotList);
-      });
+    this.getList();
   }
 };
 </script>
@@ -180,12 +200,12 @@ header {
   .group-info {
     text-align: center;
     color: #000;
+    margin-bottom: 23px;
     .group-name {
       font-size: 36px;
     }
     .group-num {
       font-size: 30px;
-      margin-top: 20px;
     }
   }
 }
@@ -204,5 +224,11 @@ header {
     padding-bottom: 10px;
     border-bottom: 1px solid #eee;
   }
+}
+
+.no-post {
+  height: 400px;
+  text-align: center;
+  line-height: 400px;
 }
 </style>

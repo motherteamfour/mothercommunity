@@ -32,6 +32,14 @@ export default {
     };
   },
   components: {},
+  created() {
+    console.log();
+    if(this.$route.name == 'Followed') {
+         this.lineLeft = "100%";
+    } else {
+          this.lineLeft = "0px";
+    }
+  },
   methods: {
     select(e) {
       //导航选择
@@ -105,8 +113,8 @@ export default {
   position: fixed;
   bottom: 150px;
   right: 50px;
-  background: rgba(255, 228, 105, 0.9);
-  box-shadow: 0 0 15px #ffe469;
+  background: @themeColor;
+  box-shadow: 0 0 15px @themeColor;
   color: #fff;
   text-align: center;
   line-height: 90px;

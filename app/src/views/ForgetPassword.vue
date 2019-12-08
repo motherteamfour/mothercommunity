@@ -1,100 +1,88 @@
 <template>
-  <div class="find-password">
+  <div class="register">
     <div class="header">
       <div class="status-bar"></div>
       <div class="navigation">
-        <i class="fa fa-angle-left" @click="back"></i>找回密码
+        <i class="fa fa-angle-left" @click="back"></i>忘记密码
       </div>
     </div>
     <form class="register-form">
       <div class="form-group">
+        <span>手机号</span>
+        <input type="text" placeholder="输入手机号" v-model="username" />
+      </div>
+      <!-- <div class="form-group">
         <span>验证码</span>
-        <input type="text" placeholder="输入验证码" v-model="verifycode" />
-        <button type="button" class="send-verify">验证码</button>
-      </div>
-      <div class="form-group">
-        <span>请设置新密码</span>
-        <input type="password" placeholder="6-16位" v-model="password" />
-      </div>
-      <div class="form-group">
-        <span>请确认新密码</span>
-        <input type="password" v-model="confirmPassword" />
-      </div>
+        <input type="password" placeholder="输入验证码" v-model="userpass" />
+        <button type="button" class="send-verify" @click="getVerifyCode">验证码</button>
+      </div>-->
       <div class="form-group register-from-group">
-        <input type="button" value="确定" @click="getConfirm" />
+        <input type="button" value="下一步" @click="getVerifyCode" />
       </div>
     </form>
     <!-- 模态框 -->
     <van-popup class="model" v-model="show" round>
       <div class="top">
         <p class="one">{{one}}</p>
+        <!-- 未填写手机号码 -->
         <p class="two">{{two}}</p>
       </div>
       <div class="bottom" @click="closeModel">好的</div>
     </van-popup>
   </div>
 </template>
+
 <script>
+import { mapMutations } from "vuex";
+
 import Vue from "vue";
 import { Popup } from "vant";
 
 Vue.use(Popup);
+
 export default {
-  name: "FindPassword",
+  name: "Register",
   data() {
     return {
-      verifycode: "",
-      password: "",
-      confirmPassword: "",
-      userPhone: "",
+      username: "",
+      userpass: "",
+      info: "",
       show: false,
       one: "",
       two: ""
     };
   },
   methods: {
+    ...mapMutations(["setPhone"]),
     back() {
       this.$router.go(-1); //返回上一层
     },
-    // 确定
-    getConfirm() {
-      if (this.password == this.confirmPassword) {
-        console.log("电话和密码", this.userPhone, this.password);
+
+    // 获取验证码
+    getVerifyCode() {
+      var name = this.username.trim();
+      console.log("用户名", name);
+      if (!name.length) {
+        this.one = "未填写手机号码";
+        this.two = "请输入手机号";
+        this.show = true;
+      } else {
         this.axios
-          .post(
-            `/zp/user/updateuserpassword?phone=${this.userPhone}&password=${this.password}&code=${this.verifycode}`
-          )
+          .post(`zp/user/sendcode?phone=${this.username}`)
           .then(res => {
-            console.log(res.data);
-            if (res.data.code == 200) {
-              this.one = "重置密码成功";
-              this.two = "请登录";
-              this.show = true;
-              // 注册成功、返回登录页
-              this.$router.replace(`/login`);
-            }else{
-              this.one = "提示";
-              this.two = "重置密码失败";
-              this.show = true;
-            }
+            this.setPhone(this.username);
+            console.log("获取验证码：", res.data);
+            this.$router.replace(`/FindPassword`);
           })
           .catch(err => {
             console.log(err);
           });
-      } else {
-        this.one = "请重新输入";
-        this.two = "密码与确认密码不相同";
-        this.show = true;
       }
     },
     //关闭模态框
     closeModel() {
       this.show = false;
     }
-  },
-  created() {
-    console.log("创建", this.$store.state.userPhone);
-    this.userPhone = this.$store.state.userPhone;
   }
 };
 </script>
@@ -144,7 +132,7 @@ export default {
     span {
       float: left;
       height: 100px;
-      width: 200px;
+      width: 120px;
       text-align: center;
       line-height: 100px;
       color: @themeColor;
@@ -167,7 +155,7 @@ export default {
 
     input[type="text"],
     input[type="password"] {
-      width: 280px;
+      width: 360px;
       height: 98px;
       line-height: 98px;
       border: none;

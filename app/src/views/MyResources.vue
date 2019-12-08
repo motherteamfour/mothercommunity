@@ -13,7 +13,7 @@
         <span class="title">头像</span>
         <span class="num">
           <van-uploader :after-read="afterRead">
-            <img :src="'http://172.16.6.38:8989/'+userInfo.userImgUrl" class="portrait" alt />
+            <img :src="imgUrl+userInfo.userImgUrl" class="portrait" alt />
           </van-uploader>
           <i class="fa fa-angle-right" aria-hidden="true" @click="postImg()"></i>
         </span>
@@ -62,12 +62,13 @@
 </template>
 
 <script>
-
 import { Uploader } from "vant";
 export default {
   inject: ["reload"],
   data() {
     return {
+      imgUrl: "",
+
       userInfo: {}
     };
   },
@@ -75,6 +76,8 @@ export default {
     [Uploader.name]: Uploader
   },
   created() {
+    // 获取图片路径
+    this.imgUrl = this.$store.state.imgUrl;
     var userId = sessionStorage.getItem("userId");
     let param = new URLSearchParams();
     param.append("userid", userId);
