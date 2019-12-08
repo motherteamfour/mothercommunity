@@ -8,7 +8,7 @@
       </div>
     </div>
     <div class="content">
-      <textarea placeholder="请详细描述您的问题" v-model="content"></textarea>
+      <textarea placeholder="请输入回答内容" v-model="content"></textarea>
     </div>
     <!-- 模态框 -->
     <van-popup class="model" v-model="show" round>
@@ -114,7 +114,7 @@ export default {
 }
 .content {
   height: 1000px;
-  padding: 0 30px;
+  padding: 10px 30px;
   textarea {
     width: 100%;
     height: 100%;

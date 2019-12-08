@@ -9,7 +9,7 @@
 
       <input type="password" srcpalaceholder="6-16位" v-model="userpass" @keyup.enter="getLogin" />
 
-      <router-link :to="'/findpassword'">
+      <router-link :to="'/ForgetPassword'">
         <button type="button" class="forget-password">忘记密码</button>
       </router-link>
     </div>
@@ -120,7 +120,7 @@ export default {
 
   .form-group {
     font-size: 28px;
-    color: @zitiColor;
+    // color: @zitiColor;
     border-bottom: 1px solid @zitiColor;
     width: 600px;
 
