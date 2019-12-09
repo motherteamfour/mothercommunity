@@ -10,7 +10,8 @@
       </span>
     </div>
     <FansLists v-for="(item, index) in fanslists" :key="index"
-    :username="item.userName"></FansLists>
+    :username="item.userName"
+    :userimg="item.userImgUrl"></FansLists>
   </div>
 </template>
 
