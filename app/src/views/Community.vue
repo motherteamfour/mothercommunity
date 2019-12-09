@@ -124,7 +124,7 @@ export default {
         "-" +
         (this.valueDate.getMonth() + 1) +
         "-" +
-        this.valueDate.getDate();
+        (this.valueDate.getDate() - 1);
         console.log("ss",this.dayday);
     this.axios
       .get(`/messagePush/findNowDay`, {
