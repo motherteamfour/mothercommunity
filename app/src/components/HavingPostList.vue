@@ -4,7 +4,7 @@
       <div class="title">{{user.postTitle}}</div>
       <div class="content">{{user.postContent}}</div>
       <div class="user">
-        <img :src="'http://172.17.4.107:8989/'+user.user.userImgUrl" class="imgs" alt />
+        <img :src="'http://172.16.6.3:8089/'+user.user.userImgUrl" class="imgs" alt />
 
         <span class="username">{{user.user.userName}}</span>
       </div>
@@ -47,7 +47,7 @@ export default {
       display: inline-block;
       width: 40px;
       height: 40px;
-      background: red;
+      border: 1px solid red;
       border-radius: 50px;
     }
     .username {

@@ -5,7 +5,7 @@
         <div class="user">
           <div class="user-por">
             <!--  <div class="portrait"> -->
-            <img :src="'http:///172.17.4.107:8989/'+imgs" class="portrait" alt />
+            <img :src="'http://172.16.6.3:8989/'+imgs" class="portrait" alt />
 
             <!-- </div> -->
           </div>
@@ -16,6 +16,7 @@
         <div class="right">
           <div class="titlee">
             <p>{{title}}</p>
+            <!-- <p>{{content}}</p> -->
           </div>
           <div class="state">
             <span>孕4天</span>
