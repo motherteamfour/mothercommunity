@@ -11,7 +11,8 @@
     </div>
     <FansLists v-for="(item, index) in fanslists" :key="index"
     :username="item.userName"
-    :userimg="item.userImgUrl"></FansLists>
+    :userimg="item.userImgUrl"
+    @click="goFansss()"></FansLists>
   </div>
 </template>
 
@@ -38,7 +39,10 @@ export default {
   methods: {
     goback() {
       this.$router.push("./my");
-    }
+    }/* ,
+    goFansss() {
+      this.$router.push(".")
+    } */
   }
 };
 </script>

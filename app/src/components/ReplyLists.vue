@@ -1,4 +1,5 @@
 <template>
+<router-link :to="'/article/' + postId">
   <div>
     <ul>
       <li>
@@ -28,14 +29,16 @@
       </li>
     </ul>
   </div>
+  </router-link>
 </template>
 
 <script>
 export default {
-  props: ['lists'],
+  props: ['lists',"postId"],
   data () {
     return {
-      imgUrl: ""
+      imgUrl: "",
+      
     }
   },
   created() {

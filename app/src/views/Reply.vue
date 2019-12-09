@@ -10,7 +10,8 @@
       </span>
     </div>
     <ReplyLists v-for="(item, index) in lists" :key="index"
-    :lists="item"></ReplyLists>
+    :lists="item"
+    :postId="item.postId"></ReplyLists>
     
   </div>
 </template>
