@@ -28,7 +28,7 @@
         <el-table-column label="操作" show-overflow-tooltip align="center">
            <!-- slot-scope="scope" -->
           <template slot-scope="scope">
-            <el-button class="check-btn">查看</el-button>
+            <el-button class="check-btn" @click="chakan(scope.row)">查看</el-button>
             <el-button class="del-btn" >删除</el-button>
             <el-button class="del-btn" @click="recover(scope.row.postId)">恢复</el-button>
           </template>
@@ -79,6 +79,10 @@ export default {
    
   },
   methods: {
+    chakan(row){
+      
+      console.log(row)
+    },
      handleSelectionChange(val) {
       this.selAll = val;
       console.log(this.selAll);
