@@ -212,7 +212,7 @@ export default {
       })
       .then(res=>{
         console.log(res.data)
-        this.axios.get("/posterior/postmanagement/notRecommend?page=1&pagesize=6")
+        this.axios.get("/posterior/postmanagement/recommend?page=1&pagesize=6")
         .then(res=>{
           console.log(res.data)
           this.tableData = res.data.data.list;
