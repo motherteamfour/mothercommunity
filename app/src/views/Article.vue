@@ -14,7 +14,7 @@
           </div>
           <span>{{article.user.userName}}</span>
         </div>
-        <div v-if="userId !== article.user.userId">
+        <div v-if="userId != article.user.userId" class="articleFollowed">
           <button class="follow" v-if="!article.isFollow" @click="follow(article.userId)">关注</button>
           <div class="followed" v-else @click="cancleFollow(article.userId)">
             <i class="fa fa-check"></i>
@@ -61,7 +61,7 @@
                 {{item.countFabulous}}
               </div>
             </div>
-            <p class="reply-text">{{item.commentContent}}</p>
+            <p class="reply-text" @click="subRp(item.userId, item.commentId, item.user.userName)">{{item.commentContent}}</p>
             <ul class="sub-reply">
               <li v-for="(item, index) in item.comres" :key="index">
                 <p>
@@ -240,6 +240,7 @@ export default {
       });
     },
     unLike(commentId) {
+      console.log(commentId,this.userId)
       this.axios
         .delete(`/comm/notLike?commentId=${commentId}&userId=${this.userId}`)
         .then(res => {
@@ -263,6 +264,7 @@ export default {
       this.axios
         .delete(`/post/notLike?postId=${this.postId}&userId=${this.userId}`)
         .then(res => {
+          console.log(res.data);
           if (res.data.code == 200) {
             this.article.isLike = !this.article.isLike;
             this.article.countFabulous -= 1;
@@ -441,6 +443,9 @@ header {
           height: 70px;
           border-radius: 50%;
           overflow: hidden;
+          display: flex;
+          justify-content: center;
+          align-items: center;
           img {
             width: 100%;
           }
@@ -552,5 +557,13 @@ header {
 }
 .praised {
   color: red;
+}
+.articleFollowed {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  .followed {
+    height: 25px;
+  }
 }
 </style>

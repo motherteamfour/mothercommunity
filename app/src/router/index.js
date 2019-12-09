@@ -20,12 +20,6 @@ const routes = [
         path: '',
         name: 'Entrance',//登陆-(密码登陆/验证码登陆)
         component: () => import('../views/Entrance.vue'),
-      },
-      {
-        path: '/findpassword',//找回密码
-        name: 'FindPassword',
-        component: () => import('../views/FindPassword.vue'),
-
       }
     ]
   },
@@ -35,17 +29,22 @@ const routes = [
     component: () => import('../views/Register.vue'),
   },
   {
-    path: '/registerPass',//注册设置密码
+    path: '/registerpass',//注册设置密码
     name: 'RegisterPass',
     component: () => import('../views/RegisterPass.vue'),
   },
   {
-    path: '/findpassword',//找回密码
+    path: '/ForgetPassword',//忘记密码
+    name: 'ForgetPassword',
+    component: () => import('../views/ForgetPassword.vue'),
+  },
+  {
+    // FindPassword
+    path: '/FindPassword',//找回密码
     name: 'FindPassword',
     component: () => import('../views/FindPassword.vue'),
   },
   {
-    // SelectState
     path: '/selectState',//选择状态
     name: 'SelectState',
     component: () => import('../views/SelectState.vue'),
@@ -201,7 +200,7 @@ const routes = [
           }
         ]
       },
-      
+
       {
         path: 'infocomment', // 消息中的评论
         component: InfoComment,

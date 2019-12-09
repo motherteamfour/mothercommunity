@@ -57,9 +57,9 @@ export default {
       console.log(typeof userId);
       console.log(userId, this.title, this.content);
       this.axios({
-        url: `/question/addQuestion?userId=${userId}&questionTitle=${this.title}&questionContent=${this.content}`,
+        url: `/question/addQuestion`,
         method: "post",
-        // data: ``,
+        data: `userId=${userId}&questionTitle=${this.title}&questionContent=${this.content}`,
         header: {
           "Content-Type": "application/x-www-form-urlencoded"
         }
