@@ -115,13 +115,13 @@ export default {
       console.log("xx", res.data);
       this.userInfo = res.data.data;
     });
-   /*  this.axios({
+    this.axios({
       url: `/user/findPostAllByUserId?userid=${this.userId}`,
       methods: "GET"
     }).then(res => {
       console.log("发帖数", res.data);
       this.getPostnum = res.data.data;
-    }); */
+    });
       this.axios.post("/zp/user/countconllectpost", param).then(res => {
         this.collnum = res.data.data;
         console.log(res.data.data);

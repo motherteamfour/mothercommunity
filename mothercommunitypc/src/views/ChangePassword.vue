@@ -5,14 +5,14 @@
       <div class="basicInformation-form-item">
         <label class="basicInformation-form-item-label">新密码</label>
         <div class="basicInformation-form-item-input">
-          <el-input v-model="input2" @blur="judgePassword(input2)"></el-input>
+          <el-input v-model="input2" @blur="judgePasswordOne(input2)" type="password"></el-input>
         </div>
-        <label class="basicInformation-form-item-label">6到16个字符</label>
+        <label class="basicInformation-form-item-label">5到15个字符</label>
       </div>
       <div class="basicInformation-form-item">
         <label class="basicInformation-form-item-label">确认新密码</label>
         <div class="basicInformation-form-item-input">
-          <el-input v-model="input3" @blur="judgePassword(input3)"></el-input>
+          <el-input v-model="input3" @blur="judgePasswordTwo(input3)" type="password"></el-input>
         </div>
       </div>
       <div class="basicInformation-form-item">
@@ -28,7 +28,9 @@ export default {
   data() {
     return {
       input2: '',
-      input3: ''
+      input3: '',
+      userpassFormat1: false,
+      userpassFormat2: false
     }
   },
   methods: {
@@ -46,19 +48,28 @@ export default {
         type: "error"
       });
     },
-    judgePassword(msg) {
+    judgePasswordOne(msg) {
       var reg = /^(\w){5,15}$/;
       if (reg.test(msg)) {
-        return (this.userpassFormat = true);
+        return (this.userpassFormat1 = true);
       }
-      this.userpassFormat = false;
+      this.userpassFormat1 = false;
+      this.defeated("密码格式不正确");
+    },
+    judgePasswordTwo(msg) {
+      var reg = /^(\w){5,15}$/;
+      if (reg.test(msg)) {
+        return (this.userpassFormat2 = true);
+      }
+      this.userpassFormat2 = false;
       this.defeated("密码格式不正确");
     },
     changePasswork() {
       const userId = sessionStorage.getItem("userId")
-      console.log(userId,this.input2)
+      
       if(this.input2==this.input3) {
-        this.axios({
+        if(this.userpassFormat2&&this.userpassFormat1) {
+          this.axios({
           url: "/admin/updatePassword",
           method: "post",
           data: `adminId=${userId}&adminPassword=${this.input2}`,
@@ -68,10 +79,19 @@ export default {
         })
           .then((res) => {
             console.log(res.data);
+            if(res.data.code==200) {
+              this.success('密码修改成功')
+              this.input2=''
+              this.input3=''
+            }
           })
           .catch(err => {
             console.log(err);
           });
+        }else {
+          this.defeated('密码格式不正确')
+        }
+        
       }else {
         this.defeated("两次密码输入不一致");
       }

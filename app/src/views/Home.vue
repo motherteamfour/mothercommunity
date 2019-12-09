@@ -22,7 +22,7 @@
     </div>
     <div class="home-main">
       <!-- 允许哪些可以被缓存 -->
-      <keep-alive include="Community,QandA,Forum,Encyclopedia,My">
+      <keep-alive include="Community,QandA,Forum,Encyclopedia">
         <router-view />
       </keep-alive>
     </div>
