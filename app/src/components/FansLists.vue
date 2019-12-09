@@ -1,16 +1,18 @@
 <template>
+<router-link :to="'/otherUsers/' + userid">
   <div class="fans">
     <div class="fanslist">
         <img :src="imgUrl+userimg" alt=""  class="por">
       <div class="username">{{username}}</div>
     </div>
   </div>
+</router-link>
 </template>
 
 <script>
 export default {
   name: "fans",
-  props: ['username',"userimg"],
+  props: ['username',"userimg","userid"],
   data () {
     return {
       imgUrl: ""
