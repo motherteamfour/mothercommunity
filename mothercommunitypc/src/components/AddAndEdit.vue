@@ -124,6 +124,7 @@ export default {
       this.input = "";
       this.value = "";
       this.fileList = [];
+      this.turnback();
     },
     getBanner() {
       this.fullscreenLoading = true;
@@ -169,6 +170,9 @@ export default {
         .then(res => {
           console.log(res.data);
           this.fullscreenLoading = false;
+          if(res.data.code==200) {
+            this.success('添加成功')
+          }
         })
         .catch(err => {
           console.log(err);
@@ -186,6 +190,9 @@ export default {
         .then(res => {
           console.log(res.data);
           this.fullscreenLoading = false;
+          if(res.data.code==200) {
+            this.success('添加成功')
+          }
         })
         .catch(err => {
           console.log(err);
@@ -203,6 +210,9 @@ export default {
         .then(res => {
           console.log(res.data);
           this.fullscreenLoading = false;
+          if(res.data.code==200) {
+            this.success('添加成功')
+          }
         })
         .catch(err => {
           console.log(err);
@@ -220,6 +230,9 @@ export default {
         .then(res => {
           console.log(res.data);
           this.fullscreenLoading = false;
+          if(res.data.code==200) {
+            this.success('修改成功')
+          }
         })
         .catch(err => {
           console.log(err);
@@ -237,6 +250,9 @@ export default {
         .then(res => {
           console.log(res.data);
           this.fullscreenLoading = false;
+          if(res.data.code==200) {
+            this.success('修改成功')
+          }
         })
         .catch(err => {
           console.log(err);
@@ -254,6 +270,9 @@ export default {
         .then(res => {
           console.log(res.data);
           this.fullscreenLoading = false;
+          if(res.data.code==200) {
+            this.success('修改成功')
+          }
         })
         .catch(err => {
           console.log(err);
