@@ -1,10 +1,11 @@
 <template>
   <div class="my">
+
     <!-- 个人中心头部 -->
     <div class="top">
       <h3>我的</h3>
       <div class="user">
-        <div class="portrait" @click="goMyResourcePage()">
+        <div class="portrait" @click="goMyResourcePage()"> 
           <!--   <p>头像</p> -->
           <img :src="imgUrl+userInfo.userImgUrl" class="imgs" alt />
         </div>
@@ -28,10 +29,10 @@
     <ul class="lists">
       <li>
         <img src="../assets/img/my/fatie.png" alt />
-        <span class="title">我的发帖</span>
-        <span class="num">{{getPostnum.length}}</span>
+        <span class="title">我的发帖</span> 
+         <span class="num">{{getPostnum.length}}</span>
         <img src="../assets/img/my/youjiantou.png" alt @click="goNewpostPage()" />
-      </li>
+   </li>
       <li>
         <img src="../assets/img/my/jinrutiezihuitie.png" alt />
         <span class="title">我的回帖</span>
@@ -71,7 +72,7 @@
       class="pop"
     >
       <button type="button" class="confirm" @click="select">确认退出</button>
-      <!--  <button type="button" @click="selectquit">取消</button> -->
+  <!--  <button type="button" @click="selectquit">取消</button> -->
     </van-popup>
   </div>
 </template>
@@ -79,6 +80,7 @@
 <script>
 import { Popup } from "vant";
 export default {
+/*   inject: ["reload"], */
   name: "My",
   data() {
     return {
@@ -113,13 +115,13 @@ export default {
       console.log("xx", res.data);
       this.userInfo = res.data.data;
     });
-    this.axios({
+   /*  this.axios({
       url: `/user/findPostAllByUserId?userid=${this.userId}`,
       methods: "GET"
     }).then(res => {
       console.log("发帖数", res.data);
       this.getPostnum = res.data.data;
-    }),
+    }); */
       this.axios.post("/zp/user/countconllectpost", param).then(res => {
         this.collnum = res.data.data;
         console.log(res.data.data);
@@ -130,6 +132,7 @@ export default {
         /*  console.log(res.data.data); */
         console.log("回帖数", res.data);
       });
+      /*  this.reload(); */
   },
   methods: {
     goNewpostPage() {
