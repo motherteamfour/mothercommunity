@@ -17,9 +17,9 @@
       >
         <el-table-column type="selection" width="60" align="center"></el-table-column>
         <el-table-column type="index" :index="indexMethod" label="ID" width="60" align="center"></el-table-column>
-        <el-table-column prop="user" label="用户名" width="120" align="center"></el-table-column>
+        <el-table-column prop="user.userName" label="用户名" width="120" align="center"></el-table-column>
         <el-table-column prop="postTitle" label="标题" width="120" align="center"></el-table-column>
-        <el-table-column prop="userStartTime" label="发布时间" width="120" align="center"></el-table-column>
+        <el-table-column prop="user.userStartTime" label="发布时间" width="120" align="center"></el-table-column>
         <el-table-column prop="countCollection" label="内容" width="120" align="center"></el-table-column>       
         <el-table-column label="操作" show-overflow-tooltip align="center">
            <!-- slot-scope="scope" -->
@@ -42,32 +42,7 @@ export default {
   name:"investigate",
   data() {
     return {
-      tableData:[
-        {
-          user:"张三",
-          postTitle:"只剩下一个",
-          userStartTime:"2018.3.5",
-          countCollection:"黎明前最黑暗"
-        },
-        {
-          user:"张三",
-          postTitle:"只剩下一个",
-          userStartTime:"2018.3.5",
-          countCollection:"黎明前最黑暗"
-        },
-        {
-          user:"张三",
-          postTitle:"只剩下一个",
-          userStartTime:"2018.3.5",
-          countCollection:"黎明前最黑暗"
-        },
-        {
-          user:"张三",
-          postTitle:"只剩下一个",
-          userStartTime:"2018.3.5",
-          countCollection:"黎明前最黑暗"
-        }
-        ], 
+      tableData:[], 
       userTotal: 0,
       page:1,
       sizePage: 6,

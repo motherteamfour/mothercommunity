@@ -213,7 +213,7 @@ export default {
       }
     });
     this.getHotList();
-    this.axios.get("/banner/bannerHomePage").then(res => {
+    this.axios.get("/banner/BannerContent").then(res => {
       console.log(res.data);
       this.swipeImg = res.data.data;
     });
