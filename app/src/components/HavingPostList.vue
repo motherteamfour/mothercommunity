@@ -4,7 +4,7 @@
       <div class="title">{{user.postTitle}}</div>
       <div class="content">{{user.postContent}}</div>
       <div class="user">
-        <img :src="'http://172.17.4.107:8989/'+user.user.userImgUrl" class="imgs" alt />
+        <img :src="imgUrl+user.user.userImgUrl" class="imgs" alt />
 
         <span class="username">{{user.user.userName}}</span>
       </div>
@@ -14,7 +14,15 @@
 
 <script>
 export default {
-  props: ["user"]
+  props: ["user"],
+  data () {
+    return {
+      imgUrl: ""
+    }
+  },
+  created() {
+    this.imgUrl = this.$store.state.imgUrl;
+  }
 };
 </script>
 
@@ -47,7 +55,7 @@ export default {
       display: inline-block;
       width: 40px;
       height: 40px;
-      background: red;
+      border: 1px solid red;
       border-radius: 50px;
     }
     .username {

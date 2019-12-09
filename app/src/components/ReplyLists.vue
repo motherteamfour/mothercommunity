@@ -4,7 +4,7 @@
       <li>
         <div class="user">
           
-            <img :src="'http:///172.17.4.107:8989/'+lists.userImgUrl" class="portrait" alt="">
+            <img :src="imgUrl+lists.userImgUrl" class="portrait" alt="">
         
           <div>
             <p class="username">{{lists.userName}}</p>
@@ -32,7 +32,15 @@
 
 <script>
 export default {
-  props: ['lists']
+  props: ['lists'],
+  data () {
+    return {
+      imgUrl: ""
+    }
+  },
+  created() {
+    this.imgUrl = this.$store.state.imgUrl;
+  }
 }
 </script>
 

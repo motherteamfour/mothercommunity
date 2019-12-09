@@ -196,7 +196,7 @@ const routes = [
           {
             path: 'havingpost',
             name: 'HavingPost',
-            component: () => import('../views/HavingPost')
+            component: () => import('../views/HavingPost.vue')
           }
         ]
       },

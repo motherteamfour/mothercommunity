@@ -14,6 +14,12 @@
           </td>
         </tr>
         <tr>
+          <td>账号：</td>
+          <td>
+            <input type="text" placeholder="请输入姓名" class="name mod" v-model="inputUsername" @blur="username(inputName)"/>
+          </td>
+        </tr>
+        <tr>
           <td>密码：</td>
           <td>
             <input
@@ -25,12 +31,7 @@
             />
           </td>
         </tr>
-        <tr>
-          <td>账号：</td>
-          <td>
-            <input type="text" placeholder="请输入姓名" class="name mod" v-model="inputUsername" @blur="username(inputName)"/>
-          </td>
-        </tr>
+        
         <tr>
           <td>联系方式：</td>
           <td>
@@ -80,7 +81,7 @@
         style="width: 98%; margin:0 auto;"
         @selection-change="handleSelectionChange"
       >
-        <el-table-column type="selection" width="120"></el-table-column>
+        <el-table-column type="selection" width="120" :selectable="checkboxO"></el-table-column>
         <el-table-column type="index" :index="indexMethod" label="序号" width="120"></el-table-column>
         <el-table-column prop="adminNickName" label="姓名" width="120"></el-table-column>
         <el-table-column prop="adminName" label="用户名" width="120"></el-table-column>
@@ -145,6 +146,14 @@ export default {
   },
   mounted() {},
   methods: {
+    //禁用第一个复选框
+    checkboxO(row,rowIndex){
+      if(rowIndex==0){
+        return false;
+      } else {
+        return true;
+      }
+    },
     handleSelectionChange(val) {
       this.selAll = val;
     },

@@ -38,12 +38,12 @@
           <i class="fa fa-volume-up" aria-hidden="true"></i>
         </div>
         <div class="category">
-          <div class="right">
-            <div class="category" v-if="informLists != undefined">
+          <div class="right" ><!--  v-if="informLists != undefined" -->
+            <div class="category" >
               <span class="title">通知</span>
-              <!-- <span class="gray">{{informLists[0].messageTime}}</span> -->
+              <span class="gray">{{informLists[0].messageTime}}</span>
             </div>
-            <!-- <div class="gray">{{informLists[0].messageTitle}}</div> -->
+            <div class="gray">{{informLists[0].messageTitle}}</div>
           </div>
         </div>
       </li> 

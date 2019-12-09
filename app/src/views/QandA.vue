@@ -144,6 +144,9 @@ export default {
       }
     }
   }
+  .footer{
+    padding-bottom: 88px;
+  }
 }
 .router-link-exact-active.router-link-active {
   font-weight: bold;

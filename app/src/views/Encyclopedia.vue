@@ -1,155 +1,672 @@
- <template>
+<template>
   <div class="encyclopedia">
-    <!-- 标题搜索 -->
-    <div class="search">
-      <div class="headline">百科</div>
-      <input type="text" class="seek" placeholder="搜索百科文章" />
+    <div class="ret-fo">
+      <div class="fo">
+        <div class="title">百科</div>
+        <div class="seek">
+          <input type="text" class="ipt" placeholder="搜索文章" />
+        </div>
+      </div>
     </div>
 
-    <div class="con">
-      <!-- 边导航 -->
-      <div class="sidebar">
-        <ul>
-          <li>
-            <a href="javascript:;">备孕</a>
-          </li>
-          <li>
-            <a href="javascript:;">怀孕</a>
-          </li>
-          <li>
-            <a href="javascript:;">产后</a>
-          </li>
-          <li>
-            <a href="javascript:;">育儿</a>
-          </li>
-          <li>
-            <a href="javascript:;">其他</a>
+    <div class="content">
+      <!-- 导航 -->
+
+      <div class="ret-fof">
+        <div class="nav">
+          <ul>
+            <li
+              v-for="(item, index) in navul"
+              :key="index"
+              @click="navs(item.navulId)"
+              :class="{on: isActive==item.navulId}"
+            >{{item.navulName}}</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- 文章说明 -->
+      <div class="show">
+        <ul class="showul">
+          <li v-for="(item, index) in isnav[isActive]" :key="index" @click="goSon()">
+            <img class="imgs" :src="item.isnavImg" alt />
+            <span style="color:#FF8A9A;">#</span>
+            {{item.isnavName}}
           </li>
         </ul>
       </div>
-
-      <!-- 文章列表 -->
-      <div class="list">
-        <ul class="listul">
-
-          <li>
-            <a href>
-              <img src="../assets/img/login/denglu.png" alt />
-              <p><span>#</span>好孕指南</p>
-            </a>
-          </li>
-
-          <li>
-            <a href>
-              <img src="../assets/img/login/denglu.png" alt />
-              <p><span>#</span>好孕指南</p>
-            </a>
-          </li>
-
-          <li>
-            <a href>
-              <img src="../assets/img/login/denglu.png" alt />
-              <p><span>#</span>好孕指南</p>
-            </a>
-          </li>
-
-        </ul>
-      </div>
-
     </div>
   </div>
 </template>
 
+
 <script>
+// import EncyclopediaSon from "./EncyclopediaSon";
 export default {
-  name: "Encyclopedia"
+  name: "Encyclopedia",
+  components: {
+    // 注册组件
+  },
+  methods: {
+    // 定义方法
+    navs(i) {
+      this.isActive = i;
+      console.log(i);
+    },
+    goSon() {
+      this.$router.replace("/encyclopediason");
+    }
+  },
+  data() {
+    // 模拟数据
+    return {
+      isActive: 0,
+      navul: [
+        {
+          navulId: 0,
+          navulName: "备孕"
+        },
+        {
+          navulId: 1,
+          navulName: "怀孕"
+        },
+        {
+          navulId: 2,
+          navulName: "产后"
+        },
+        {
+          navulId: 3,
+          navulName: "育儿"
+        },
+        {
+          navulId: 4,
+          navulName: "其他"
+        }
+      ],
+      isnav: [
+        [
+          // 下标0的数组 备孕
+          {
+            isnavId: 0,
+            isnavImg: require("../assets/img/touxiang/dt11.jpg"),
+            isnavName: "备孕必知"
+          },
+          {
+            isnavId: 1,
+            isnavImg: require("../assets/img/touxiang/dt16.jpg"),
+            isnavName: "受孕时间"
+          },
+          {
+            isnavId: 2,
+            isnavImg: require("../assets/img/touxiang/dt13.jpg"),
+            isnavName: "备孕禁忌"
+          },
+          {
+            isnavId: 3,
+            isnavImg: require("../assets/img/touxiang/dt4.jpg"),
+            isnavName: "备孕禁忌"
+          },
+          {
+            isnavId: 4,
+            isnavImg: require("../assets/img/touxiang/dt16.jpg"),
+            isnavName: "备孕禁忌"
+          },
+          {
+            isnavId: 5,
+            isnavImg: require("../assets/img/touxiang/dt17.jpg"),
+            isnavName: "备孕禁忌"
+          },
+          {
+            isnavId: 6,
+            isnavImg: require("../assets/img/touxiang/dt15.jpg"),
+            isnavName: "备孕禁忌"
+          },
+          {
+            isnavId: 7,
+            isnavImg: require("../assets/img/touxiang/dt8.jpg"),
+            isnavName: "备孕禁忌"
+          },
+          {
+            isnavId: 8,
+            isnavImg: require("../assets/img/touxiang/dt5.jpg"),
+            isnavName: "备孕禁忌"
+          },
+          {
+            isnavId: 9,
+            isnavImg: require("../assets/img/touxiang/dt4.jpg"),
+            isnavName: "备孕禁忌"
+          },
+          {
+            isnavId: 10,
+            isnavImg: require("../assets/img/touxiang/dt3.jpg"),
+            isnavName: "备孕禁忌"
+          },
+          {
+            isnavId: 11,
+            isnavImg: require("../assets/img/touxiang/dt2.jpg"),
+            isnavName: "备孕禁忌"
+          },
+          {
+            isnavId: 12,
+            isnavImg: require("../assets/img/touxiang/dt13.jpg"),
+            isnavName: "备孕禁忌"
+          },
+          {
+            isnavId: 13,
+            isnavImg: require("../assets/img/touxiang/dt14.jpg"),
+            isnavName: "备孕禁忌"
+          },
+          {
+            isnavId: 14,
+            isnavImg: require("../assets/img/touxiang/dt15.jpg"),
+            isnavName: "备孕禁忌"
+          },
+          {
+            isnavId: 15,
+            isnavImg: require("../assets/img/touxiang/dt16.jpg"),
+            isnavName: "备孕禁忌"
+          },
+          {
+            isnavId: 16,
+            isnavImg: require("../assets/img/touxiang/dt17.jpg"),
+            isnavName: "备孕禁忌"
+          },
+          {
+            isnavId: 17,
+            isnavImg: require("../assets/img/touxiang/dt18.jpg"),
+            isnavName: "备孕禁忌"
+          }
+        ], // 下标1的数组 怀孕
+        [
+          {
+            isnavId: 0,
+            isnavImg: require("../assets/img/touxiang/dt18.jpg"),
+            isnavName: "备孕必知"
+          },
+          {
+            isnavId: 1,
+            isnavImg: require("../assets/img/touxiang/dt16.jpg"),
+            isnavName: "受孕时间"
+          },
+          {
+            isnavId: 2,
+            isnavImg: require("../assets/img/touxiang/dt17.jpg"),
+            isnavName: "孕妇零食"
+          },
+          {
+            isnavId: 3,
+            isnavImg: require("../assets/img/touxiang/dt15.jpg"),
+            isnavName: "备孕禁忌"
+          },
+          {
+            isnavId: 4,
+            isnavImg: require("../assets/img/touxiang/dt14.jpg"),
+            isnavName: "维生素"
+          },
+          {
+            isnavId: 5,
+            isnavImg: require("../assets/img/touxiang/dt13.jpg"),
+            isnavName: "孕妇补钙"
+          },
+          {
+            isnavId: 6,
+            isnavImg: require("../assets/img/touxiang/dt12.jpg"),
+            isnavName: "备孕禁忌"
+          },
+          {
+            isnavId: 7,
+            isnavImg: require("../assets/img/touxiang/dt11.jpg"),
+            isnavName: "备孕禁忌"
+          },
+          {
+            isnavId: 8,
+            isnavImg: require("../assets/img/touxiang/dt5.jpg"),
+            isnavName: "备孕禁忌"
+          },
+          {
+            isnavId: 9,
+            isnavImg: require("../assets/img/touxiang/dt4.jpg"),
+            isnavName: "备孕禁忌"
+          },
+          {
+            isnavId: 10,
+            isnavImg: require("../assets/img/touxiang/dt3.jpg"),
+            isnavName: "备孕禁忌"
+          },
+          {
+            isnavId: 11,
+            isnavImg: require("../assets/img/touxiang/dt2.jpg"),
+            isnavName: "备孕禁忌"
+          },
+          {
+            isnavId: 12,
+            isnavImg: require("../assets/img/touxiang/dt1.jpg"),
+            isnavName: "备孕禁忌"
+          },
+          {
+            isnavId: 13,
+            isnavImg: require("../assets/img/touxiang/dt10.jpg"),
+            isnavName: "备孕禁忌"
+          },
+          {
+            isnavId: 14,
+            isnavImg: require("../assets/img/touxiang/dt6.jpg"),
+            isnavName: "备孕禁忌"
+          },
+          {
+            isnavId: 15,
+            isnavImg: require("../assets/img/touxiang/dt8.jpg"),
+            isnavName: "备孕禁忌"
+          },
+          {
+            isnavId: 16,
+            isnavImg: require("../assets/img/touxiang/dt7.jpg"),
+            isnavName: "备孕禁忌"
+          },
+          {
+            isnavId: 17,
+            isnavImg: require("../assets/img/touxiang/dt1.jpg"),
+            isnavName: "备孕禁忌"
+          }
+        ], // 下标2的数组  产后
+        [
+          {
+            isnavId: 0,
+            isnavImg: require("../assets/img/touxiang/dt12.jpg"),
+            isnavName: "备孕必知"
+          },
+          {
+            isnavId: 1,
+            isnavImg: require("../assets/img/touxiang/dt11.jpg"),
+            isnavName: "月子饮食"
+          },
+          {
+            isnavId: 2,
+            isnavImg: require("../assets/img/touxiang/dt12.jpg"),
+            isnavName: "产后发汗"
+          },
+          {
+            isnavId: 3,
+            isnavImg: require("../assets/img/touxiang/dt8.jpg"),
+            isnavName: "产后出血"
+          },
+          {
+            isnavId: 4,
+            isnavImg: require("../assets/img/touxiang/dt10.jpg"),
+            isnavName: "备孕禁忌"
+          },
+          {
+            isnavId: 5,
+            isnavImg: require("../assets/img/touxiang/dt18.jpg"),
+            isnavName: "每月恢复"
+          },
+          {
+            isnavId: 6,
+            isnavImg: require("../assets/img/touxiang/dt17.jpg"),
+            isnavName: "备孕禁忌"
+          },
+          {
+            isnavId: 7,
+            isnavImg: require("../assets/img/touxiang/dt16.jpg"),
+            isnavName: "备孕禁忌"
+          },
+          {
+            isnavId: 8,
+            isnavImg: require("../assets/img/touxiang/dt10.jpg"),
+            isnavName: "备孕禁忌"
+          },
+          {
+            isnavId: 9,
+            isnavImg: require("../assets/img/touxiang/dt11.jpg"),
+            isnavName: "备孕禁忌"
+          },
+          {
+            isnavId: 10,
+            isnavImg: require("../assets/img/touxiang/dt7.jpg"),
+            isnavName: "备孕禁忌"
+          },
+          {
+            isnavId: 11,
+            isnavImg: require("../assets/img/touxiang/dt6.jpg"),
+            isnavName: "备孕禁忌"
+          },
+          {
+            isnavId: 12,
+            isnavImg: require("../assets/img/touxiang/dt12.jpg"),
+            isnavName: "备孕禁忌"
+          },
+          {
+            isnavId: 13,
+            isnavImg: require("../assets/img/touxiang/dt5.jpg"),
+            isnavName: "备孕禁忌"
+          },
+          {
+            isnavId: 14,
+            isnavImg: require("../assets/img/touxiang/dt15.jpg"),
+            isnavName: "备孕禁忌"
+          },
+          {
+            isnavId: 15,
+            isnavImg: require("../assets/img/touxiang/dt13.jpg"),
+            isnavName: "备孕禁忌"
+          },
+          {
+            isnavId: 16,
+            isnavImg: require("../assets/img/touxiang/dt17.jpg"),
+            isnavName: "备孕禁忌"
+          },
+          {
+            isnavId: 17,
+            isnavImg: require("../assets/img/touxiang/dt8.jpg"),
+            isnavName: "备孕禁忌"
+          }
+        ], // 下表3的数组 育儿
+        [
+          {
+            isnavId: 0,
+            isnavImg: require("../assets/img/touxiang/dt10.jpg"),
+            isnavName: "备孕必知"
+          },
+          {
+            isnavId: 1,
+            isnavImg: require("../assets/img/touxiang/dt8.jpg"),
+            isnavName: "受孕时间"
+          },
+          {
+            isnavId: 2,
+            isnavImg: require("../assets/img/touxiang/dt3.jpg"),
+            isnavName: "备孕禁忌"
+          },
+          {
+            isnavId: 3,
+            isnavImg: require("../assets/img/touxiang/dt17.jpg"),
+            isnavName: "备孕禁忌"
+          },
+          {
+            isnavId: 4,
+            isnavImg: require("../assets/img/touxiang/dt12.jpg"),
+            isnavName: "备孕禁忌"
+          },
+          {
+            isnavId: 5,
+            isnavImg: require("../assets/img/touxiang/dt16.jpg"),
+            isnavName: "备孕禁忌"
+          },
+          {
+            isnavId: 6,
+            isnavImg: require("../assets/img/touxiang/dt1.jpg"),
+            isnavName: "备孕禁忌"
+          },
+          {
+            isnavId: 7,
+            isnavImg: require("../assets/img/touxiang/dt8.jpg"),
+            isnavName: "备孕禁忌"
+          },
+          {
+            isnavId: 8,
+            isnavImg: require("../assets/img/touxiang/dt5.jpg"),
+            isnavName: "备孕禁忌"
+          },
+          {
+            isnavId: 9,
+            isnavImg: require("../assets/img/touxiang/dt4.jpg"),
+            isnavName: "备孕禁忌"
+          },
+          {
+            isnavId: 10,
+            isnavImg: require("../assets/img/touxiang/dt7.jpg"),
+            isnavName: "备孕禁忌"
+          },
+          {
+            isnavId: 11,
+            isnavImg: require("../assets/img/touxiang/dt2.jpg"),
+            isnavName: "备孕禁忌"
+          },
+          {
+            isnavId: 12,
+            isnavImg: require("../assets/img/touxiang/dt13.jpg"),
+            isnavName: "备孕禁忌"
+          },
+          {
+            isnavId: 13,
+            isnavImg: require("../assets/img/touxiang/dt14.jpg"),
+            isnavName: "备孕禁忌"
+          },
+          {
+            isnavId: 14,
+            isnavImg: require("../assets/img/touxiang/dt15.jpg"),
+            isnavName: "备孕禁忌"
+          },
+          {
+            isnavId: 15,
+            isnavImg: require("../assets/img/touxiang/dt16.jpg"),
+            isnavName: "备孕禁忌"
+          },
+          {
+            isnavId: 16,
+            isnavImg: require("../assets/img/touxiang/dt17.jpg"),
+            isnavName: "备孕禁忌"
+          },
+          {
+            isnavId: 17,
+            isnavImg: require("../assets/img/touxiang/dt18.jpg"),
+            isnavName: "备孕禁忌"
+          }
+        ], // 下表4的数组 其他
+        [
+          {
+            isnavId: 0,
+            isnavImg: require("../assets/img/touxiang/dt13.jpg"),
+            isnavName: "备孕必知"
+          },
+          {
+            isnavId: 1,
+            isnavImg: require("../assets/img/touxiang/dt6.jpg"),
+            isnavName: "受孕时间"
+          },
+          {
+            isnavId: 2,
+            isnavImg: require("../assets/img/touxiang/dt12.jpg"),
+            isnavName: "备孕禁忌"
+          },
+          {
+            isnavId: 3,
+            isnavImg: require("../assets/img/touxiang/dt2.jpg"),
+            isnavName: "备孕禁忌"
+          },
+          {
+            isnavId: 4,
+            isnavImg: require("../assets/img/touxiang/dt11.jpg"),
+            isnavName: "备孕禁忌"
+          },
+          {
+            isnavId: 5,
+            isnavImg: require("../assets/img/touxiang/dt17.jpg"),
+            isnavName: "备孕禁忌"
+          },
+          {
+            isnavId: 6,
+            isnavImg: require("../assets/img/touxiang/dt8.jpg"),
+            isnavName: "备孕禁忌"
+          },
+          {
+            isnavId: 7,
+            isnavImg: require("../assets/img/touxiang/dt7.jpg"),
+            isnavName: "备孕禁忌"
+          },
+          {
+            isnavId: 8,
+            isnavImg: require("../assets/img/touxiang/dt5.jpg"),
+            isnavName: "备孕禁忌"
+          },
+          {
+            isnavId: 9,
+            isnavImg: require("../assets/img/touxiang/dt15.jpg"),
+            isnavName: "备孕禁忌"
+          },
+          {
+            isnavId: 10,
+            isnavImg: require("../assets/img/touxiang/dt3.jpg"),
+            isnavName: "备孕禁忌"
+          },
+          {
+            isnavId: 11,
+            isnavImg: require("../assets/img/touxiang/dt5.jpg"),
+            isnavName: "备孕禁忌"
+          },
+          {
+            isnavId: 12,
+            isnavImg: require("../assets/img/touxiang/dt13.jpg"),
+            isnavName: "备孕禁忌"
+          },
+          {
+            isnavId: 13,
+            isnavImg: require("../assets/img/touxiang/dt14.jpg"),
+            isnavName: "备孕禁忌"
+          },
+          {
+            isnavId: 14,
+            isnavImg: require("../assets/img/touxiang/dt15.jpg"),
+            isnavName: "备孕禁忌"
+          },
+          {
+            isnavId: 15,
+            isnavImg: require("../assets/img/touxiang/dt16.jpg"),
+            isnavName: "备孕禁忌"
+          },
+          {
+            isnavId: 16,
+            isnavImg: require("../assets/img/touxiang/dt17.jpg"),
+            isnavName: "备孕禁忌"
+          },
+          {
+            isnavId: 17,
+            isnavImg: require("../assets/img/touxiang/dt18.jpg"),
+            isnavName: "备孕禁忌"
+          }
+        ]
+      ]
+    };
+  }
 };
 </script>
 
-<style lang="less" scoped>
-@oneColor: #fff;
-@themeColor: #ffe469;
-@twoSize: 36px; // 页面字体大小
-@fourBorder: 1px solid #ddd; // 分割线
-@fiveColor: #666;
 
-/* .encyclopedia{
+<style lang="less" scoped>
+@import "../assets/style/base.less";
+@import "../assets/style/Encycloped.less";
+
+// 上方共有数据
+
+/* 百科全书 */
+.encyclopedia {
   width: 750px;
   height: 1334px;
-} */
-.search {
+  background: @oneColor;
+}
+.ret-fo {
   width: 100%;
-  border-bottom: @fourBorder;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
+  height: 204px;
+  position: relative;
+}
+.fo {
+  width: 100%;
+  background: @oneColor;
+  position: fixed;
+  top: 0;
 }
 
-/* 标题 */
-.headline {
-  width: 100%;
-  height: 120px;
+/* 标题栏 */
+.title {
+  .wht();
   background: @themeColor;
-  color: @oneColor;
-  display: flex;
-  justify-content: center;
-  align-items: center;
   font-size: @twoSize;
+  color: @oneColor;
+  .flexCenter(); // 水平垂直居中
 }
+
+/* 搜索 */
 .seek {
-  width: 90%;
-  height: 60px;
-  line-height: 60px;
-  background: #ddd;
+  width: 100%;
+  height: 100px;
+  border: @fourBorder;
+  .flexCenter(); // 水平垂直居中
+}
+.ipt::-webkit-input-placeholder {
+  color: @fiveColor;
+  text-align: center;
+}
+.ipt {
+  width: 80%;
+  height: 50px;
+  background: @sixColor;
   border: none;
   border-radius: 50px;
-  text-align: center;
-  margin: 20px 0;
-}
-::-webkit-input-placeholder {
-  color: @fiveColor;
 }
 
-// 导航文章
-.con {
+/* 内容 */
+.content {
+  width: 100%;
   display: flex;
   justify-content: space-between;
 }
 
-/* 导航 */
-.sidebar{
+/* 导航固定 */
+// .ret-fof{
+//   width: 20%;
+//   position: relative;
+// }
+
+.nav {
   width: 20%;
-}
-.sidebar li{
-  height: 90px;
-  border-bottom: @fourBorder;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-
-}
-.sidebar a{
-  font-size: @twoSize;
-  color: @fiveColor;
+  position: fixed;
+  // top: 204px;
+  // left: 0;
 }
 
-/* 文章 */
-.list{
+.nav li {
+  height: 80px;
+
+  .flexCenter();
+  .sizeBorder();
+}
+
+.on {
+  color: @themeColor !important; //权重方法
+  border-left: 2px solid @themeColor !important;
+  // box-shadow: 2px 2px 10px @themeColor !important;
+}
+
+/* 文章说明 */
+.show {
   width: 80%;
 }
-.listul{
+.showul {
+  width: 100%;
   display: flex;
   justify-content: space-around;
+  flex-wrap: wrap;
+  margin-top: 20px;
 }
-.listul li{
-  text-align: center;
-}
-.listul p{
-  font-size: 24px;
+.show li {
+  width: 120px;
+  height: 200px;
+  // background: red;
+  font-size: 12px;
   color: @fiveColor;
+  text-align: center;
+  margin: 0 20px;
 }
-.listul span{
-  color: @themeColor;
+
+.bb {
+  width: 100px;
+  height: 100px;
+}
+
+.imgs {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 }
 </style>

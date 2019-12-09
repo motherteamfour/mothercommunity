@@ -4,7 +4,7 @@
       <li>
         <div class="user">
           
-          <img :src="'http://172.17.4.107:8989/'+colllist.user.userImgUrl"  class="portrait" alt="">
+          <img :src="imgUrl+colllist.user.userImgUrl"  class="portrait" alt="">
 
          
           <div>
@@ -34,7 +34,15 @@
 <script>
 export default {
   name: "CollPostList",
-  props: ["colllist"]
+  props: ["colllist"],
+  data () {
+    return {
+      imgUrl: ""
+    }
+  },
+  created() {
+    this.imgUrl = this.$store.state.imgUrl;
+  }
 }
 </script>
 
