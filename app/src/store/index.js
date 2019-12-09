@@ -14,7 +14,7 @@ export default new Vuex.Store({
     // 问题搜索关键字
     searchKeyword: "",
     // 图片服务器地址
-    imgUrl: "http://172.16.6.3:8989/",
+    imgUrl: "http://172.16.6.45:8989/",
     searchPost: ""
   },
   mutations: {
