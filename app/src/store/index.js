@@ -10,7 +10,7 @@ export default new Vuex.Store({
     // 用户注册手机号码
     userPhone: "",
     // 验证码倒计时
-    countDown: 60,
+    countDown: 5,
     // 问题搜索关键字
     searchKeyword: "",
     // 图片服务器地址
@@ -43,10 +43,7 @@ export default new Vuex.Store({
   actions: {
     // 验证码倒计时
     decrementSync({ commit }) {
-      setTimeout(function () {
-        commit('decrement');
-        console.log('lll');
-      }, 1000)
+        commit('decrement');      
     }
     /* getLists() {
       

@@ -131,7 +131,7 @@ export default {
                   clearInterval(timer);
                   that.current = 1;
                   // 重置倒计时数字
-                  that.resetcountDown(60);
+                  that.resetcountDown(5);
                 }
               }, 1000);
             }

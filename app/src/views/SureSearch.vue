@@ -48,7 +48,23 @@ export default {
         )
         .then(res => {
           console.log(res.data);
-          this.lists = res.data.data;
+          if (res.data.length == 0) {
+            //如果没有搜素到内容则显示全部问题
+            this.axios
+              .get(
+                `/question/ordinarySearch?questionTitle=""&userId=${this.userId}`
+              )
+              .then(res => {
+                console.log("全部", res.data);
+                this.lists = res.data.data;
+              })
+              .catch(err => {
+                console.log(err);
+              });
+          } else {
+            // 显示搜素问题
+            this.lists = res.data.data;
+          }
         })
         .catch(err => {
           console.log(err);

@@ -19,6 +19,15 @@
     <div class="footer">
       <button type="submit" @click="getSubmit">提交</button>
     </div>
+    <!-- 模态框 -->
+    <van-popup class="model" v-model="show" round>
+      <div class="top">
+        <p class="one">{{one}}</p>
+        <!-- 未填写手机号码 -->
+        <p class="two">{{two}}</p>
+      </div>
+      <div class="bottom" @click="closeModel">好的</div>
+    </van-popup>
   </div>
 </template>
 <script>
@@ -29,20 +38,28 @@ export default {
       title: "",
       content: "",
       titleMaxLength: 50,
-      contentMaxLength: 500
+      contentMaxLength: 500,
+      show: false,
+      one: "",
+      two: ""
     };
   },
   watch: {
     title() {
       if (this.title.length > this.titleMaxLength) {
-        console.log("超过了");
         this.title = String(this.title).slice(0, this.titleMaxLength);
+        this.one = "提示";
+        this.two = "字数超过限制~";
+        this.show = true;
       }
     },
     content() {
       if (this.content.length > this.contentMaxLength) {
-        console.log("超过了");
+        // console.log("超过了");
         this.content = String(this.content).slice(0, this.contentMaxLength);
+        this.one = "提示";
+        this.two = "字数超过限制~";
+        this.show = true;
       }
     }
   },
@@ -77,6 +94,10 @@ export default {
         .catch(err => {
           console.log(err);
         });
+    },
+    //关闭模态框
+    closeModel() {
+      this.show = false;
     }
   }
 };
@@ -164,6 +185,34 @@ button[type="submit"] {
   border: none;
   &:active {
     color: @zitiColor;
+  }
+}
+.model {
+  background-color: rgb(255, 255, 255);
+  border-radius: 20px;
+  width: 540px;
+  .top {
+    height: 120px;
+    padding: 20px 0;
+    margin: 0 auto;
+    box-sizing: border-box;
+    text-align: center;
+
+    .one {
+      font-weight: bold;
+      font-size: 30px;
+    }
+    .two {
+      font-size: 24px;
+    }
+  }
+  .bottom {
+    border-top: 1px solid #f9f9f9;
+    height: 90px;
+    line-height: 90px;
+    text-align: center;
+    font-size: 30px;
+    color: blue;
   }
 }
 </style>

@@ -14,7 +14,8 @@
       <div class="form-group">
         <span>验证码</span>
         <input type="password" placeholder="输入验证码" v-model="userpass" />
-        <button type="button" class="send-verify" @click="getVerifyCode">验证码</button>
+        <button type="button" class="send-verify" @click="getVerifyCode" v-show="current==1">验证码</button>
+        <button type="button" class="send-verify" v-show="current==2">{{count1}}</button>
       </div>
       <div class="form-group register-from-group">
         <input type="button" value="下一步" @click="getRegister" />
@@ -33,7 +34,7 @@
 </template>
 
 <script>
-import { mapMutations } from "vuex";
+import { mapActions, mapMutations } from "vuex";
 
 import Vue from "vue";
 import { Popup } from "vant";
@@ -44,6 +45,7 @@ export default {
   name: "Register",
   data() {
     return {
+      current: 1,
       username: "",
       userpass: "",
       info: "",
@@ -52,8 +54,15 @@ export default {
       two: ""
     };
   },
+  computed: {
+    count1() {
+      return this.$store.state.countDown; // 写法1
+    }
+  },
   methods: {
     ...mapMutations(["setPhone"]),
+    ...mapActions(["decrementSync"]),
+    ...mapMutations(["resetcountDown"]),
     back() {
       this.$router.go(-1); //返回上一层
     },
@@ -110,7 +119,19 @@ export default {
           .post(`zp/user/sendcode?phone=${this.username}`)
           .then(res => {
             console.log("获取验证码：", res.data);
-            this.info = res.data.data;
+            // 倒计时
+            this.current = 2;
+            var that = this;
+            var timer = setInterval(function() {
+              that.decrementSync();
+              console.log(that.$store.state.countDown);
+              if (that.$store.state.countDown <= 1) {
+                clearInterval(timer);
+                that.current = 1;
+                // 重置倒计时数字
+                that.resetcountDown(5);
+              }
+            }, 1000);
           })
           .catch(err => {
             console.log(err);

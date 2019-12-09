@@ -17,7 +17,7 @@
         <button type="button" class="send-verify" @click="getVerifyCode">验证码</button>
       </div>-->
       <div class="form-group register-from-group">
-        <input type="button" value="下一步" @click="getVerifyCode" />
+        <input type="button" value="获取验证码" @click="getVerifyCode" />
       </div>
     </form>
     <!-- 模态框 -->

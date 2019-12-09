@@ -73,10 +73,9 @@ export default {
         box-shadow: 1px 1px 3px #10412b;
       }
     }
-  
   }
-    .register-from-group {
-      border: none;
-    }
+  .register-from-group {
+    border: none;
+  }
 }
 </style>

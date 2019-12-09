@@ -41,6 +41,15 @@
         <p class="clear-history" @click="delAllHistory()">清空记录</p>
       </div>
     </div>
+    <!-- 模态框 -->
+    <van-popup class="model" v-model="show" round>
+      <div class="top">
+        <p class="one">{{one}}</p>
+        <!-- 未填写手机号码 -->
+        <p class="two">{{two}}</p>
+      </div>
+      <div class="bottom" @click="closeModel">好的</div>
+    </van-popup>
   </div>
 </template>
 <script>
@@ -53,7 +62,10 @@ export default {
       userId: "",
       keyword: "",
       hotLists: {},
-      historyLists: {}
+      historyLists: {},
+      show: false,
+      one: "",
+      two: ""
     };
   },
   methods: {
@@ -74,7 +86,10 @@ export default {
       var value = this.keyword.trim();
       console.log(value);
       if (!value.length) {
-        alert("搜索关键词不能为空");
+        // alert("搜索关键词不能为空");
+        this.one = "搜索关键词不能为空";
+        this.two = "请先输入哦~";
+        this.show = true;
       } else {
         this.search();
       }
@@ -153,6 +168,10 @@ export default {
         .catch(err => {
           console.log(err);
         });
+    },
+    //关闭模态框
+    closeModel() {
+      this.show = false;
     }
   },
   created() {
@@ -310,6 +329,34 @@ export default {
       color: #adadad;
       text-align: center;
     }
+  }
+}
+.model {
+  background-color: rgb(255, 255, 255);
+  border-radius: 20px;
+  width: 540px;
+  .top {
+    height: 120px;
+    padding: 20px 0;
+    margin: 0 auto;
+    box-sizing: border-box;
+    text-align: center;
+
+    .one {
+      font-weight: bold;
+      font-size: 30px;
+    }
+    .two {
+      font-size: 24px;
+    }
+  }
+  .bottom {
+    border-top: 1px solid #f9f9f9;
+    height: 90px;
+    line-height: 90px;
+    text-align: center;
+    font-size: 30px;
+    color: blue;
   }
 }
 </style>
