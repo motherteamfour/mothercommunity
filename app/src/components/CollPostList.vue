@@ -4,7 +4,7 @@
       <li>
         <div class="user">
           
-          <img :src="'http://172.17.4.107:8989/'+colllist.userImgUrl"  class="portrait" alt="">
+          <img :src="'http://172.16.6.3:8989/'+colllist.userImgUrl"  class="portrait" alt="">
 
          
           <div>

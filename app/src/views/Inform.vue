@@ -48,7 +48,8 @@ export default {
 @import "../assets/style/base.less";
 .resource {
   width: 750px;
-  height: 100vh;
+  /* height: 100vh; */
+  margin-bottom: 120px; 
   background: rgb(248, 248, 248);
 }
 .top {

@@ -63,9 +63,11 @@ export default {
           if (res.data.code == 200) {
             this.fullscreenLoading = false;
             this.bannerLists = res.data.data;
+          }else if(res.data.code == 204){
+            this.fullscreenLoading = false;
+            this.bannerLists = [];
           }else {
             this.fullscreenLoading = false;
-            this.defeated('服务器出错，请稍后重试');
           }
         })
         .catch(error => {
@@ -85,9 +87,11 @@ export default {
           if (res.data.code == 200) {
             this.fullscreenLoading = false;
             this.bannerLists = res.data.data;
+          }else if(res.data.code == 204){
+            this.fullscreenLoading = false;
+            this.bannerLists = [];
           }else {
             this.fullscreenLoading = false;
-            this.defeated('服务器出错，请稍后重试');
           }
         })
         .catch(error => {
@@ -107,9 +111,11 @@ export default {
           if (res.data.code == 200) {
             this.fullscreenLoading = false;
             this.bannerLists = res.data.data;
+          }else if(res.data.code == 204){
+            this.fullscreenLoading = false;
+            this.bannerLists = [];
           }else {
             this.fullscreenLoading = false;
-            this.defeated('服务器出错，请稍后重试');
           }
         })
         .catch(error => {

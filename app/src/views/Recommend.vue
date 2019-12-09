@@ -1,7 +1,7 @@
 <template>
   <div class="wrap">
     <div class="van-swiper">
-      <van-swipe :autoplay="3000" indicator-color="white" :height="200">
+      <van-swipe :autoplay="3000" indicator-color="white" :height="150">
         <van-swipe-item v-for="(item, index) in swipeImg" :key="index">
           <img :src="imgIp + item.imgUrl" alt />
         </van-swipe-item>
@@ -213,7 +213,7 @@ export default {
       }
     });
     this.getHotList();
-    this.axios.get("/banner/BannerContent").then(res => {
+    this.axios.get("/banner/bannerHomePage").then(res => {
       console.log(res.data);
       this.swipeImg = res.data.data;
     });
@@ -299,7 +299,7 @@ export default {
   margin-top: 10px;
   img {
     width: 100%;
-    height: 200px;
+    height: 150px;
   }
 }
 </style>

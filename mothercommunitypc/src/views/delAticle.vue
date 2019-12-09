@@ -156,50 +156,48 @@ export default {
           console.log(err);
         });
     },
-    del(i) {
-      this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        type: 'warning'
-      }).then(() => {
-        this.comsts.splice(i, 1);
-        this.$message({
-          type: 'success',
-          message: '删除成功!'
-        });
-      }).catch(() => {
-        this.$message({
-          type: 'info',
-          message: '已取消删除'
-        });          
-      });
-       
-    },
     //恢复
     recover(postId){
-      console.log(postId)
-      this.axios({  
-        url:"/posterior/postmanagement/recoveryPostById",
-        method:"post",
-        data:`postId=${postId}`,
-        headers:{
-          "Content-Type":"application/x-www-form-urlencoded"
-        },
+      this.$confirm("确认回复本条数据？","提示",{
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
       })
-      .then(res=>{
-        console.log(res.data)
-        this.axios.get("/posterior/postmanagement/recyclePost?page=1&pagesize=6")
-        .then(res=>{
-          console.log(res.data)
-          this.tableData = res.data.data.list;
+      .then(()=>{
+        this.$message({
+          type:"success",
+          message:"恢复成功"
+        })
+        this.axios({  
+          url:"/posterior/postmanagement/recoveryPostById",
+          method:"post",
+          data:`postId=${postId}`,
+          headers:{
+            "Content-Type":"application/x-www-form-urlencoded"
+          },
+        })
+        .then(()=>{
+          this.axios.get("/posterior/postmanagement/recyclePost?page=1&pagesize=6")
+          .then(res=>{
+            this.tableData = res.data.data.list;
+          })
+          .catch(error=>{
+            console.log(error)
+          })
         })
         .catch(error=>{
           console.log(error)
         })
+        
       })
-      .catch(error=>{
-        console.log(error)
+      .catch(()=>{
+        this.$message({
+          type:"info",
+          message:"已取消恢复"
+        })
       })
+
+      
     },
     indexMethod(index){
       return (index+ 1) + ( this.page - 1 ) * this.sizePage
@@ -211,7 +209,6 @@ export default {
         });
         this.unRecoms2 = this.unRecoms.join(",")
       } 
-      console.log(this.unRecoms)
       this.axios({
         url:"/posterior/postmanagement/recoveryPostByIds",
         method:"post",
@@ -219,11 +216,9 @@ export default {
         headers:{"Content-Type":"application/x-www-form-urlencoded"}
       })
      
-      .then(res=>{
-        console.log(res.data)
+      .then(()=>{
         this.axios.get("/posterior/postmanagement/recyclePost?page=1&pagesize=6")
         .then(res=>{
-          console.log(res.data)
           this.tableData = res.data.data.list;
         })
         .catch(error=>{

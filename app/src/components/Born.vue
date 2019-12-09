@@ -6,7 +6,7 @@
     </div>
     <p>宝宝性别</p>
     <div class="select-sex">
-      <van-radio-group v-model="radio">
+      <van-radio-group v-model="radio" checked-color="#ef8e9a">
         <van-radio name="男">男</van-radio>
         <van-radio name="女">女</van-radio>
       </van-radio-group>

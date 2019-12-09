@@ -14,6 +14,9 @@
     </header>
     <section class="hot">
       <p class="hot-title">全部帖子</p>
+      <div class="no-post" v-if="hotList.length == 0">
+        暂无帖子
+      </div>
       <HotList
         v-for="(item, index) in hotList"
         :key="index"
@@ -221,5 +224,11 @@ header {
     padding-bottom: 10px;
     border-bottom: 1px solid #eee;
   }
+}
+
+.no-post {
+  height: 400px;
+  text-align: center;
+  line-height: 400px;
 }
 </style>
