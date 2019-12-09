@@ -77,6 +77,20 @@ export default {
     
   }),
   methods:{
+    success(msg) {
+      this.$message({
+        showClose: true,
+        message: msg,
+        type: "success"
+      });
+    },
+    defeated(msg) {
+      this.$message({
+        showClose: true,
+        message: msg,
+        type: "error"
+      });
+    },
     submitUpload() {
         this.$refs.upload.submit();
     },
@@ -125,6 +139,11 @@ export default {
           })
           .then(res => {
             console.log(res.data);
+            if(res.data.code==200) {
+              this.success('修改成功')
+            }else {
+              this.defeated('服务器出了一点问题，请稍后重试')
+            }
           })
           .catch(err => {
             console.log(err);
