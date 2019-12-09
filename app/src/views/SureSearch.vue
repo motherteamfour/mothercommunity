@@ -48,21 +48,33 @@ export default {
         )
         .then(res => {
           console.log(res.data);
-          if (res.data.length == 0) {
+          if (res.data.data.length == 0) {
+            console.log("没有....");
             //如果没有搜素到内容则显示全部问题
+            // this.axios
+            //   .get(
+            //     `/question/ordinarySearch?questionTitle="感冒"&userId=${this.userId}`
+            //   )
+            //   .then(res => {
+            //     console.log("全部", res.data);
+            //     this.lists = res.data.data;
+            //   })
+            //   .catch(err => {
+            //     console.log(err);
+            //   });
             this.axios
-              .get(
-                `/question/ordinarySearch?questionTitle=""&userId=${this.userId}`
-              )
+              .post(`/question/hotQuestion?userId=${this.userId}`)
               .then(res => {
-                console.log("全部", res.data);
+                console.log("热门问题：", res.data);
                 this.lists = res.data.data;
+                console.log(this.lists);
               })
               .catch(err => {
                 console.log(err);
               });
           } else {
             // 显示搜素问题
+            console.log("有");
             this.lists = res.data.data;
           }
         })
