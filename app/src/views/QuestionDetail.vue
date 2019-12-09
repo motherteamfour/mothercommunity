@@ -204,6 +204,7 @@ export default {
   font-size: 32px;
   border-top: 1px solid #eaeaea;
   color: @themeColor;
+  background-color: white;
   line-height: 90px;
   text-align: center;
   position: fixed;

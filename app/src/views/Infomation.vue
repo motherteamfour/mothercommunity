@@ -9,7 +9,7 @@
     </div>
 
     <ul>
-      <!-- <li @click="goInfoComment()">
+      <li @click="goInfoComment()">
         <div class="photo blue">
           <i class="fa fa-comments" aria-hidden="true"></i>
         </div>
@@ -32,8 +32,8 @@
           </div>
           <div class="gray">帮小友思考思考时时刻刻是给你点了一个赞</div>
         </div>
-      </li> -->
-      <li @click="goInform()" >
+      </li>
+     <li @click="goInform()" >
         <div class="photo pink">
           <i class="fa fa-volume-up" aria-hidden="true"></i>
         </div>
@@ -41,12 +41,12 @@
           <div class="right">
             <div class="category" v-if="informLists != undefined">
               <span class="title">通知</span>
-              <span class="gray">{{informLists[0].messageTime}}</span>
+              <!-- <span class="gray">{{informLists[0].messageTime}}</span> -->
             </div>
-            <div class="gray">{{informLists[0].messageTitle}}</div>
+            <!-- <div class="gray">{{informLists[0].messageTitle}}</div> -->
           </div>
         </div>
-      </li>
+      </li> 
     </ul>
   </div>
 </template>
@@ -66,19 +66,18 @@ export default {
     }).then(res => {
       console.log("消息列表", res.data.data);
       this.informLists = res.data.data;
-      console.log(this.informLists[0].messageTime);
     });
   },
   methods: {
     goback() {
       this.$router.push("/");
     },
-    /* goInfoComment() {
+    goInfoComment() {
       this.$router.push("/infocomment");
     },
     goInfoLike() {
       this.$router.push("/infolike");
-    }, */
+    },
     goInform() {
       this.$router.push("/inform");
     }

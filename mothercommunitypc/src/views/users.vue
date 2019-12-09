@@ -66,7 +66,6 @@ export default {
     this.axios
       .get("/admin/userList?size=1&sizePage=6")
       .then(res => {
-        console.log(res.data.data);
         if (res.data.code == 200) {
           this.tableData = res.data.data.list;
           this.userTotal = res.data.data.total;
@@ -88,7 +87,6 @@ export default {
   methods: {
     handleSelectionChange(val) {
       this.selAll = val;
-      console.log(this.selAll);
     },
     handleSizeChange(val) {
       console.log(`每页 ${val} 条`);
@@ -152,7 +150,6 @@ export default {
           }
         })
         .then((res) => {
-          console.log(res.data);
           if(res.data.code==200) {
             this.tableData = res.data.data.list;
           }
@@ -176,45 +173,41 @@ export default {
 
     //用户数据删除
     delbtn(userId) {
-      // var userIds = this.userIds.join
-      console.log(userId);
-      // const params = new URLSearchParams()
-      // params.append('userId',userId)
-      this.axios({
-        url:"/admin/delUser",
-        method:"post",
-        data: `userId=${userId}`,
-        headers:{
-          "Content-Type":"application/x-www-form-urlencoded"
-        },
-      // data:params
-        
+      this.$confirm("确认删除该用户？","提示",{
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
       })
-      .then(res=>{
-        console.log(res.data)
-
-          this.axios
-          .get("/admin/userList?size=1&sizePage=6")
-          .then(res => {
-            console.log(res.data.data);
-              this.tableData = res.data.data.list;
-          })
-        
-        
+      .then(()=>{
+        this.$message({ 
+        type: 'success',
+        message: '删除成功!'
+        })
+        this.axios({
+          url:"/admin/delUser",
+          method:"post",
+          data: `userId=${userId}`,
+          headers:{
+            "Content-Type":"application/x-www-form-urlencoded"
+          },        
+        })
+        .then(()=>{
+            this.axios
+            .get("/admin/userList?size=1&sizePage=6")
+            .then(res => {
+                this.tableData = res.data.data.list;
+            })
+        })
+        .catch(error=>{
+          console.log(error)
+        })
       })
-      .catch(error=>{
-        console.log(error)
+      .catch(()=>{
+        this.$message({
+          type: 'info',
+          message: '已取消删除'
+        });  
       })
-      // this.axios.post("/admin/delUser", 
-      //   {
-      //     userId: userId
-      //   })
-      //   .then(res => {
-      //     console.log(res.data,"1111");
-      //   })
-      //   .catch(err => {
-      //     console.log(err);
-      //   })
       
     },
     //刪除多條數據
@@ -226,34 +219,48 @@ export default {
         });
         this.selectAll2 = this.selectAll1.join(",")
       } 
-      console.log(this.selectAll1)
-      this.axios({
-        url:"/admin/delUsers",
-        method:"post",
-        data:`ids=${this.selectAll2}`,
-        headers:{
-          "Content-Type":"application/x-www-form-urlencoded"
-        },
+      this.$confirm("确认批量删除用户？","提示",{
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
       })
-      .then(res=>{
-        console.log(res.data)
-         this.axios
-        .get("/admin/userList?size=1&sizePage=6")
-        .then(res => {
-          console.log(res.data.data);
-          if (res.data.code == 200) {
-            this.tableData = res.data.data.list;
-          }
+      .then(()=>{
+        this.$message({ 
+        type: 'success',
+        message: '删除成功!'
         })
-        .catch(error => {
-          console.log(error);
-        });
+        this.axios({
+          url:"/admin/delUsers",
+          method:"post",
+          data:`ids=${this.selectAll2}`,
+          headers:{
+            "Content-Type":"application/x-www-form-urlencoded"
+          },
+        })
+        .then(res=>{
+          console.log(res.data)
+          this.axios
+          .get("/admin/userList?size=1&sizePage=6")
+          .then(res => {
+            console.log(res.data.data);
+            if (res.data.code == 200) {
+              this.tableData = res.data.data.list;
+            }
+          })
+          .catch(error => {
+            console.log(error);
+          });
+        })
+        .catch(error=>{
+          console.log(error)
+        })
       })
-      .catch(error=>{
-        console.log(error)
+      .catch(()=>{
+        this.$message({
+          type: 'info',
+          message: '已取消删除'
+        }); 
       })
-      
-
     },
     //序號的編寫
     indexMethod(index){

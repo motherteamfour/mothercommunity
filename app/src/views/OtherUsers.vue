@@ -10,7 +10,7 @@
     </van-sticky>
     <div class="user-wrap">
       <div class="avatar">
-        <img :src="'http://172.17.4.107:8989/' + userInfo.userImgUrl" alt />
+        <img :src="imgUrl + userInfo.userImgUrl" alt />
       </div>
       <div class="user-info">
         <ul class="count">
@@ -27,8 +27,8 @@
             <span>粉丝</span>
           </li>
         </ul>
-        <div v-if="userId!==userInfo.userId">
-          <button class="follow" v-if="isFollow==0">关注</button>
+        <div class="follow-wrap">
+          <button class="follow"  v-if="userId!=userInfo.userId">关注</button>
         </div>
       </div>
     </div>
@@ -56,26 +56,24 @@ export default {
       userInfo: {},
       fans: 0,
       followed: 0,
-      post: []
+      post: [],
+      imgUrl: ""
     };
   },
   components: {
     [Sticky.name]: Sticky
   },
   created() {
+    this.imgUrl = this.$store.state.imgUrl; // 获取图片路径
     this.userId = this.$route.params.id;
     let param = new URLSearchParams();
     param.append("userid", this.userId);
     this.axios.post("/zp/user/findMyself", param).then(res => {
       this.userInfo = res.data.data;
       console.log(this.userInfo);
-      this.axios
-        .get(
-          `/user/isFol?userId=1001&followUserId=1023`
-        )
-        .then(res => {
-          console.log(res.data);
-        });
+      this.axios.get(`/user/isFol?userId=1001&followUserId=1023`).then(res => {
+        console.log(res.data);
+      });
     });
     this.axios.post("/zp/fant/countattention", param).then(res => {
       this.followed = res.data.data;
@@ -175,15 +173,19 @@ header {
       font-size: 24px;
     }
   }
-  .follow {
+  .follow-wrap {
     margin-top: 30px;
     width: 300px;
     height: 50px;
-    font-size: 28px;
-    background: @themeColor;
-    border: none;
-    border-radius: 30px;
-    color: #fff;
+    .follow {
+      width: 100%;
+      height: 100%;
+      font-size: 28px;
+      background: @themeColor;
+      border: none;
+      border-radius: 30px;
+      color: #fff;
+    }
   }
 }
 

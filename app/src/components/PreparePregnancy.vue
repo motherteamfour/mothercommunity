@@ -243,6 +243,7 @@ export default {
       color: #b0b0b0;
       height: 80px;
       line-height: 80px;
+      text-align: center;
     }
     .one {
       width: 380px;

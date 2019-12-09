@@ -32,10 +32,12 @@
               :key="index"
               :class="setColor(index)"
             >
-              <div class="circle-pic">
-                <img :src="imgUrl + item.circleUrl" alt />
-              </div>
-              <p>{{item.circleName}}</p>
+              <router-link :to="'/group/' + item.circleId" class="circle-link">
+                <div class="circle-pic">
+                  <img :src="imgUrl + item.circleUrl" alt />
+                </div>
+                <p>{{item.circleName}}</p>
+              </router-link>
               <div class="btns">
                 <van-loading v-show="isLoading==item.circleId" size="24px" vertical></van-loading>
                 <button
@@ -60,8 +62,10 @@
       <div class="followed-wrap" v-show="isAll==2">
         <ul>
           <li class="followed-item" v-for="(item, index) in followedCircle" :key="index">
-            <img :src="imgUrl + item.circles.circleUrl" alt />
-            <p>{{item.circles.circleName}}</p>
+            <router-link :to="'/group/' + item.circleId" class="follow-link">
+              <img :src="imgUrl + item.circles.circleUrl" alt />
+              <p>{{item.circles.circleName}}</p>
+            </router-link>
           </li>
         </ul>
       </div>
@@ -86,12 +90,14 @@ export default {
       subClass: [],
       isLoading: -1,
       followedCircle: [],
-      imgIp: ""
+      imgIp: "",
+      userId: ""
     };
   },
   created() {
     // 获取图片路径
     this.imgUrl = this.$store.state.imgUrl;
+    this.userId = sessionStorage.getItem("userId");
     this.axios.get("/search/searchTop10").then(res => {
       console.log(res.data);
     });
@@ -109,7 +115,7 @@ export default {
       this.isActive = i;
 
       this.axios
-        .get(`/circle/byId/list?categoryId=${i}&userId=1001`)
+        .get(`/circle/byId/list?categoryId=${i}&userId=${this.userId}`)
         .then(res => {
           //请求圈子数据
           if (res.data.code == 200) {
@@ -122,7 +128,7 @@ export default {
       this.isLoading = i;
       let param = new URLSearchParams();
       param.append("circleId", i);
-      param.append("userId", "1001");
+      param.append("userId", this.userId);
       this.axios.post("/user/addCircle", param).then(res => {
         //请求圈子数据
         if (res.data.code == 200) {
@@ -133,7 +139,7 @@ export default {
     cancleFollow(i, categoryId) {
       this.isLoading = i;
       this.axios
-        .delete(`/user/deleteCircle?circleId=${i}&userId=1001`)
+        .delete(`/user/deleteCircle?circleId=${i}&userId=${this.userId}`)
         .then(res => {
           //请求圈子数据
           if (res.data.code == 200) {
@@ -143,7 +149,7 @@ export default {
     },
     getFollowedCircle() {
       this.isAll = 2;
-      this.axios.get("/userCircle/list?userId=1001").then(res => {
+      this.axios.get(`/userCircle/list?userId=${this.userId}`).then(res => {
         console.log(res.data);
         this.followedCircle = res.data.data;
       });
@@ -252,13 +258,22 @@ header {
       margin: 30px 0;
       border-radius: 60px 0 0 60px;
       font-size: 36px;
-
-      .circle-pic {
-        width: 90px;
-        height: 90px;
-        overflow: hidden;
-        img {
-          width: 100%;
+      .circle-link {
+        display: flex;
+        align-items: center;
+        justify-content: space-around;
+        p {
+          font-size: 34px;
+          width: 170px;
+        }
+        .circle-pic {
+          width: 90px;
+          height: 90px;
+          overflow: hidden;
+          margin-right: 20px;
+          img {
+            width: 100%;
+          }
         }
       }
       .circle-follow {
@@ -300,24 +315,27 @@ header {
     margin: 0 auto;
 
     .followed-item {
-      display: flex;
       background: #fff;
       margin-top: 20px;
-      justify-content: flex-start;
-      align-items: center;
+
       font-size: 36px;
       border: 1px solid #eee;
       padding: 20px 30px;
       box-sizing: border-box;
       border-radius: 20px;
       box-shadow: 0 0 10px #ddd;
-      img {
-        width: 80px;
-        height: 80px;
-        margin-left: 100px;
-      }
-      p {
-        margin-left: 80px;
+      .follow-link {
+        display: flex;
+        justify-content: flex-start;
+        align-items: center;
+        img {
+          width: 80px;
+          height: 80px;
+          margin-left: 100px;
+        }
+        p {
+          margin-left: 80px;
+        }
       }
     }
   }
