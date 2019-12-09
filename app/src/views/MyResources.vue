@@ -108,8 +108,9 @@ export default {
       console.log(param.url);
       this.axios.post("/zp/user/updateuserhesd", param).then(res => {
         console.log(res.data);
+         this.reload();
       });
-      this.reload();
+     
     }
   }
 };
