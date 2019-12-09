@@ -29,7 +29,7 @@ export default {
 <style lang="less" scoped>
 .listss{
   width: 650px;
-  height: 100vh;
+
   /* background: greenyellow; */
   .lis {
   width: 690px;
@@ -45,6 +45,10 @@ export default {
   .content {
     font-size: 30px;
     color: gray;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 1;
+    overflow: hidden;
   }
   .user {
     width: 100%;
