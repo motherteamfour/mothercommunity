@@ -14,6 +14,12 @@
           </td>
         </tr>
         <tr>
+          <td>账号：</td>
+          <td>
+            <input type="text" placeholder="请输入姓名" class="name mod" v-model="inputUsername" @blur="username(inputName)"/>
+          </td>
+        </tr>
+        <tr>
           <td>密码：</td>
           <td>
             <input
@@ -25,12 +31,7 @@
             />
           </td>
         </tr>
-        <tr>
-          <td>账号：</td>
-          <td>
-            <input type="text" placeholder="请输入姓名" class="name mod" v-model="inputUsername" @blur="username(inputName)"/>
-          </td>
-        </tr>
+        
         <tr>
           <td>联系方式：</td>
           <td>
