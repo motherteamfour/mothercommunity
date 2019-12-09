@@ -4,7 +4,7 @@
       <el-col :span="24">
         <h5>这是一个logo</h5>
         <el-menu
-          default-active="2"
+          default-active="/home/homePage"
           class="el-menu-vertical-demo"
           @open="handleOpen"
           @close="handleClose"
@@ -19,7 +19,7 @@
             <span slot="title">主页</span>
           </el-menu-item>
 
-          <el-submenu index="1">
+          <el-submenu index="2">
             <template slot="title">
               <i class="el-icon-location"></i>
               <span>用户管理</span>

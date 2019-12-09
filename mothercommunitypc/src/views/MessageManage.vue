@@ -21,7 +21,6 @@
           tooltip-effect="dark"
           style="width: 80%; margin:0 auto;"
           @selection-change="handleSelectionChange"
-          select-on-indeterminate="true"
         >
           <el-table-column type="selection" width="120"></el-table-column>
           <el-table-column prop="userName" label="姓名" width="120"></el-table-column>
