@@ -1,8 +1,8 @@
 <template>
   <div>
     <div class="top">
-      <input type="text" class="username" placeholder="请输入需要搜索的用户名">
-      <input type="text" class="title" placeholder="请输入需要搜索的标题">
+      <input type="text" class="username" placeholder="请输入需要搜索的用户名" />
+      <input type="text" class="title" placeholder="请输入需要搜索的标题" />
       <button type="button" class="seek-btn">搜索</button>
       <button type="button" class="seek-btn">推荐</button>
       <button type="button" class="del-btn">驳回</button>
@@ -20,9 +20,9 @@
         <el-table-column prop="user.userName" label="用户名" width="120" align="center"></el-table-column>
         <el-table-column prop="postTitle" label="标题" width="120" align="center"></el-table-column>
         <el-table-column prop="user.userStartTime" label="发布时间" width="120" align="center"></el-table-column>
-        <el-table-column prop="countCollection" label="内容" width="120" align="center"></el-table-column>       
+        <el-table-column prop="countCollection" label="内容" width="120" align="center"></el-table-column>
         <el-table-column label="操作" show-overflow-tooltip align="center">
-           <!-- slot-scope="scope" -->
+          <!-- slot-scope="scope" -->
           <template slot-scope="scope">
             <el-button class="check-btn">查看</el-button>
             <el-button class="check-btn" @click="recom(scope.row.postId)">推荐</el-button>
@@ -36,162 +36,197 @@
 </template>
 
 <script>
-
-
 export default {
-  name:"investigate",
+  name: "investigate",
   data() {
     return {
-      tableData:[], 
+      tableData: [],
       userTotal: 0,
-      page:1,
-      sizePage: 6,
-    }
+      page: 1,
+      sizePage: 6
+    };
   },
   created() {
-    this.axios.get("/posterior/postmanagement/auditRecommend?page=1&pagesize=6")
-    .then(res=>{
-      console.log(res.data)
-      this.tableData = res.data.data.list;
-    })
-    .catch(error=>{
-      console.log(error)
-    })
+    this.axios
+      .get("/posterior/postmanagement/auditRecommend?page=1&pagesize=6")
+      .then(res => {
+        console.log(res.data);
+        this.tableData = res.data.data.list;
+      })
+      .catch(error => {
+        console.log(error);
+      });
   },
-  computed: {
-
-  },
+  computed: {},
   methods: {
-    selectAll:function(e){
-      if(e.target.checked){
-        this.comsts = this.comsts.map(function(item){
+    selectAll: function(e) {
+      if (e.target.checked) {
+        this.comsts = this.comsts.map(function(item) {
           item.isSel = true;
-          return item
+          return item;
         });
       } else {
-        this.comsts = this.comsts.map(function(item){
+        this.comsts = this.comsts.map(function(item) {
           item.isSel = false;
-          return item
+          return item;
         });
       }
     },
     // 推荐
-    recom(postId){
-      this.axios({
-        url:"/posterior/postmanagement/updatePostRecommendById",
-        method:"post",
-        data:`postId=${postId}`,
-        headers:{
-          "Content-Type":"application/x-www-form-urlencoded"
-        },
+    recom(postId) {
+      this.$confirm("确认推荐？", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning"
       })
-      .then(res=>{
-        console.log(res.data)
-      })
-      .catch(error=>{
-        console.log(error)
-      })
-    },  
+        .then(() => {
+          this.$message({
+            type: "success",
+            message: "推荐成功!"
+          });
+          this.axios({
+            url: "/posterior/postmanagement/updatePostRecommendById",
+            method: "post",
+            data: `postId=${postId}`,
+            headers: {
+              "Content-Type": "application/x-www-form-urlencoded"
+            }
+          })
+            .then(res => {
+              console.log(res.data);
+            })
+            .catch(error => {
+              console.log(error);
+            });
+        })
+        .catch(() => {
+          this.$message({
+            type: "info",
+            message: "已取消删除"
+          });
+        });
+    },
     //通过
-    recover(postId){
-      this.axios({
-        url:"/posterior/postmanagement/recoveryPostById",
-        method:"post",
-        data:`postId=${postId}`,
-        headers:{
-          "Content-Type":"application/x-www-form-urlencoded"
-        },
+    recover(postId) {
+      this.$confirm("确认通过？", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning"
       })
-      .then(res=>{
-        console.log(res.data)
-        this.axios.get("/posterior/postmanagement/recyclePost?page=1&pagesize=6")
-        .then(res=>{
-          console.log(res.data)
-          this.tableData = res.data.data.list;
+      .then(()=>{
+        this.$message({
+          type: "success",
+          message: "推荐成功!"
         })
-        .catch(error=>{
-          console.log(error)
-        })
+        this.axios({
+        url: "/posterior/postmanagement/recoveryPostById",
+        method: "post",
+        data: `postId=${postId}`,
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded"
+        }
       })
-      .catch(error=>{
-        console.log(error)
-      })  
+        .then(res => {
+          console.log(res.data);
+          this.axios
+            .get("/posterior/postmanagement/recyclePost?page=1&pagesize=6")
+            .then(res => {
+              console.log(res.data);
+              this.tableData = res.data.data.list;
+            })
+            .catch(error => {
+              console.log(error);
+            });
+        })
+        .catch(error => {
+          console.log(error);
+        });
+      })
+      .catch(() => {
+        this.$message({
+          type: "info",
+          message: "已取消删除"
+        });
+      });
+      
     },
-    indexMethod(index){
-      return (index+ 1) + ( this.page - 1 ) * this.sizePage
-    },
+    indexMethod(index) {
+      return index + 1 + (this.page - 1) * this.sizePage;
+    }
   }
-
-}
+};
 </script>
 
 <style lang="less" scoped>
-@import '../assets/style/resize.less';
-.top{
+@import "../assets/style/resize.less";
+.top {
   padding: 20px;
-  input,button{
-    margin: 20px;
-  };
-  select{
+  input,
+  button {
     margin: 20px;
   }
-  
+  select {
+    margin: 20px;
+  }
 }
 
-.userId,.username,.title{
+.userId,
+.username,
+.title {
   width: 182px;
   height: 38px;
   background: #fff;
-  padding:0 0 0 10px;
+  padding: 0 0 0 10px;
 }
-select{
+select {
   height: 42px;
-  margin-top: 2px
+  margin-top: 2px;
 }
-button{
+button {
   width: @btn-w;
   height: @btn-h;
   color: white;
   outline: none;
   border: none;
-  border-radius: 2px
+  border-radius: 2px;
 }
-.seek-btn,.del-btn{
-  background:@bg-btn;
+.seek-btn,
+.del-btn {
+  background: @bg-btn;
 }
 button:hover {
-  background: #009687d0
+  background: #009687d0;
 }
-.check-btn{
+.check-btn {
   background: @bg-check-btn;
-  margin-right: 10px
+  margin-right: 10px;
 }
-.check-btn:hover{
-  background: #2a8fddfa
+.check-btn:hover {
+  background: #2a8fddfa;
 }
-.table{
+.table {
   width: 100%;
-  
 }
-table{
+table {
   width: 98%;
-  border-collapse:collapse;
-  margin: 0 auto  
-
+  border-collapse: collapse;
+  margin: 0 auto;
 }
-tr,th,td{
+tr,
+th,
+td {
   border: @tab-border;
   height: 28px;
 }
 
-.unRecommend{
+.unRecommend {
   background: #ebe71d;
-  margin-left: 10px
+  margin-left: 10px;
 }
 .unRecommend:hover {
-  background: #ebe81dc4
+  background: #ebe81dc4;
 }
-.caozuo{
-  width:@three;
+.caozuo {
+  width: @three;
 }
 </style>
