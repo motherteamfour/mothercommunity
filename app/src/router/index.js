@@ -11,6 +11,7 @@ import Collect from '../views/Collect.vue'
 Vue.use(VueRouter)
 
 const routes = [
+  // 登录注册部分
   {
     // 登陆--曾晶
     path: '/login',
@@ -123,12 +124,18 @@ const routes = [
         path: 'suresearch',// 确定搜索
         name: 'SureSearch',
         component: () => import('../views/SureSearch.vue'),
+        meta: {
+          auth: true
+        }
       },
       // 百科
       {
         path: 'encyclopedia',
         name: 'Encyclopedia',//百科
         component: () => import('../views/Encyclopedia.vue'),
+        meta: {
+          auth: true
+        }
 
       },
       // 我的-赵蕊
@@ -150,7 +157,10 @@ const routes = [
       {
         path: 'reply', //我的回帖
         name: 'Reply',
-        component: () => import('../views/Reply.vue')
+        component: () => import('../views/Reply.vue'),
+        meta: {
+          auth: true
+        }
       },
       {
         path: 'collect', //我的收藏
@@ -159,24 +169,36 @@ const routes = [
           {
             path: '',
             name: 'CollPost',
-            component: () => import('../views/CollPost.vue')
+            component: () => import('../views/CollPost.vue'),
+            meta: {
+              auth: true
+            }
           },
           {
             path: 'collqa',
             name: 'CollQA',
-            component: () => import('../views/CollQA.vue')
+            component: () => import('../views/CollQA.vue'),
+            meta: {
+              auth: true
+            }
           }
         ]
       },
       {
         path: 'resource', //我的资料
         name: 'Resource',
-        component: () => import('../views/MyResources.vue')
+        component: () => import('../views/MyResources.vue'),
+        meta: {
+          auth: true
+        }
       },
       {
         path: 'group/:id',
         name: 'Group',
-        component: () => import('../views/Group.vue')
+        component: () => import('../views/Group.vue'),
+        meta: {
+          auth: true
+        }
       },
       {
         path: '/searchs', // 搜索
@@ -186,17 +208,26 @@ const routes = [
           {
             path: '',
             name: 'SearchPost',
-            component: () => import('../views/SearchPost.vue')
+            component: () => import('../views/SearchPost.vue'),
+            meta: {
+              auth: true
+            }
           },
           {
             path: 'userpage',
             name: 'Userpage',
             component: () => import('../views/Userpage.vue'),
+            meta: {
+              auth: true
+            }
           },
           {
             path: 'havingpost',
             name: 'HavingPost',
-            component: () => import('../views/HavingPost.vue')
+            component: () => import('../views/HavingPost.vue'),
+            meta: {
+              auth: true
+            }
           }
         ]
       },
@@ -208,12 +239,18 @@ const routes = [
           {
             path: '',
             name: 'Received',
-            component: () => import('../views/Received.vue')
+            component: () => import('../views/Received.vue'),
+            meta: {
+              auth: true
+            }
           },
           {
             path: 'sented',
             name: 'Sented',
             component: () => import('../views/Sented.vue'),
+            meta: {
+              auth: true
+            }
           }
         ]
 
@@ -221,7 +258,10 @@ const routes = [
       {
         path: 'infolike', // 消息中的点赞
         name: 'InfoLike',
-        component: () => import('../views/InfoLike.vue')
+        component: () => import('../views/InfoLike.vue'),
+        meta: {
+          auth: true
+        }
       },
       {
         path: 'inform', //消息中通知

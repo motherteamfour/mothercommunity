@@ -106,8 +106,8 @@ export default {
   margin-top: 200px;
   p {
     text-align: center;
-    font-size: 24px;
-    color: #d0d0d0;
+    font-size: 26px;
+    color: black;
     a {
       color: @themeColor;
     }
