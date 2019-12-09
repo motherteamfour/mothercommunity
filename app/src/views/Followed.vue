@@ -10,6 +10,7 @@
       :lLoading="lLoading"
       :cLoading="cLoading"
       :userId="userId"
+      :loading="loading"
       :isFollowPage="isFollowPage"
       @followFn="follow"
       @cancleFollowFn="cancleFollow"
@@ -32,6 +33,7 @@ export default {
       fLoading: -1,
       lLoading: -1,
       cLoading: -1,
+      loading: true,
       imgIp: "",
       userId: 1001,
       isFollowPage: 1
@@ -55,6 +57,8 @@ export default {
             item.idn = index;
             item.isFollow = 1;
           });
+          console.log(this.hotList);
+          this.loading = false;
           this.isShow = !this.isShow;
         }
       });
