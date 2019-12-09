@@ -12,6 +12,7 @@
     <FansLists v-for="(item, index) in fanslists" :key="index"
     :username="item.userName"
     :userimg="item.userImgUrl"
+    :userid="item.userId"
     @click="goFansss()"></FansLists>
   </div>
 </template>
