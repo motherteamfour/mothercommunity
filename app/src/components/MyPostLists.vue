@@ -5,7 +5,7 @@
         <div class="user">
           <div class="user-por">
             <!--  <div class="portrait"> -->
-            <img :src="'http://172.16.6.3:8989/'+imgs" class="portrait" alt />
+            <img :src="imgUrl+imgs" class="portrait" alt />
 
             <!-- </div> -->
           </div>
@@ -37,7 +37,15 @@
 <script>
 export default {
   name: "NewPosts",
-  props: ["name", "title", "time", "countco", "imgs","postId"]
+  props: ["name", "title", "time", "countco", "imgs","postId"],
+  data () {
+    return {
+      imgUrl: ""
+    }
+  },
+  created() {
+    this.imgUrl = this.$store.state.imgUrl;
+  }
 };
 </script>
 
