@@ -10,7 +10,7 @@
       <div class="form-group">
         <span>验证码</span>
         <input type="text" placeholder="输入验证码" v-model="verifycode" />
-        <button type="button" class="send-verify">验证码</button>
+        <!-- <button type="button" class="send-verify">验证码</button> -->
       </div>
       <div class="form-group">
         <span>请设置新密码</span>
@@ -70,9 +70,7 @@ export default {
               this.one = "重置密码成功";
               this.two = "请登录";
               this.show = true;
-              // 注册成功、返回登录页
-              this.$router.replace(`/login`);
-            }else{
+            } else {
               this.one = "提示";
               this.two = "重置密码失败";
               this.show = true;
@@ -89,6 +87,10 @@ export default {
     },
     //关闭模态框
     closeModel() {
+      // 重置密码成功、返回登录页
+      if (this.one == "重置密码成功") {
+        this.$router.replace(`/login`);
+      }
       this.show = false;
     }
   },

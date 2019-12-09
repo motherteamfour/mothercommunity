@@ -1,7 +1,7 @@
 <template>
   <div class="fans">
     <div class="fanslist">
-      <img :src="'http://172.17.7.107:8989/'+userimg" alt=""  class="por">
+        <img :src="imgUrl+userimg" alt=""  class="por">
       <div class="username">{{username}}</div>
     </div>
   </div>
@@ -10,7 +10,15 @@
 <script>
 export default {
   name: "fans",
-  props: ['username',"userimg"]
+  props: ['username',"userimg"],
+  data () {
+    return {
+      imgUrl: ""
+    }
+  },
+  created() {
+    this.imgUrl = this.$store.state.imgUrl;
+  }
 };
 </script>
 
@@ -30,7 +38,7 @@ export default {
     width: 80px;
     height: 80px;
     border-radius: 50%;
-    background: red;
+    border: 1px solid red;
     margin-left: 20px;
     margin-right: 20px;
   }

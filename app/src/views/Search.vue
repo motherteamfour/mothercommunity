@@ -1,9 +1,19 @@
 <template>
   <div class="search">
+    <div class="top">
+      <span class="goback" @click="goback()">
+        <i class="fa fa-angle-left" aria-hidden="true"></i>
+      </span>
+      <h3>我的回复</h3>
+      <span>
+       
+      </span>
+    </div>
     <div class="searchbox">
-      <van-search v-model="val" placeholder="请输入搜索关键词" show-action shape="round">
+      <van-search v-model="val" placeholder="请输入搜索关键词" show-action shape="round" style="width:100%">
         <div slot="action" @click="search">搜索</div>
       </van-search>
+      
     </div>
     <nav>
       <router-link to="/searchs">
@@ -57,22 +67,26 @@ export default {
     },
     search() {
       this.result = this.val;
-      console.log(this.result);
-      this.keyword = this.result;
-      /* this.userId = sessionStorage.getItem("userId"); */
-      this.searctPost(this.keyword);
+      console.log("ssssssswww",this.result);
+      if (this.result == "") {
+        console.log("请重新输入");
+      } else {
+        this.keyword = this.result;
+        /* this.userId = sessionStorage.getItem("userId"); */
+        this.searctPost(this.keyword);
 
-      this.axios({
-        url: `/search/searchPost?userId=${this.userId}&searchMessage=${this.keyword}`,
-        methods: "GET"
-      }).then(res => {
-        console.log(res.data);
-        if (res.data.code == 200) {
-          this.$router.push("/searchs/havingpost");
-          /* this.postnum = res.data.data;
+        this.axios({
+          url: `/search/searchPost?userId=${this.userId}&searchMessage=${this.keyword}`,
+          methods: "GET"
+        }).then(res => {
+          console.log(res.data);
+          if (res.data.code == 200) {
+            this.$router.push("/searchs/havingpost");
+            /* this.postnum = res.data.data;
           console.log(this.postnum); */
-        }
-      });
+          }
+        });
+      }
       /*  this.$store.dispatch('getLists'); */
     }
   }
@@ -84,6 +98,31 @@ export default {
 .search {
   width: 750px;
   padding-bottom: 70px;
+   .top {
+    width: 750px;
+    height: 80px;
+    background: @themeColor;
+    padding-top: 40px;
+    text-align: center;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+
+    h3 {
+      /* width: 80%; */
+      width: 70%;
+      color: white;
+      font-weight: 500;
+      font-size: 36px;
+      /*  margin-bottom: 10px; */
+      letter-spacing: 2px;
+      /* line-height: 80px; */
+    }
+    i {
+      color: white;
+      font-size: 54px;
+    }
+  }
 }
 .searchbox {
   width: 710px;
